@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeCraft – Resume Builder</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com"> 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Montserrat:wght@400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Resume<span>Craft</span></div>
+    <div class="logo-tag">Professional Resume Builder</div>
+  </div>
+  <div class="header-right">
+    <button class="hdr-btn" onclick="document.getElementById('jsonLoadInput').click()">⬆ Load JSON</button>
+    <input type="file" id="jsonLoadInput" accept=".json" onchange="loadJSON(this)">
+    <button class="mode-toggle" id="modeToggle" onclick="toggleMode()">Light Mode</button>
+    <div class="save-indicator" id="saveIndicator">● Auto-saved</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eye">Free &middot; Instant &middot; Printable PDF</div>
+  <h1>Build Your <em>Perfect</em><br>Resume Today</h1>
+  <p>Fill your details &nbsp;&middot;&nbsp; Choose a template &nbsp;&middot;&nbsp; Export A4 PDF</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">Completion <span id="progressPct">0%</span></div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+</div>
+
+<div class="container">
+
+  <div class="s-lbl">01 — Choose Template</div>
+  <div class="tpl-cards">
+    <label class="t-card active" id="card1" onclick="selTpl(1)">
+      <input type="radio" name="tpl" value="1" checked>
+      <div class="t-num">01</div>
+      <div class="t-name">Dark Sidebar</div>
+      <div class="t-desc">Bold black left panel with a timeline layout. Best for creative & tech roles.</div>
+      <div class="t-badge">Selected</div>
+    </label>
+    <label class="t-card" id="card2" onclick="selTpl(2)">
+      <input type="radio" name="tpl" value="2">
+      <div class="t-num">02</div>
+      <div class="t-name">Light Minimal</div>
+      <div class="t-desc">Clean structured layout with right sidebar. Ideal for corporate roles.</div>
+      <div class="t-badge">Select</div>
+    </label>
+  </div>
+
+  <div class="s-lbl">02 — Customize</div>
+  <div class="customize-row">
+    <div class="cust-box">
+      <div class="cust-title">Theme Color</div>
+      <div class="color-swatches" id="colorSwatches">
+        <div class="swatch active" data-color="#c9a96e" style="background:#c9a96e" title="Gold" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#2d5a3d" style="background:#2d5a3d" title="Green" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#2980b9" style="background:#2980b9" title="Blue" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#8e44ad" style="background:#8e44ad" title="Violet" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#c0392b" style="background:#c0392b" title="Red" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#e67e22" style="background:#e67e22" title="Orange" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#16a085" style="background:#16a085" title="Teal" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#888" style="background:#888" title="Slate" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#DC143C" style="background:#DC143C" title="Crimson" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#440E03" style="background:#440E03" title="Midnight" onclick="setColor(this)"></div>
+        <div class="swatch" data-color="#212E54" style="background:#212E54" title="Plum" onclick="setColor(this)"></div>
+      <div class="swatch" data-color="#FF9EFB" style="background:#FF9EFB" title="Pink" onclick="setColor(this)"></div>
+
+
+
+      </div>
+    </div>
+    <div class="cust-box">
+      <div class="cust-title">Font Family</div>
+      <div class="font-opts" id="fontOpts">
+        <button class="font-opt active" data-font="Playfair Display" onclick="setFont(this)">Playfair</button>
+        <button class="font-opt" data-font="Poppins" onclick="setFont(this)">Poppins</button>
+        <button class="font-opt" data-font="Roboto" onclick="setFont(this)">Roboto</button>
+        <button class="font-opt" data-font="Lato" onclick="setFont(this)">Lato</button>
+        <button class="font-opt" data-font="Merriweather" onclick="setFont(this)">Merriweather</button>
+        <button class="font-opt" data-font="Raleway" onclick="setFont(this)">Raleway</button>
+        <button class="font-opt" data-font="Montserrat" onclick="setFont(this)">Montserrat</button>
+        <button class="font-opt" data-font="Ubuntu" onclick="setFont(this)">Ubuntu</button>
+        <button class="font-opt" data-font="Bebas Neue" onclick="setFont(this)">Bebas</button>
+        <button class="font-opt" data-font="Oswald" onclick="setFont(this)">Oswald</button>
+        <button class="font-opt" data-font="Inter" onclick="setFont(this)">Inter</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="s-lbl">03 — Your Details</div>
+  <div id="val-banner" class="val-banner">⚠ Please fix the highlighted fields before generating.</div>
+
+  <form id="rForm" onsubmit="generate(event)">
+    <div class="sections-list">
+
+      <!-- PERSONAL INFO -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left">
+            <div class="acc-num">01</div>
+            <div class="acc-title-t">Personal Information</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="acc-chevron open">▾</span>
+          </div>
+        </div>
+        <div class="acc-body open">
+          <div class="form-grid">
+            <div class="fg"><label>First Name *</label><input type="text" id="firstName" placeholder="John" oninput="validateField(this)"><div class="err-msg" id="err-firstName">Required</div></div>
+            <div class="fg"><label>Last Name *</label><input type="text" id="lastName" placeholder="Doe" oninput="validateField(this)"><div class="err-msg" id="err-lastName">Required</div></div>
+            <div class="fg"><label>Job Title *</label><input type="text" id="jobTitle" placeholder="Graphic Designer" oninput="validateField(this)"><div class="err-msg" id="err-jobTitle">Required</div></div>
+            <div class="fg">
+              <label>Profile Photo</label>
+              <div class="photo-drop" onclick="document.getElementById('photoInput').click()">
+                <input type="file" id="photoInput" accept="image/*" onchange="prevPhoto(this)" style="display:none">
+                <img id="photo-preview" alt="">
+                <svg class="ph-icon" id="ph-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span class="ph-hint" id="ph-hint">Click to upload photo</span>
+              </div>
+            </div>
+            <div class="fg full"><label>Profile Summary</label><textarea id="profile" placeholder="Brief professional summary..."></textarea></div>
+            <div class="fg full"><label>Career Objective</label><textarea id="objective" placeholder="Seeking a position where I can apply my skills in..."></textarea></div>
+            <div class="fg">
+              <label>Gender</label>
+              <select id="gender"><option value="">— Select —</option><option>Male</option><option>Female</option><option>Non-binary</option><option>Prefer not to say</option></select>
+            </div>
+            <div class="fg">
+              <label>Civil Status</label>
+              <select id="civilStatus"><option value="">— Select —</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option><option>Separated</option></select>
+            </div>
+            <div class="fg"><label>Age</label><input type="number" id="age" placeholder="28" min="1" max="120"></div>
+            <div class="fg"><label>Birth Place</label><input type="text" id="birthPlace" placeholder="City, Country"></div>
+            <div class="fg full"><label>Religion</label><input type="text" id="religion" placeholder="e.g. Roman Catholic"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT & SOCIAL -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">02</div><div class="acc-title-t">Contact & Social Links</div></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="form-grid">
+            <div class="fg"><label>Phone 1</label><input type="tel" id="phone1" placeholder="+1 234 567 890"></div>
+            <div class="fg"><label>Phone 2 (optional)</label><input type="tel" id="phone2" placeholder="+1 234 567 891"></div>
+            <div class="fg"><label>Email</label><input type="email" id="email" placeholder="john@example.com"></div>
+            <div class="fg"><label>Website</label><input type="text" id="website" placeholder="www.johndoe.com"></div>
+            <div class="fg full"><label>Address</label><input type="text" id="address" placeholder="123 Street, City, State"></div>
+          </div>
+          <div style="margin-top:4px">
+            <label style="margin-bottom:10px;display:block;">Social Profiles</label>
+            <div id="socialList">
+              <div class="social-row">
+                <select class="soc-platform"><option value="linkedin">LinkedIn</option><option value="github">GitHub</option><option value="portfolio">Portfolio</option><option value="behance">Behance</option><option value="dribbble">Dribbble</option><option value="facebook">Facebook</option><option value="twitter">Twitter/X</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="other">Other</option></select>
+                <input type="text" placeholder="https://..." class="soc-url">
+                <button type="button" class="btn-rm" onclick="rmItem(this,'socialList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+            <button type="button" class="btn-add-txt" onclick="addSocial()">+ Add Social Link</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">03</div><div class="acc-title-t">Education</div></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="eduList">
+            <div class="item-row">
+              <div class="fields">
+                <input type="text" placeholder="Degree Name" class="edu-degree">
+                <input type="text" placeholder="Year (e.g. 2010–2014)" class="edu-year">
+                <input type="text" placeholder="Institution" class="edu-inst s2">
+                <textarea placeholder="Description..." class="edu-desc s2" style="min-height:52px"></textarea>
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'eduList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addEdu()">+ Add Education</button>
+        </div>
+      </div>
+
+      <!-- WORK EXPERIENCE -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">04</div><div class="acc-title-t">Work Experience</div></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="workList">
+            <div class="item-row">
+              <div class="fields">
+                <input type="text" placeholder="Job Title" class="work-title">
+                <input type="text" placeholder="Company" class="work-company">
+                <input type="text" placeholder="Years (e.g. 2019–2022)" class="work-year s2">
+                <textarea placeholder="Key responsibilities and achievements..." class="work-desc s2" style="min-height:52px"></textarea>
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'workList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addWork()">+ Add Experience</button>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">05</div><div class="acc-title-t">Projects</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="projList">
+            <div class="item-row">
+              <div class="proj-fields">
+                <input type="text" placeholder="Project Title" class="proj-title s2">
+                <input type="text" placeholder="Technologies Used (e.g. HTML, React, Node)" class="proj-tech s2">
+                <textarea placeholder="Brief description of the project..." class="proj-desc s2" style="min-height:52px"></textarea>
+                <input type="text" placeholder="Project Link (optional)" class="proj-link s2">
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'projList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addProj()">+ Add Project</button>
+        </div>
+      </div>
+
+      <!-- CERTIFICATIONS -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">06</div><div class="acc-title-t">Certifications</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="certList">
+            <div class="item-row">
+              <div class="cert-fields">
+                <div class="cert-img-drop s2" onclick="triggerCertImg(this)">
+                  <input type="file" accept="image/*" class="cert-img-input" onchange="prevCertImg(this)" style="display:none">
+                  <img class="cert-preview" alt="" style="display:none">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span class="ph-hint">Click to upload certificate image</span>
+                </div>
+                <input type="text" placeholder="Certificate Title" class="cert-title s2">
+                <textarea placeholder="Short description..." class="cert-desc s2" style="min-height:48px"></textarea>
+                <div style="display:flex;flex-direction:column;gap:4px"><label style="margin-bottom:3px">Date Start</label><input type="date" class="cert-start"></div>
+                <div style="display:flex;flex-direction:column;gap:4px"><label style="margin-bottom:3px">Date End / Expiry</label><input type="date" class="cert-end"></div>
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'certList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addCert()">+ Add Certification</button>
+        </div>
+      </div>
+
+      <!-- ACHIEVEMENTS / AWARDS -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">07</div><div class="acc-title-t">Achievements & Awards</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="awardList">
+            <div class="item-row">
+              <div class="fields">
+                <input type="text" placeholder="Award / Achievement Name" class="award-name s2">
+                <input type="text" placeholder="Year" class="award-year">
+                <input type="text" placeholder="Issued by / Organization" class="award-org">
+                <textarea placeholder="Brief description..." class="award-desc s2" style="min-height:48px"></textarea>
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'awardList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addAward()">+ Add Achievement</button>
+        </div>
+      </div>
+
+      <!-- TRAININGS / SEMINARS -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">08</div><div class="acc-title-t">Trainings & Seminars</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="trainingList">
+            <div class="item-row">
+              <div class="fields">
+                <input type="text" placeholder="Seminar / Training Title" class="train-title s2">
+                <input type="text" placeholder="Organizer / Institution" class="train-org">
+                <input type="date" class="train-date">
+                <textarea placeholder="Notes (optional)..." class="train-desc s2" style="min-height:44px"></textarea>
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'trainingList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addTraining()">+ Add Training</button>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">09</div><div class="acc-title-t">Skills & Languages</div></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="form-grid">
+            <div class="fg">
+              <label>Software / Technical Skills</label>
+              <div class="skill-dlist" id="softList">
+                <div class="skill-row">
+                  <input type="text" placeholder="e.g. Photoshop" class="sk-name">
+                  <select class="sk-level"><option value="90">Expert</option><option value="75" selected>Good</option><option value="55">Basic</option><option value="40">Learning</option></select>
+                  <button type="button" class="btn-rm" onclick="rmItem(this,'softList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+              </div>
+              <button type="button" class="btn-add-txt" onclick="addSkill('softList')">+ Add</button>
+            </div>
+            <div class="fg">
+              <label>Interpersonal Skills</label>
+              <div class="skill-dlist" id="interList">
+                <div class="skill-row">
+                  <input type="text" placeholder="e.g. Communication" class="sk-name">
+                  <select class="sk-level"><option value="90">Expert</option><option value="75" selected>Good</option><option value="55">Basic</option><option value="40">Learning</option></select>
+                  <button type="button" class="btn-rm" onclick="rmItem(this,'interList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+              </div>
+              <button type="button" class="btn-add-txt" onclick="addSkill('interList')">+ Add</button>
+            </div>
+            <div class="fg full">
+              <label>Languages</label>
+              <div class="dlist" id="langList">
+                <div class="skill-row">
+                  <input type="text" placeholder="e.g. English" class="sk-name">
+                  <select class="sk-level"><option value="100">Native</option><option value="80" selected>Fluent</option><option value="60">Intermediate</option><option value="40">Basic</option></select>
+                  <button type="button" class="btn-rm" onclick="rmItem(this,'langList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+              </div>
+              <button type="button" class="btn-add-txt" onclick="addSkill('langList')">+ Add Language</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOBBIES -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">10</div><div class="acc-title-t">Hobbies & Interests</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="fg full" style="margin:0">
+            <label>Interests (comma-separated or one per line)</label>
+            <textarea id="hobbies" placeholder="e.g. Photography, Gaming, UI Design, Public Speaking, Reading" style="min-height:72px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERENCES -->
+      <div class="section-accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">
+          <div class="acc-header-left"><div class="acc-num">11</div><div class="acc-title-t">References</div><span class="acc-tag opt">Optional</span></div>
+          <span class="acc-chevron">▾</span>
+        </div>
+        <div class="acc-body">
+          <div class="dlist" id="refList">
+            <div class="item-row">
+              <div class="fields">
+                <input type="text" placeholder="Full Name" class="ref-name s2">
+                <input type="text" placeholder="Title / Bio" class="ref-bio">
+                <input type="tel" placeholder="Phone" class="ref-phone">
+                <input type="email" placeholder="Email" class="ref-email">
+                <input type="text" placeholder="Address" class="ref-addr s2">
+              </div>
+              <button type="button" class="btn-rm" onclick="rmItem(this,'refList')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
+          <button type="button" class="btn-add-txt" onclick="addRef()">+ Add Reference</button>
+        </div>
+      </div>
+
+    </div>
+
+    <button type="submit" class="gen-btn">Generate &amp; Open Resume →</button>
+    <div class="bottom-btns">
+      <button type="button" class="outline-btn" onclick="downloadJSON()">⬇ Save as JSON</button>
+      <button type="button" class="outline-btn danger" onclick="clearData()">✕ Clear All Data</button>
+    </div>
+  </form>
+
+</div>
+
+</body>
+</html>

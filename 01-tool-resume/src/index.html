@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NameTag Studio</title>
+<link rel="icon" href="./favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<div id="print-wrap" style="display:none"></div>
+
+<header>
+  <div>
+    <div class="logo">Name<em>Tag</em> Studio</div>
+    <div class="logo-sub">Badge Generator</div>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn btn-ghost" onclick="resetAll()"><i class="ti ti-refresh"></i> Reset</button>
+    <button class="btn btn-ghost" onclick="downloadPNG()"><i class="ti ti-download"></i> PNG</button>
+    <button class="btn btn-primary" onclick="printBadge()"><i class="ti ti-printer"></i> Print</button>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- ══ LEFT PANEL ══ -->
+  <div class="panel">
+
+    <div class="sec">Personal Details</div>
+    <div class="grid2">
+      <div class="field"><label>First Name</label><input type="text" id="fn" value="Maria" oninput="render()"></div>
+      <div class="field"><label>Surname</label><input type="text" id="ln" value="Santos" oninput="render()"></div>
+      <div class="field col2"><label>Role / Title</label><input type="text" id="role" value="Software Engineer" oninput="render()"></div>
+      <div class="field col2"><label>Organization</label><input type="text" id="org" value="ResumeCraft Inc." oninput="render()"></div>
+      <div class="field col2"><label>Event / Top Bar Text</label><input type="text" id="event" value="Annual Summit 2026" oninput="render()"></div>
+    </div>
+
+    <div class="sec">Contact <span style="font-size:.5rem;color:var(--text3);text-transform:none;letter-spacing:0;font-weight:400">optional</span></div>
+    <div class="grid2">
+      <div class="field col2"><label>Email</label><input type="email" id="email" placeholder="maria@example.com" oninput="render()"></div>
+      <div class="field"><label>Phone</label><input type="tel" id="phone" placeholder="+63 900 000 0000" oninput="render()"></div>
+      <div class="field"><label>Website</label><input type="text" id="web" placeholder="www.example.com" oninput="render()"></div>
+    </div>
+
+    <div class="sec">Photos &amp; Logo</div>
+    <div class="grid2">
+      <!-- Profile photo -->
+      <div class="field" id="photo-field">
+        <label>Profile Photo</label>
+        <div class="upload-zone" id="zone-photo" onclick="document.getElementById('inp-photo').click()">
+          <i class="ti ti-user-circle uz-icon"></i>
+          <span class="uz-txt">Click to upload</span>
+          <span class="uz-sub">JPG · PNG</span>
+          <img class="uz-preview" id="prev-photo" alt="">
+          <button class="uz-clear" onclick="clearImg(event,'photo')" title="Remove"><i class="ti ti-x"></i></button>
+        </div>
+        <input type="file" id="inp-photo" accept="image/*" onchange="loadImg(this,'photo')">
+        <span class="field-hint" id="photo-hint" style="display:none">Not available for Small &amp; Standard</span>
+      </div>
+      <!-- Org logo -->
+      <div class="field">
+        <label>Logo / Org Image</label>
+        <div class="upload-zone" id="zone-logo" onclick="document.getElementById('inp-logo').click()">
+          <i class="ti ti-building uz-icon"></i>
+          <span class="uz-txt">Click to upload</span>
+          <span class="uz-sub">JPG · PNG</span>
+          <img class="uz-preview" id="prev-logo" alt="">
+          <button class="uz-clear" onclick="clearImg(event,'logo')" title="Remove"><i class="ti ti-x"></i></button>
+        </div>
+        <input type="file" id="inp-logo" accept="image/*" onchange="loadImg(this,'logo')">
+      </div>
+      <!-- Card background -->
+      <div class="field col2">
+        <label>Card Background Image <span style="font-size:.5rem;color:var(--text3);text-transform:none;letter-spacing:0;font-weight:400">overrides body color</span></label>
+        <div class="upload-zone" id="zone-bg" onclick="document.getElementById('inp-bg').click()" style="min-height:52px">
+          <i class="ti ti-photo uz-icon"></i>
+          <span class="uz-txt">Click to upload background</span>
+          <span class="uz-sub">Fills the card body</span>
+          <img class="uz-preview" id="prev-bg" alt="">
+          <button class="uz-clear" onclick="clearImg(event,'bg')" title="Remove"><i class="ti ti-x"></i></button>
+        </div>
+        <input type="file" id="inp-bg" accept="image/*" onchange="loadImg(this,'bg')">
+        <!-- Overlay toggle — only visible when bg is uploaded -->
+        <div class="overlay-row" id="overlay-row" style="display:none">
+          <label for="overlay-toggle">White overlay (readability)</label>
+          <label class="toggle">
+            <input type="checkbox" id="overlay-toggle" onchange="toggleOverlay(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">Badge Size</div>
+    <div class="size-grid">
+      <div class="size-card" data-size="small" onclick="pickSize(this)">
+        <span class="sc-name">Small</span>
+        <span class="sc-dim">1″ × 3″ / 2.5 × 7.6 cm</span>
+        <span class="sc-desc">Names only — simple tags</span>
+      </div>
+      <div class="size-card on" data-size="standard" onclick="pickSize(this)">
+        <span class="sc-name">Standard ★</span>
+        <span class="sc-dim">1.5″ × 3″ / 3.8 × 7.6 cm</span>
+        <span class="sc-desc">Industry standard</span>
+      </div>
+      <div class="size-card" data-size="event" onclick="pickSize(this)">
+        <span class="sc-name">Event</span>
+        <span class="sc-dim">2″ × 3.5″ / 5.1 × 8.9 cm</span>
+        <span class="sc-desc">Trade shows</span>
+      </div>
+      <div class="size-card" data-size="conference" onclick="pickSize(this)">
+        <span class="sc-name">Conference</span>
+        <span class="sc-dim">4″ × 3″ / 10.2 × 7.6 cm</span>
+        <span class="sc-desc">Lanyard badges + QR</span>
+      </div>
+    </div>
+
+    <div class="sec">Colors &amp; Style</div>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Card Body Color</label>
+      <div class="swatches" id="sw-body">
+        <div class="sw on"  data-c="#ffffff" style="background:#fff;border:1.5px solid #ddd" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#f5f0e8" style="background:#f5f0e8" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#e8f0fe" style="background:#e8f0fe" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#e8f5e9" style="background:#e8f5e9" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#fce4ec" style="background:#fce4ec" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#fff8e1" style="background:#fff8e1" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#ede7f6" style="background:#ede7f6" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#1a1a2e" style="background:#1a1a2e" onclick="pickSw(this,'body')"></div>
+        <div class="sw"     data-c="#1c1c1c" style="background:#1c1c1c" onclick="pickSw(this,'body')"></div>
+        <div class="sw-custom"><i class="ti ti-color-picker"></i><input type="color" id="cc-body" value="#ffffff" oninput="customSw(this,'body')"></div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Surname Accent Color</label>
+      <div class="swatches" id="sw-surname">
+        <div class="sw on"  data-c="#c9a96e" style="background:#c9a96e" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#e05252" style="background:#e05252" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#2980b9" style="background:#2980b9" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#2d5a3d" style="background:#2d5a3d" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#8e44ad" style="background:#8e44ad" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#16a085" style="background:#16a085" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#e67e22" style="background:#e67e22" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#c0392b" style="background:#c0392b" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#212E54" style="background:#212E54" onclick="pickSw(this,'surname')"></div>
+        <div class="sw"     data-c="#b06a8a" style="background:#b06a8a" onclick="pickSw(this,'surname')"></div>
+        <div class="sw-custom"><i class="ti ti-color-picker"></i><input type="color" id="cc-surname" value="#c9a96e" oninput="customSw(this,'surname')"></div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Top Bar Color</label>
+      <div class="swatches" id="sw-bar">
+        <div class="sw"     data-c="#c9a96e" style="background:#c9a96e" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#e05252" style="background:#e05252" onclick="pickSw(this,'bar')"></div>
+        <div class="sw on"  data-c="#2980b9" style="background:#2980b9" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#2d5a3d" style="background:#2d5a3d" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#8e44ad" style="background:#8e44ad" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#16a085" style="background:#16a085" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#e67e22" style="background:#e67e22" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#c0392b" style="background:#c0392b" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#212E54" style="background:#212E54" onclick="pickSw(this,'bar')"></div>
+        <div class="sw"     data-c="#b06a8a" style="background:#b06a8a" onclick="pickSw(this,'bar')"></div>
+        <div class="sw-custom"><i class="ti ti-color-picker"></i><input type="color" id="cc-bar" value="#2980b9" oninput="customSw(this,'bar')"></div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-bottom:16px">
+      <label>Name Size</label>
+      <div class="range-row">
+        <input type="range" min="16" max="40" value="26" id="name-size" oninput="updateSize(this)">
+        <span class="range-val" id="size-val">26px</span>
+      </div>
+    </div>
+
+    <div class="sec">Badge Style</div>
+    <div class="style-grid">
+      <div class="style-card on" data-style="minimal" onclick="pickStyle(this)">
+        <i class="ti ti-credit-card"></i><span>Minimal</span>
+      </div>
+      <div class="style-card" data-style="s-classic" onclick="pickStyle(this)">
+        <i class="ti ti-border-style-2"></i><span>Classic</span>
+      </div>
+      <div class="style-card" data-style="s-sharp" onclick="pickStyle(this)">
+        <i class="ti ti-square"></i><span>Sharp</span>
+      </div>
+    </div>
+
+  </div><!-- /panel -->
+
+  <!-- ══ RIGHT CANVAS ══ -->
+  <div class="canvas">
+    <div class="canvas-label">Live Preview</div>
+    <div class="size-pill" id="size-pill">Standard — 1.5″ × 3″</div>
+
+    <div class="lanyard" id="lanyard">
+      <div class="lanyard-clip"></div>
+      <div class="lanyard-cord"></div>
+    </div>
+
+    <!-- THE BADGE -->
+    <div class="badge" id="badge" style="--badge-bar-color:#2980b9">
+      <div class="badge-bg" id="badge-bg"></div>
+      <div class="badge-corner badge-corner-tl"></div>
+      <div class="badge-corner badge-corner-tr"></div>
+      <div class="badge-corner badge-corner-bl"></div>
+      <div class="badge-corner badge-corner-br"></div>
+
+      <div class="badge-bar" id="badge-bar" style="background:#2980b9">
+        <span class="badge-bar-txt" id="badge-bar-txt">Annual Summit 2026</span>
+      </div>
+
+      <div class="badge-holes">
+        <div class="badge-hole"></div>
+        <div class="badge-hole"></div>
+      </div>
+
+      <div class="badge-org">
+        <div class="badge-logo-wrap" id="badge-logo-wrap">
+          <i class="ti ti-building"></i>
+          <img id="badge-logo-img" alt="logo">
+        </div>
+        <span class="badge-org-name" id="badge-org-name">ResumeCraft Inc.</span>
+      </div>
+
+      <div class="badge-body">
+        <div class="badge-names">
+          <div class="badge-fn" id="badge-fn">Maria</div>
+          <div class="badge-ln" id="badge-ln" style="color:#c9a96e">Santos</div>
+          <div class="badge-role" id="badge-role">SOFTWARE ENGINEER</div>
+        </div>
+        <div class="badge-photo" id="badge-photo">
+          <img id="badge-photo-img" alt="photo">
+        </div>
+      </div>
+
+      <div class="badge-divider" id="badge-divider" style="display:none"></div>
+      <div class="badge-contacts" id="badge-contacts"></div>
+
+      <div class="badge-qr-wrap" id="badge-qr-wrap">
+        <div class="badge-qr"><i class="ti ti-qrcode"></i></div>
+      </div>
+    </div><!-- /badge -->
+
+    <div class="export-row">
+      <button class="btn btn-ghost" onclick="downloadPNG()"><i class="ti ti-photo-down"></i> PNG</button>
+      <button class="btn btn-primary" onclick="printBadge()"><i class="ti ti-printer"></i> Print</button>
+    </div>
+  </div><!-- /canvas -->
+
+</div><!-- /shell -->
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg">Done!</span></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

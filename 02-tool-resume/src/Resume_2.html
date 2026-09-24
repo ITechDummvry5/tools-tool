@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume – Light Minimal</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style-resume2.css">
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tb-btn" onclick="goBack()">← Back to Editor</button>
+  <button class="tb-btn primary" onclick="window.print()">⬇ Download / Print PDF</button>
+</div>
+
+<div class="page" id="resumePage">
+  <div class="header-band">
+    <div class="hb-left">
+      <div class="hb-name" id="hb-name"></div>
+      <div class="hb-title" id="hb-title"></div>
+      <div class="hb-profile" id="hb-profile"></div>
+      <div class="hb-objective" id="hb-objective" style="display:none"></div>
+    </div>
+    <div class="hb-right" id="hb-photo-wrap"></div>
+  </div>
+
+  <div class="contact-strip" id="contact-strip"></div>
+
+  <div class="body-grid">
+    <div class="main-col">
+      <div class="section-gap" id="main-work-sec">
+        <div class="sec-title">Work Experience</div>
+        <div id="main-work"></div>
+      </div>
+      <div class="section-gap" id="main-edu-sec">
+        <div class="sec-title">Education</div>
+        <div id="main-edu"></div>
+      </div>
+      <div class="section-gap" id="main-proj-sec">
+        <div class="sec-title">Projects</div>
+        <div class="proj-grid" id="main-proj"></div>
+      </div>
+      <div class="section-gap" id="main-cert-sec">
+        <div class="sec-title">Certifications</div>
+        <div class="cert-list" id="main-certs"></div>
+      </div>
+      <div class="section-gap" id="main-award-sec">
+        <div class="sec-title">Achievements & Awards</div>
+        <div id="main-awards"></div>
+      </div>
+      <div class="section-gap" id="main-train-sec">
+        <div class="sec-title">Trainings & Seminars</div>
+        <div id="main-trains"></div>
+      </div>
+      <div class="section-gap" id="main-ref-sec">
+        <div class="sec-title">References</div>
+        <div class="ref-2col" id="main-refs"></div>
+      </div>
+    </div>
+
+    <div class="side-col">
+      <div class="sb2-sec-gap" id="sb2-personal-sec">
+        <div class="sb2-sec-title">Personal Info</div>
+        <div id="sb2-personal"></div>
+      </div>
+      <div class="sb2-sec-gap" id="sb2-social-sec">
+        <div class="sb2-sec-title">Social Profiles</div>
+        <div id="sb2-social"></div>
+      </div>
+      <div class="sb2-sec-gap" id="sb2-soft-sec">
+        <div class="sb2-sec-title">Technical Skills</div>
+        <div class="skill-pill-wrap" id="sb2-soft"></div>
+      </div>
+      <div class="sb2-sec-gap" id="sb2-inter-sec">
+        <div class="sb2-sec-title">Interpersonal Skills</div>
+        <div class="skill-pill-wrap" id="sb2-inter"></div>
+      </div>
+      <div class="sb2-sec-gap" id="sb2-lang-sec">
+        <div class="sb2-sec-title">Languages</div>
+        <div id="sb2-langs"></div>
+      </div>
+      <div class="sb2-sec-gap" id="sb2-hobby-sec">
+        <div class="sb2-sec-title">Hobbies & Interests</div>
+        <div class="hobby-wrap" id="sb2-hobbies"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/script-resume2.js"></script>
+</body>
+</html>

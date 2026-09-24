@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume – Dark Sidebar</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style-resume1.css">
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tb-btn" onclick="goBack()">← Back to Editor</button>
+  <button class="tb-btn primary" onclick="window.print()">⬇ Download / Print PDF</button>
+</div>
+
+<div class="page" id="resumePage">
+  <aside class="sidebar">
+    <div class="sb-photo-wrap"><div id="sbPhotoContainer"></div></div>
+    <div class="sb-name-block">
+      <div class="sb-fname" id="sb-fname"></div>
+      <div class="sb-lname" id="sb-lname"></div>
+      <div class="sb-job" id="sb-job"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-contact-sec">
+      <div class="sb-sec-title">Contact</div>
+      <div id="sb-contacts"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-social-sec">
+      <div class="sb-sec-title">Social Profiles</div>
+      <div id="sb-socials"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-personal-sec">
+      <div class="sb-sec-title">Personal Info</div>
+      <div class="personal-grid" id="sb-personal"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-soft-sec">
+      <div class="sb-sec-title">Software Skills</div>
+      <div class="skills-2col" id="sb-soft-skills"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-inter-sec">
+      <div class="sb-sec-title">Interpersonal Skills</div>
+      <div class="skills-2col" id="sb-inter-skills"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-lang-sec">
+      <div class="sb-sec-title">Languages</div>
+      <div id="sb-languages"></div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section" id="sb-hobby-sec">
+      <div class="sb-sec-title">Hobbies & Interests</div>
+      <div id="sb-hobbies"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="main-profile-sec" class="section-gap">
+      <div class="sec-title">Profile</div>
+      <div class="profile-text" id="main-profile"></div>
+    </div>
+    <div id="main-objective-sec" class="section-gap" style="display:none">
+      <div class="sec-title">Career Objective</div>
+      <div class="objective-text" id="main-objective"></div>
+    </div>
+    <div id="main-work-sec" class="section-gap">
+      <div class="sec-title">Work Experience</div>
+      <div id="main-work"></div>
+    </div>
+    <div id="main-edu-sec" class="section-gap">
+      <div class="sec-title">Education</div>
+      <div id="main-edu"></div>
+    </div>
+    <div id="main-proj-sec" class="section-gap">
+      <div class="sec-title">Projects</div>
+      <div class="proj-grid" id="main-projs"></div>
+    </div>
+    <div id="main-cert-sec" class="section-gap">
+      <div class="sec-title">Certifications</div>
+      <div class="cert-grid" id="main-certs"></div>
+    </div>
+    <div id="main-award-sec" class="section-gap">
+      <div class="sec-title">Achievements & Awards</div>
+      <div id="main-awards"></div>
+    </div>
+    <div id="main-train-sec" class="section-gap">
+      <div class="sec-title">Trainings & Seminars</div>
+      <div id="main-trains"></div>
+    </div>
+    <div id="main-ref-sec" class="section-gap">
+      <div class="sec-title">References</div>
+      <div class="ref-grid" id="main-refs"></div>
+    </div>
+  </main>
+</div>
+
+<script src="js/script-resume1.js"></script>
+</body>
+</html>
