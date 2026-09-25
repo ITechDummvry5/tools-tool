@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mom's Expense Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="dedication">
+  <div class="heart">❤️</div>
+  <h1>For you!</h1>
+  <p>A simple expense tracker built to help manage daily family spending.</p>
+  <p style="color:#555;font-size:14px;">Built with care 💌</p>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span id="toastMsg"></span><button class="toast-undo" id="toastUndoBtn" style="display:none" onclick="undoDelete()">Undo</button></div>
+
+<div class="app-wrap" id="appWrap">
+
+<nav class="topbar">
+  <div class="topbar-logo">Mom's Tracker</div>
+  <div class="topbar-right">
+    <div class="topbar-links">
+      <a href="#" class="active">Overview</a>
+      <a href="notes.html">Notes</a>
+      <a href="iconlib.html">Icon Library</a>
+    </div>
+    <div class="theme-toggle">
+      <button class="theme-btn active" id="btnDark" onclick="setTheme('dark')" title="Dark mode">D</button>
+      <button class="theme-btn" id="btnLight" onclick="setTheme('light')" title="Light mode">L</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Family Expense Tracker</p>
+  <h1>Track daily products,<br><em>expenses</em>, and essentials</h1>
+  <p>Stay organized, manage your budget, and never lose track of what you've spent.</p>
+</section>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">Total spent</div><div class="stat-value green" id="statTotal">₱0.00</div></div>
+  <div class="stat-card"><div class="stat-label">Budget left</div><div class="stat-value" id="statLeft">—</div></div>
+  <div class="stat-card"><div class="stat-label">Items</div><div class="stat-value" id="statCount">0</div></div>
+  <div class="stat-card"><div class="stat-label">Checked off</div><div class="stat-value amber" id="statChecked">0</div></div>
+</div>
+
+<!-- CALLOUT CARDS: cheapest / most expensive -->
+<div class="callout-row">
+  <div class="callout-card"><span class="callout-icon"></span><div><div class="callout-label">Cheapest item</div><div class="callout-val" id="calloutCheap">—</div></div></div>
+  <div class="callout-card"><span class="callout-icon"></span><div><div class="callout-label">Most expensive</div><div class="callout-val" id="calloutExp">—</div></div></div>
+  <div class="callout-card"><span class="callout-icon"></span><div><div class="callout-label">Daily spent</div><div class="callout-val" id="dailySpent">—</div></div></div>
+  <div class="callout-card"><span class="callout-icon"></span><div><div class="callout-label">Daily remaining</div><div class="callout-val" id="dailyRemaining">—</div></div></div>
+
+</div>
+
+    
+<!-- WEEK HISTORY TABS -->
+<div class="week-tabs" id="weekTabs"></div>
+
+<!-- BUDGET -->
+<div class="budget-section">
+  <div class="budget-header"><h3>Weekly budget</h3><span id="budgetPct">—</span></div>
+  <div class="budget-track"><div class="budget-fill" id="budgetFill" style="width:0%"></div></div>
+  <div class="budget-set">
+    <input type="number" id="budgetInput" placeholder="Set weekly budget (₱)" min="0"/>
+    <button onclick="setBudget()">Set budget</button>
+    <button onclick="addBudget()" style="background:rgba(48,209,88,0.15);color:#30d158;border-color:rgba(48,209,88,0.3);">+ Add extra</button>
+    <button onclick="resetBudget()" style="background:rgba(255,69,58,0.15);color:#ff453a;border-color:rgba(255,69,58,0.3);">Reset budget</button>
+  </div>
+  <div class="daily-limit-row">
+    <input type="number" id="dailyLimitInput" placeholder="Set daily limit (₱)" min="0"/>
+    <button onclick="setDailyLimit()" style="background:var(--surface3);border:0.5px solid var(--border2);color:var(--text);font-size:13px;padding:8px 16px;border-radius:var(--radius-pill);cursor:pointer;font-family:inherit;">Set daily limit</button>
+
+  </div>
+</div>
+
+<!-- SPARKLINE -->
+<div class="sparkline-section">
+  <h3>Weekly spending trend</h3>
+  <canvas id="sparkCanvas"></canvas>
+</div>
+
+<!-- BREAKDOWN -->
+<div class="breakdown">
+  <h3>Spending breakdown</h3>
+  <div class="breakdown-bars">
+    <div class="bbar-row bbar-food"><span class="bbar-label">Food</span><div class="bbar-track"><div class="bbar-fill" id="barFood" style="width:0%"></div></div><span class="bbar-amount" id="amtFood">₱0</span></div>
+    <div class="bbar-row bbar-home"><span class="bbar-label">Home</span><div class="bbar-track"><div class="bbar-fill" id="barHome" style="width:0%"></div></div><span class="bbar-amount" id="amtHome">₱0</span></div>
+    <div class="bbar-row bbar-personal"><span class="bbar-label">Personal</span><div class="bbar-track"><div class="bbar-fill" id="barPersonal" style="width:0%"></div></div><span class="bbar-amount" id="amtPersonal">₱0</span></div>
+    <div class="bbar-row bbar-bills"><span class="bbar-label">Bills</span><div class="bbar-track"><div class="bbar-fill" id="barBills" style="width:0%"></div></div><span class="bbar-amount" id="amtBills">₱0</span></div>
+    <div class="bbar-row bbar-other"><span class="bbar-label">Other</span><div class="bbar-track"><div class="bbar-fill" id="barOther" style="width:0%"></div></div><span class="bbar-amount" id="amtOther">₱0</span></div>
+  </div>
+</div>
+
+<!-- FILTER + SORT -->
+<div class="filter-row">
+  <button class="filter-btn active" onclick="filterCat('all',this)">All</button>
+  <button class="filter-btn" onclick="filterCat('food',this)">Food</button>
+  <button class="filter-btn" onclick="filterCat('home',this)">Home</button>
+  <button class="filter-btn" onclick="filterCat('personal',this)">Personal</button>
+  <button class="filter-btn" onclick="filterCat('bills',this)">Bills</button>
+  <button class="filter-btn" onclick="filterCat('other',this)">Other</button>
+  <select class="sort-select" id="sortSelect" onchange="renderRow()">
+    <option value="added">Sort: Date added</option>
+    <option value="price-asc">Sort: Price ↑</option>
+    <option value="price-desc">Sort: Price ↓</option>
+    <option value="cat">Sort: Category</option>
+  </select>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-bar-wrap">
+  <input class="search-bar" id="searchBar" placeholder="🔍  Search products in this week…" oninput="renderRow()"/>
+</div>
+
+<!-- BATCH ACTIONS -->
+<div class="batch-row">
+  <button onclick="checkAll()">✓ Mark all checked</button>
+  <button onclick="uncheckAll()">◯ Uncheck all</button>
+</div>
+
+<!-- RECENT QUICK-ADD -->
+<div class="recent-section" id="recentSection" style="display:none;">
+  <h3>Quick-add from recent</h3>
+  <div class="recent-chips" id="recentChips"></div>
+</div>
+
+<!-- STARRED / FREQUENTLY BOUGHT -->
+<div class="starred-section" id="starredSection" style="display:none;">
+  <h3>⭐ Frequently bought</h3>
+  <div id="starredRow"></div>
+</div>
+
+<section class="section">
+  <div class="section-header"><h2 id="weekLabel">Weekly purchases</h2></div>
+  <p class="section-desc">Tap ✓ to check off items while shopping · Tap ✕ to delete · Tap ⊕ to duplicate · Tap ⭐ to star</p>
+  <div class="icon-row-wrap">
+    <div class="icon-row" id="iconRow">
+      <div class="empty-state" id="emptyState">No products yet — tap "Add Product" below to get started.</div>
+    </div>
+  </div>
+  <div class="action-row">
+    <div class="btn-group">
+      <button class="btn" onclick="openModal()">+ Add Product</button>
+      <button class="btn btn-ghost" onclick="toggleReceipt()">🧾 Receipt</button>
+      <button class="btn btn-ghost" onclick="printReceipt()">🖨️ Print</button>
+      <button class="btn btn-ghost" onclick="exportJSON()">⬇ JSON</button>
+      <button class="btn btn-ghost" onclick="openImport()">⬆ Import</button>
+      <button class="btn btn-danger" onclick="clearAll()">Clear all</button>
+    </div>
+    <div class="scroll-btns">
+      <button onclick="scrollLeft()">‹</button>
+      <button onclick="scrollRight()">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- RECEIPT -->
+<div id="receiptPreview">
+  <h3>Mom's Expense Tracker</h3>
+  <div class="receipt-meta" id="receiptMeta"></div>
+  <div class="receipt-store-row">
+    <input id="storeNameInput" placeholder="Store name (optional)" type="text"/>
+    <input id="storeLocInput" placeholder="Location (optional)" type="text"/>
+  </div>
+  <div class="export-row">
+    <button onclick="exportCSV()">⬇ Export CSV</button>
+    <button onclick="exportJSON()">⬇ Export JSON</button>
+    <button onclick="groupByCategory=!groupByCategory;buildReceipt()" id="groupBtn">📂 Group by category</button>
+  </div>
+  <div id="receiptContent"></div>
+</div>
+
+<footer>
+  <div class="footer-grid" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;">
+    <div>
+      <h4>Mom's Expense Tracker</h4>
+      <p style="font-size:12px;color:var(--text3);line-height:1.8;">A simple tool to help families track daily spending, manage budgets, and stay financially organized. Built for real-life grocery trips, weekly budgeting, and everyday needs.</p>
+    </div>
+    <div>
+      <h4>Smart tips</h4>
+      <a>Buy in bulk to save more</a>
+      <a>Check expiry dates</a>
+      <a>Compare prices</a>
+      <a>Shop early for freshness</a>
+    </div>
+    <div>
+      <h4>Quick actions</h4>
+      <a onclick="openModal()">Add product</a>
+      <a onclick="toggleReceipt()">View receipt</a>
+      <a onclick="printReceipt()">Print receipt</a>
+      <a onclick="clearAll()">Clear list</a>
+    </div>
+    <div>
+      <h4>Tools</h4>
+      <a href="notes.html">Notes</a>
+      <a href="iconlib.html">Icon Library</a>
+      <a onclick="openImport()">Import data</a>
+      <a onclick="exportJSON()">Backup (JSON)</a>
+
+    </div>
+    <div>
+      <h4>System</h4>
+      <a>Settings</a>
+      <a>Help & guide</a>
+      <a>Privacy & Terms</a>
+      <a>Feedback</a>
+    </div>
+  </div>
+  <p class="footer-copy" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>Family Expense Tracker © 2026 · Built with care 💌</span>
+    <span style="color:var(--text3);">Stay on budget, always.</span>
+  </p>
+</footer>
+
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">Add product expense</h2>
+    <div class="form-grid">
+      <div>
+        <label class="form-label">Product name</label>
+        <input id="productName" type="text" placeholder="e.g. Rice, Soap"/>
+      </div>
+      <div>
+        <label class="form-label">Category</label>
+        <select id="category">
+          <option value="food">🍚 Food</option>
+          <option value="home">🧺 Home</option>
+          <option value="personal">🧴 Personal</option>
+          <option value="bills">🧾 Bills</option>
+          <option value="other">📦 Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Quantity</label>
+        <input id="quantity" type="number" placeholder="1" min="1"/>
+      </div>
+      <div>
+        <label class="form-label">Price per item (₱)</label>
+        <input id="price" type="number" placeholder="0.00" min="0" step="0.01"/>
+      </div>
+      <div>
+        <label class="form-label">Min price (₱) – optional</label>
+        <input id="priceMin" type="number" placeholder="min" min="0" step="0.01"/>
+      </div>
+      <div>
+        <label class="form-label">Max price (₱) – optional</label>
+        <input id="priceMax" type="number" placeholder="max" min="0" step="0.01"/>
+      </div>
+      <div class="form-full">
+        <label class="form-label">Icon (type to search)</label>
+        <div style="position:relative;">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input id="iconFile" type="text" placeholder="e.g. rice, baon, bill..." oninput="iconSearch(this.value)" autocomplete="off" style="flex:1;"/>
+            <div id="imgPreviewWrap" style="display:none;width:48px;height:48px;border-radius:10px;background:var(--surface2);overflow:hidden;flex-shrink:0;border:0.5px solid var(--border2);">
+              <img id="imgPreview" style="width:100%;height:100%;object-fit:contain;padding:4px;"/>
+            </div>
+          </div>
+          <div id="iconSuggestions" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:#1c1c1e;border:0.5px solid var(--border2);border-radius:12px;overflow:hidden;z-index:999;max-height:200px;overflow-y:auto;"></div>
+        </div>
+        <p style="font-size:11px;color:var(--text3);margin-top:8px;">Put PNGs in <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--text);">icons/</code> folder · add filenames to <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--text);"><a href="iconlib.html" target="_blank">iconLibrary</a></code></p>
+      </div>
+      <div class="form-full">
+        <label class="form-label">Note (optional)</label>
+        <textarea id="note" placeholder="e.g. Buy from SM, check expiry date..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="saveBtn" onclick="saveProduct()">Save product</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div id="importModal">
+  <div id="importBox">
+    <h2>Import data</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Paste exported JSON below to restore your data.</p>
+    <textarea id="importText" placeholder='[{"name":"Rice","qty":1,"price":50,...}]'></textarea>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+      <button onclick="closeImport()" style="padding:10px 20px;border-radius:var(--radius-pill);background:transparent;border:none;color:var(--text2);cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="doImport()" style="padding:10px 20px;border-radius:var(--radius-pill);background:var(--blue);border:none;color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Import</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

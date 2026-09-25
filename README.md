@@ -2,10 +2,10 @@
 Tools — Useful utilities, scripts, or developer tools.
 
 
-mkdir -p 03-tool-matrix-solver/{docs,src/css,src/js}
+mkdir -p 04-tool-tracker-expense/{docs,src/css,src/js}
 
-touch 03-tool-matrix-solver/{README.md,LICENSE,.gitignore}
-touch 03-tool-matrix-solver/docs/{overview.md,setup.md,usage.md}
-touch 03-tool-matrix-solver/src/index.html
-touch 03-tool-matrix-solver/src/css/style.css
-touch 03-tool-matrix-solver/src/js/script.js
+touch 04-tool-tracker-expense/{README.md,LICENSE,.gitignore}
+touch 04-tool-tracker-expense/docs/{overview.md,setup.md,usage.md}
+touch 04-tool-tracker-expense/src/index.html
+touch 04-tool-tracker-expense/src/css/style.css
+touch 04-tool-tracker-expense/src/js/script.js

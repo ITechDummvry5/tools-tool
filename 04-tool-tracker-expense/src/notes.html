@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style-notes.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Notes Library</div>
+  <a class="nav-back" href="index.html">← Back to Tracker</a>
+</nav>
+
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <p class="hero-eyebrow">Expense Tracker Guide</p>
+  <h1>Your <em> Notes </em> library</h1>
+  <p class="hero-sub">Everything you need to know — updated to match the latest version of Mom's Tracker.</p>
+</section>
+
+<!-- STATS CARDS -->
+<section class="section">
+  <h2>📌 Top Stats — What Each Number Means</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top blue"></div>
+      <div class="card-content">
+        <h3>Total Spent</h3>
+        <p>Shows everything you have spent so far. Automatically increases every time you add a product.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Just add items — the total updates by itself.</div>
+        <div class="note">Example: Add Rice ₱65 + Soap ₱30 = Total Spent ₱95</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top amber"></div>
+      <div class="card-content">
+        <h3>Budget Left</h3>
+        <p>How much money you can still spend. Turns <strong style="color:#ffd60a">yellow</strong> when almost out, <strong style="color:#ff453a">red</strong> and says "over" when exceeded.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Always check this before buying anything.</div>
+        <div class="note">Shows "—" if no budget is set yet. Set your budget first!</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top green"></div>
+      <div class="card-content">
+        <h3>Items</h3>
+        <p>Total number of products you have added to the list this week.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Use this to avoid overbuying.</div>
+        <div class="note">More items = higher total spending.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top orange"></div>
+      <div class="card-content">
+        <h3>Checked Off</h3>
+        <p>How many items you already picked up at the market. Tap ✓ on a product card to check it off while shopping.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap ✓ on a card as you put it in your cart.</div>
+        <div class="note">Checked items turn gray with a green ✓ badge so you know what's done.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="section">
+  <h2>💰 Budget Control Panel</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top lime"></div>
+      <div class="card-content">
+        <h3>Weekly Budget Bar</h3>
+        <p>A progress bar that fills up as you spend. Green = safe · Yellow = almost out · Red = over budget.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Set your budget first, then start adding products.</div>
+        <div class="note">Example: Budget ₱500, Spent ₱400 → bar is 80% full and turns yellow.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top purple"></div>
+      <div class="card-content">
+        <h3>Set Budget</h3>
+        <p>Type your spending limit and tap "Set Budget" to start tracking. Budget is saved — it stays even if you refresh.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Set this once at the start of the week.</div>
+        <div class="note">Example: Type 500 → click Set Budget → bar starts tracking.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top sky"></div>
+      <div class="card-content">
+        <h3>+ Add Extra Budget</h3>
+        <span class="tag new">New</span>
+        <p>Adds more money on top of your existing budget without losing your spending history. Safer than resetting.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Use this when you need extra money mid-week.</div>
+        <div class="note">Example: Budget ₱500, click "+ Add Extra" → type 200 → new budget becomes ₱700.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top indigo"></div>
+      <div class="card-content">
+        <h3>Reset Budget</h3>
+        <p>Clears the budget limit only. Your products and total spent are NOT deleted.</p>
+        <div class="action warn">⚠ WHAT TO DO:<br>Only use this when starting a new week or new budget cycle.</div>
+        <div class="note">IMPORTANT: Items stay. Only the budget limit goes to zero.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SPENDING BREAKDOWN -->
+<section class="section">
+  <h2>📊 Spending Breakdown</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top pink"></div>
+      <div class="card-content">
+        <h3>🍚 Food</h3>
+        <p>Shows how much of your budget went to food items like rice, ulam, baon, groceries, eggs, etc.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Select "Food" category when adding food products.</div>
+        <div class="note">Bar updates automatically every time you add or delete a food item.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top teal"></div>
+      <div class="card-content">
+        <h3>🧺 Home</h3>
+        <p>Tracks spending on household items like detergent, cleaning supplies, dishwash, gas, etc.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Select "Home" category for anything used around the house.</div>
+        <div class="note">Example: Detergent ₱80 → Home category.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top purple"></div>
+      <div class="card-content">
+        <h3>🧴 Personal</h3>
+        <p>Tracks personal care spending — soap, shampoo, lotion, gamot, and similar items.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Select "Personal" when adding health and hygiene items.</div>
+        <div class="note">Example: Shampoo ₱55 → Personal category.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top orange"></div>
+      <div class="card-content">
+        <h3>🧾 Bills</h3>
+        <span class="tag new">New</span>
+        <p>Tracks recurring bills like electricity, water, internet, rent, Lazada, Shopee orders.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Select "Bills" for any payment or subscription.</div>
+        <div class="note">Example: Electricity ₱1,200 → Bills category.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top gray"></div>
+      <div class="card-content">
+        <h3>📦 Other</h3>
+        <p>Anything that doesn't fit the other categories goes here.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Use "Other" for miscellaneous spending.</div>
+        <div class="note">Example: School supplies, gifts, unexpected expenses.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRODUCT CARDS -->
+<section class="section">
+  <h2>🛒 Product Cards — How to Use</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top blue"></div>
+      <div class="card-content">
+        <h3>+ Add Product</h3>
+        <p>Opens a form where you fill in the product name, category, quantity, price, icon, and optional note.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Fill name + price at minimum. Category defaults to Food.</div>
+        <div class="note">All products are saved automatically — refreshing the page will NOT lose your data.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top lime"></div>
+      <div class="card-content">
+        <h3>Icon Search</h3>
+        <span class="tag new">New</span>
+        <p>Type part of the filename in the icon field — a dropdown appears showing matching icons from your <code style="background:#1c1c1e;padding:2px 5px;border-radius:4px;font-size:11px;">icons/</code> folder.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Type "ric" → rice.png appears → tap it to select.</div>
+        <div class="note">Your icons: rice.png · kape.png · agahan.png · miryenda.png · ulam.png · baon.png · bills.png · lazada.png · shopee.png · groceries.png · tubig.png · egg.png · fastfooddelivery.png · gamot.png · delata.png · gas.png · school.png · default.png · edit.png</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top amber"></div>
+      <div class="card-content">
+        <h3>✓ Check Off</h3>
+        <p>Tap the green ✓ button on any card while you are at the market to mark it as picked up.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap ✓ as you put each item in your cart.</div>
+        <div class="note">Checked items turn gray with a ✓ badge. The "Checked Off" stat at the top updates automatically.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top sky"></div>
+      <div class="card-content">
+        <h3>Edit Product (eye/edit icon)</h3>
+        <span class="tag new">New</span>
+        <p>Each product card has a centered edit icon below the product image. Tap it to open the edit form pre-filled with that product's details.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap the edit icon → change what you need → tap "Update product".</div>
+        <div class="note">You can change the name, price, quantity, category, icon, or note. The card updates instantly.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top red"></div>
+      <div class="card-content">
+        <h3>✕ Delete Product</h3>
+        <p>Tap the red ✕ button (top right of card, appears on hover) to permanently remove that item.</p>
+        <div class="action warn">⚠ WHAT TO DO:<br>Only delete if you are sure — this cannot be undone.</div>
+        <div class="note">Total spent and budget bar update automatically after deletion.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top indigo"></div>
+      <div class="card-content">
+        <h3>Category Filter</h3>
+        <p>Tap All · Food · Home · Personal · Bills · Other to show only items in that category.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Use filters at the market to quickly find the right items.</div>
+        <div class="note">Filtering does not delete anything — just hides other categories temporarily.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACTIONS -->
+<section class="section">
+  <h2>🧾 Actions Panel</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top purple"></div>
+      <div class="card-content">
+        <h3>🧾 Receipt</h3>
+        <p>Shows a full summary table of all your products — name, quantity, category, and subtotal — with today's date.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap Receipt to review everything before paying or printing.</div>
+        <div class="note">Total is shown at the bottom of the receipt.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top green"></div>
+      <div class="card-content">
+        <h3>🖨️ Print</h3>
+        <p>Prints only the receipt — the rest of the page is hidden during print so it comes out clean.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Use for paper records or to show someone your spending list.</div>
+        <div class="note">Receipt prints in black and white, readable on paper.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top red"></div>
+      <div class="card-content">
+        <h3>Clear All</h3>
+        <p>Removes ALL products from your list permanently. Budget is not affected.</p>
+        <div class="action warn">⚠ WHAT TO DO:<br>Only use when starting a brand new week.</div>
+        <div class="note">WARNING: This cannot be undone. All items will be gone.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- THEME -->
+<section class="section">
+  <h2>🌙 Dark / Light Mode</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top gray"></div>
+      <div class="card-content">
+        <h3>🌙 Dark Mode</h3>
+        <span class="tag new">New</span>
+        <p>The default mode — black background with white text. Easier on the eyes at night.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap the 🌙 button in the top right of the nav bar.</div>
+        <div class="note">Your preference is saved — it stays dark even after refresh.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top sky"></div>
+      <div class="card-content">
+        <h3>☀️ Light Mode</h3>
+        <span class="tag new">New</span>
+        <p>White background with dark text — just like iPhone's default look. Great for daytime use.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Tap the ☀️ button in the top right of the nav bar.</div>
+        <div class="note">Everything — cards, modal, budget bar, footer — switches smoothly.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top indigo"></div>
+      <div class="card-content">
+        <h3>Auto-Save Theme</h3>
+        <span class="tag new">New</span>
+        <p>Whatever mode you pick is remembered by the app. You don't need to switch every time you open it.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Switch once — it stays your chosen mode forever.</div>
+        <div class="note">Saved in your browser's local storage. Works without internet.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AUTO SAVE -->
+<section class="section">
+  <h2>💾 Auto-Save — Your Data is Always Safe</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-top teal"></div>
+      <div class="card-content">
+        <h3>Refresh Safe</h3>
+        <span class="tag new">New</span>
+        <p>All your products, budget, and checked-off items are saved automatically. Refreshing or closing the tab will NOT lose your data.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Nothing — it saves by itself every time you make a change.</div>
+        <div class="note">Data is stored in your browser's local storage — no internet needed.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top gold"></div>
+      <div class="card-content">
+        <h3>What Gets Saved</h3>
+        <p>Everything is saved automatically: all products · prices · quantities · categories · icons · check-off status · budget amount · theme preference.</p>
+        <div class="action safe">✔ WHAT TO DO:<br>Just use the app normally — saving is automatic.</div>
+        <div class="note">Only "Clear All" and "Reset Budget" remove saved data — so use those carefully.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top red"></div>
+      <div class="card-content">
+        <h3>When Data Is Deleted</h3>
+        <p>Data is only removed when you manually: tap "Clear All" (removes all products) or "Reset Budget" (removes budget only).</p>
+        <div class="action warn">⚠ WHAT TO DO:<br>Think twice before tapping Clear All or Reset Budget.</div>
+        <div class="note">Clearing browser history or cache can also erase saved data.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

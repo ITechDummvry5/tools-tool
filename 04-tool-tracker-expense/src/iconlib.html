@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Icon Library</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style-iconlib.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Icon Library</div>
+  <a class="nav-back" href="index.html">← Back to Tracker</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <p class="hero-eyebrow">Flaticon PNG Collection</p>
+  <h1>Your <em>icon</em> library</h1>
+  <p class="hero-sub">All your icons in one place. Tap any icon to copy its filename — then paste it in the tracker.</p>
+  <div class="hero-count">
+    <strong id="iconCount">0</strong> icons available
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">S</span>
+    <input type="text" id="searchInput" placeholder="Search icons..." oninput="filterIcons(this.value)"/>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<div class="how-panel">
+  <h3>How to add an icon to a product</h3>
+  <div class="how-step">
+    <div class="how-num">1</div>
+    <div class="how-text">Tap any icon card here — the filename is <strong>copied to clipboard</strong> automatically.</div>
+  </div>
+  <div class="how-step">
+    <div class="how-num">2</div>
+    <div class="how-text">Go back to the tracker and tap <strong>+ Add Product</strong> or the <strong>edit icon</strong> on a card.</div>
+  </div>
+  <div class="how-step">
+    <div class="how-num">3</div>
+    <div class="how-text">In the Icon field, <strong>paste</strong> the filename (e.g. <code>rice.png</code>) — the preview appears instantly.</div>
+  </div>
+  <div class="how-step">
+    <div class="how-num">4</div>
+    <div class="how-text">To add a new icon: put the <code>.png</code> file in your <code>icons/</code> folder, then add the filename to <code>iconLibrary</code> in the JS.</div>
+  </div>
+</div>
+
+<!-- BENTO GRID -->
+<div class="bento-wrap">
+  <p class="bento-section-label">Tap to copy filename</p>
+  <div class="bento-grid" id="bentoGrid"></div>
+  <div class="empty" id="emptyMsg">No icons match your search.</div>
+</div>
+
+<script src="js/script-iconlib.js"></script>
+</body>
+</html>
