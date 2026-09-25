@@ -2,10 +2,10 @@
 Tools — Useful utilities, scripts, or developer tools.
 
 
-mkdir -p 04-tool-tracker-expense/{docs,src/css,src/js}
+mkdir -p 05-tool-sidebar-note/{docs,src/css,src/js}
 
-touch 04-tool-tracker-expense/{README.md,LICENSE,.gitignore}
-touch 04-tool-tracker-expense/docs/{overview.md,setup.md,usage.md}
-touch 04-tool-tracker-expense/src/index.html
-touch 04-tool-tracker-expense/src/css/style.css
-touch 04-tool-tracker-expense/src/js/script.js
+touch 05-tool-sidebar-note/{README.md,LICENSE,.gitignore}
+touch 05-tool-sidebar-note/docs/{overview.md,setup.md,usage.md}
+touch 05-tool-sidebar-note/src/index.html
+touch 05-tool-sidebar-note/src/css/style.css
+touch 05-tool-sidebar-note/src/js/script.js

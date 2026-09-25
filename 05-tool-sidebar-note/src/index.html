@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USERMANUAL 2026 — Admin Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell" id="app">
+
+  <!-- ══════ SIDEBAR OVERLAY (mobile tap-to-close) ══════ -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="s-logo"><i class="ti ti-leaf"></i></div>
+      <div style="flex:1;min-width:0">
+        <div class="s-title">USER MANUAL</div>
+        <div class="s-sub">Admin Portal</div>
+      </div>
+      <!-- Mobile close button -->
+      <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close menu" aria-label="Close menu">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <div class="sidebar-nav" id="snav">
+      <!-- All Notes -->
+      <div class="mod-group">
+        <button class="mod-header open" onclick="filterAll(this);closeSidebarOnMobile()">
+          <i class="ti ti-layout-grid mi"></i>All Notes
+        </button>
+      </div>
+      <!-- Starred -->
+      <div class="mod-group">
+        <button class="starred-nav-btn" id="starred-btn" onclick="filterStarred(this);closeSidebarOnMobile()">
+          <i class="ti ti-star" style="font-size:15px;flex-shrink:0"></i>Starred Notes
+        </button>
+      </div>
+      <!-- Bug Reports -->
+      <div class="mod-group">
+        <button class="starred-nav-btn" id="bug-btn" onclick="filterBugs(this);closeSidebarOnMobile()">
+          <i class="ti ti-bug" style="font-size:15px;flex-shrink:0"></i>Bug Reports
+        </button>
+      </div>
+      <!-- Dynamic module groups -->
+      <div id="snav-modules"></div>
+    </div>
+
+    <div class="util-group">
+      <div class="storage-pill" id="storage-pill">
+        <i class="ti ti-device-floppy"></i>
+        <span id="storage-label">Auto-saved</span>
+      </div>
+      <div class="util-header"><i class="ti ti-tool" style="font-size:12px;opacity:.5"></i>Utilities</div>
+      <button class="util-btn manage-modules-btn" onclick="openModuleManager()"><i class="ti ti-layout-sidebar"></i>Manage Modules</button>
+      <button class="util-btn flowchart-btn" onclick="generateFlowchart()"><i class="ti ti-sitemap"></i>Generate Flowchart</button>
+      <div class="import-export-row">
+        <button class="ie-btn" onclick="$('importInput').click()">
+          <i class="ti ti-file-arrow-left"></i><span>Import</span>
+        </button>
+        <div class="ie-divider"></div>
+        <button class="ie-btn" onclick="exportData()">
+          <i class="ti ti-file-export"></i><span>Export</span>
+        </button>
+      </div>
+      <button class="util-btn danger" onclick="clearStorage()"><i class="ti ti-trash"></i>Clear Saved Data</button>
+      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importData(this)">
+    </div>
+
+    <div class="sidebar-footer">
+      <span id="user-name-disp" style="cursor:pointer;font-size:11px" onclick="promptUserName()">👤 Admin</span>
+      <button class="signout-btn" onclick="alert('Sign out clicked')">
+        <i class="ti ti-logout"></i>Sign out
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <!-- Hamburger (mobile only) -->
+        <button class="hamburger-btn" id="hamburger-btn" onclick="openSidebar()" aria-label="Open menu" title="Open menu">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <span class="t-title" id="ptitle">All Notes</span>
+        <span class="t-badge" id="pbadge">Manual</span>
+      </div>
+      <div class="topbar-right">
+        <button class="dark-toggle-btn" id="dark-toggle-btn" onclick="toggleDark()" title="Toggle dark/light mode">
+          <i class="ti ti-moon" id="dark-icon"></i>
+        </button>
+        <div class="view-btns">
+          <button class="view-btn active" id="vbtn-grid" onclick="setView('grid')" title="Grid view"><i class="ti ti-layout-grid"></i></button>
+          <button class="view-btn" id="vbtn-list" onclick="setView('list')" title="List view"><i class="ti ti-list"></i></button>
+        </div>
+        <button class="btn-add" onclick="openModal(null)">
+          <i class="ti ti-plus"></i>
+          <span class="btn-add-label">Add Note</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="sinput" placeholder="Search notes… (Ctrl+K)" oninput="debouncedRender()">
+      </div>
+      <select class="tb-select" id="sort-sel" onchange="renderNotes()">
+        <option value="connections">Most Linked</option>
+        <option value="date-desc">Most Recent</option>
+        <option value="date-asc">Most Oldest</option>
+        <option value="title-asc">Ascending Order (A-Z)</option>
+        <option value="title-desc">Descending Order (Z-A)</option>
+      </select>
+      <select class="tb-select" id="filter-tag" onchange="renderNotes()">
+        <option value="">All tags</option>
+      </select>
+      <select class="tb-select" id="filter-img" onchange="renderNotes()">
+        <option value="">All notes</option>
+        <option value="with">Has image</option>
+        <option value="without">No image</option>
+      </select>
+      <span class="cnt" id="scnt"></span>
+    </div>
+
+    <div class="progress-bar" id="prog-bar">
+      <span class="prog-label" id="prog-label">Module coverage</span>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <span class="prog-pct" id="prog-pct">0%</span>
+    </div>
+
+    <div class="content"><div id="ngrid" class="notes-grid"></div></div>
+  </div>
+
+  <div class="toast" id="toast"><i class="ti ti-check"></i><span id="toastMsg"></span></div>
+</div>
+
+<!-- ══════════════ MODULE MANAGER MODAL ══════════════ -->
+<div id="mm-overlay" onclick="mmOverlayClick(event)">
+  <div id="mm-modal">
+    <!-- Head -->
+    <div id="mm-head">
+      <div id="mm-head-icon"><i class="ti ti-layout-sidebar"></i></div>
+      <span id="mm-head-title">Manage Modules &amp; Submodules</span>
+      <button id="mm-head-close" onclick="closeModuleManager()"><i class="ti ti-x"></i></button>
+    </div>
+
+    <!-- Body -->
+    <div id="mm-body">
+      <!-- Left: module list -->
+      <div id="mm-left">
+        <div id="mm-module-list"></div>
+        <div id="mm-left-foot">
+          <button class="mm-add-mod-btn" onclick="mmAddModule()">
+            <i class="ti ti-plus"></i> Add Module
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: editor -->
+      <div id="mm-right">
+        <div id="mm-right-inner">
+          <div id="mm-empty-state">
+            <i class="ti ti-click"></i>
+            <p>Select a module on the left to edit it,<br>or click <strong>Add Module</strong> to create one.</p>
+          </div>
+          <div id="mm-editor" style="display:none;flex-direction:column;gap:14px">
+            <!-- Module name -->
+            <div>
+              <div class="mm-section-label">Module Name</div>
+              <input class="mm-input" id="mm-mod-name" type="text" placeholder="e.g. Enrollment Management">
+            </div>
+            <!-- Module key -->
+            <div>
+              <div class="mm-section-label">Module Key <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:9px;color:var(--primary-icon)">(unique identifier, no spaces)</span></div>
+              <input class="mm-input" id="mm-mod-key" type="text" placeholder="e.g. enrollment" style="font-family:'DM Mono',monospace;font-size:12px">
+            </div>
+            <!-- Icon picker -->
+            <div>
+              <div class="mm-section-label">Module Icon</div>
+              <div class="mm-icon-picker" id="mm-icon-picker"></div>
+            </div>
+            <!-- Submodules -->
+            <div>
+              <div class="mm-section-label" style="margin-bottom:6px">Submodules</div>
+              <div id="mm-sub-list"></div>
+              <!-- Inline add/edit sub form -->
+              <div class="mm-sub-form" id="mm-sub-form">
+                <div class="mm-sub-form-row">
+                  <input class="mm-input" id="mm-sub-label" type="text" placeholder="Submodule label (e.g. Enrollment List)" style="flex:2">
+                  <input class="mm-input" id="mm-sub-key" type="text" placeholder="key (e.g. enroll-list)" style="flex:1;font-family:'DM Mono',monospace;font-size:12px">
+                </div>
+                <div class="mm-sub-form-row">
+                  <div style="flex:1">
+                    <div class="mm-section-label" style="margin-bottom:4px">Icon</div>
+                    <div class="mm-icon-picker" id="mm-sub-icon-picker"></div>
+                  </div>
+                </div>
+                <div class="mm-sub-form-actions">
+                  <button class="mm-btn-sm ghost" onclick="mmCancelSub()">Cancel</button>
+                  <button class="mm-btn-sm primary" onclick="mmSaveSub()">Save Submodule</button>
+                </div>
+              </div>
+              <button class="mm-add-sub-btn" id="mm-add-sub-btn" onclick="mmShowSubForm()">
+                <i class="ti ti-plus"></i> Add Submodule
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Right foot -->
+        <div id="mm-right-foot" style="display:none">
+          <button class="mm-del-mod-btn" onclick="mmDeleteModule()">
+            <i class="ti ti-trash"></i> Delete Module
+          </button>
+          <div style="display:flex;gap:8px">
+            <button class="mm-btn-sm ghost" onclick="closeModuleManager()">Close</button>
+            <button class="mm-btn-sm primary" onclick="mmSaveModule()">Save Module</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Connect Notes Modal -->
+<div id="conn-modal-overlay">
+  <div id="conn-modal">
+    <div id="conn-modal-head">
+      <span id="conn-modal-title">Connect Notes</span>
+      <button id="conn-modal-close" onclick="closeConnModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div id="conn-modal-body"></div>
+    <div id="conn-modal-foot">
+      <button class="conn-cancel-btn" onclick="closeConnModal()">Cancel</button>
+      <button class="conn-save-btn" onclick="saveConnections()">Save Connections</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+<script src="js/script-sidebar.js"></script>
+</body>
+</html>
