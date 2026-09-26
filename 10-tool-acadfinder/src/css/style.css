@@ -1,0 +1,881 @@
+/* ---------- Custom Fonts ---------- */
+@font-face {
+  font-family: "GameOfSquids";
+  src: url("../fonts/GameOfSquids.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Desc";
+  src: url("../fonts/Desc.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("../fonts/Cairo-Medium.ttf") format("truetype");
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+select, select option {
+    font-family: "Cairo", sans-serif;
+}
+input[type="text"], 
+input[type="email"], 
+textarea {
+    font-family: "Cairo", sans-serif;
+}
+
+
+
+/* Apply DESC font to h3, options, buttons, inputs, selects */
+h3,
+button {
+    font-family: "DESC", sans-serif;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  margin: 0;
+  height: 100%;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000c7; /* fallback color */
+  overflow-x: hidden;
+}
+
+/* Fullscreen background div */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../images/Logo/scholar.jpg") no-repeat center center;
+  background-size: cover;
+  filter: blur(0px); /* start sharp */
+  z-index: -1;
+  transition: filter 0.5s ease, opacity 0.5s ease; /* smooth transition */
+  opacity: 0.7;
+}
+
+/* Add this class dynamically when search is clicked */
+body.blur-bg::before {
+  filter: blur(6px); /* blur after search */
+}
+
+.page-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-bar {
+  background: #003a8f;
+  color: #fff;
+  padding: 14px 32px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; /* stretch to allow flex-end alignment */
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-family: "GameOfSquids", sans-serif;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Right side container */
+.header-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* buttons top, tagline bottom */
+  align-items: flex-end;
+}
+/* Fix width so Tools button doesn't move */
+.header-clock {
+  font-family: "Desc", sans-serif;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 500;
+  padding-top: 5px;
+  display: inline-block;      /* ensure width can be set */
+  width: 90px;                /* fixed width enough for HH:MM:SS */
+  text-align: right;          /* align clock text to the right */
+}
+
+/* Navigation buttons */
+.header-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.header-btn {
+  background: #ff9800;
+  color: #fff;
+  text-decoration: none;
+  padding: 3px 6px;       /* compact padding */
+  border-radius: 4px;     /* small rounded corners */
+  font-size: 12px;        /* smaller font for compactness */
+  display: inline-flex;   /* allows icon + text alignment */
+  align-items: center;    /* vertically center icon and text */
+  gap: 8px;               /* small space between icon and text */
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-family: "GameOfSquids", sans-serif;
+
+}
+
+.header-btn:hover {
+  background: #e68900;
+  transform: translateY(-1px); /* subtle hover effect */
+}
+
+/* Tagline */
+.header-desc {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Desc", sans-serif;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+
+/* ---------- Layout ---------- */
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 24px 32px;
+  flex: 1; /* fills remaining vertical space */
+  align-items: flex-start; /* prevents aside from stretching */
+}
+
+
+/* ---------- Filters Sidebar ---------- */
+.filters {
+  width: 280px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  height: auto; /* let it grow naturally, but no stretch to results height */
+}
+
+.filters h3 {
+  margin: 0 0 14px;
+  font-size: 1.17em;
+  font-weight: bold;
+  color: #002b6b;
+}
+
+.filters input,
+.filters select {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  font-size: 14px;
+  background: #fff;
+  transition: 0.2s ease;
+}
+
+.filters input::placeholder {
+  color: #9e9e9e;
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: #e68900;
+}
+
+.filters select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.filters button {
+  width: 100%;
+  height: 44px;
+  background: #003a8f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background: #002b6b;
+}
+
+#resetBtn {
+  background-color: #a71717;
+  margin-top: 8px; /* Adjust the px value to your liking */
+}
+
+
+/* ---------- Results ---------- */
+.results {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Card styling */
+/* Card styling */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  flex: 1 1 250px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+  padding: 16px;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Title */
+.card h3 {
+  margin: 0 0 6px;
+  color: #003a8f;
+  font-size: 18px;
+}
+
+/* Description */
+.card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+  flex-grow: 1;
+}
+
+/* Apply button */
+.card a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #e68900;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.card a:hover {
+  background: #cc7a00; /* smoother hover */
+}
+
+/* Badges container */
+.card .badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 8px 0;
+}
+
+/* Badge base */
+.card .badge {
+  background-color: #e0e0e0;
+  color: #555;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* Status badge */
+.badge.status {
+  font-weight: bold;
+}
+
+/* OPEN */
+.badge.status.open {
+  background-color: #e6f7ee;
+  color: #1e8e5a;
+  box-shadow: 0 0 6px rgba(30, 142, 90, 0.4);
+}
+
+/* CLOSED */
+.badge.status.closed {
+  background-color: #fdecea;
+  color: #c62828;
+}
+
+/* Deadline text */
+.deadline {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Icon color FIX — inherit text color */
+.card .badge i,
+.deadline i {
+  font-size: 12px;
+  color: inherit;
+}
+
+/* Closed text (when link disabled) */
+.closed-text {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #c62828;
+  text-align: center;
+}
+
+
+.link-row {
+  display: flex;
+  align-items: center;   /* vertical center */
+  width: 100%;
+}
+
+/* 80% for link */
+.link-row a {
+  flex: 0 0 80%;
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+  text-align: center;
+}
+
+.bookmark-star {
+  flex: 0 0 20%;
+  text-align: center;     /* center horizontally */
+
+  font-size: 22px;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Hover */
+.bookmark-star:hover {
+  color: #999;
+}
+
+/* Active state */
+.bookmark-star.active {
+  color: gold;
+  animation: rollIn 0.5s ease;
+}
+
+/* Roll animation */
+@keyframes rollIn {
+  0% {
+    transform: translateX(-5px) rotate(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* No results */
+.no-results {
+  width: 100%;
+  padding-top: 13%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  font-size: 2.1rem;
+      font-family: "GameOfSquids", sans-serif;
+
+}/* ---------- Footer ---------- */
+.footer {
+  background: #003a8f;
+  color: #fff;
+  padding: 20px 32px;
+  font-family: "Poppins", sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Footer sections */
+.footer-left, .footer-center, .footer-right {
+  flex: 1 1 220px;
+}
+
+
+
+/* ---------- Footer Left ---------- */
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center horizontally */
+  justify-content: space-between; /* space between ScholarshipFinders and ACADLINK */
+  min-height: 80px; /* ensures spacing even on small screens */
+  gap: 4px;
+}
+
+.footer-left .footer-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-left-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40px;
+  text-align: center;
+  
+}
+
+.footer-left-text p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+    font-family: "GameOfSquids", sans-serif;
+}
+
+.footer-left-text span {
+  font-size: 12px;
+  color: #fff;    font-family: "DESC", sans-serif;
+}
+
+
+/* ---------- Footer Center (Quick Links) ---------- */
+.footer-center h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+      font-family: "DESC", sans-serif;
+}
+
+.footer-center ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+}
+
+.footer-center ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+  
+}
+
+.footer-center ul li a:hover {
+  color: #ff9800;
+}
+
+/* ---------- Footer Right ---------- */
+.footer-right p {
+  margin: 2px 0;
+  font-size: 13px;
+}
+.footer-right p span{
+      font-family: "DESC", sans-serif;
+
+}
+
+/* Email subscription */
+.footer-subscribe {
+  display: flex;
+  margin: 6px 0;
+  gap: 4px;
+  
+}
+
+.footer-subscribe input {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: none;
+  font-size: 13px;
+  flex: 1;
+      font-family: "GameOfSquids", sans-serif;
+}
+
+.footer-subscribe button {
+  padding: 6px 12px;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+      font-family: "GameOfSquids", sans-serif;
+  
+}
+
+.footer-subscribe button:hover {
+  background: #e68900;
+}
+
+/* Social icons */
+.footer-socials {
+  margin-top: 6px;
+}
+
+.footer-socials a {
+  color: #fff;
+  margin-right: 6px;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.footer-socials a:hover {
+  color: #ff9800;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .footer-left, .footer-center, .footer-right {
+    flex: unset;
+  }
+
+  .footer-subscribe {
+    justify-content: center;
+  }
+
+  .footer-socials {
+    margin-top: 4px;
+  }
+
+  .footer-left-text {
+    height: auto; /* stack naturally on mobile */
+  }
+}
+
+
+/* ======================= LOADER OVERLAY ======================= */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Background image with overlay color */
+  background: rgba(255, 255, 255, 0.281) url('../images//Logo/favicon.ico') no-repeat center center;
+  background-size: 5%; /* small image */
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  /* Initially hidden */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  /* Animate background horizontally */
+  animation: float-bg-horizontal 3s ease-in-out infinite alternate;
+}
+
+/* Show loader */
+.loader-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ======================= HORIZONTAL FLOAT ANIMATION ======================= */
+@keyframes float-bg-horizontal {
+  0%   { background-position: calc(50% - 45px) 50%; } /* left 35px */
+  100% { background-position: calc(50% + 35px) 50%; } /* right 35px */
+}
+/* ================= CHATBOT POPUP ================= */
+.chatbot-popup {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 360px;
+  height: 520px;
+  background: transparent;
+  transform: scale(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+  z-index: 9999;
+}
+
+.chatbot-popup.active {
+  transform: scale(1);
+}
+
+/* ================= MAIN BOX ================= */
+.chatbot-box {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+/* ================= HEADER ================= */
+.chatbot-header {
+  background: linear-gradient(135deg, #ff6a00, #ff9f00);
+  color: #fff;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.chatbot-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chatbot-header span {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.chatbot-header button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ================= BODY ================= */
+.chatbot-body {
+  flex: 1;
+  padding: 14px;
+  background: #f9f9f9;
+  overflow-y: auto;
+}
+
+/* ================= MESSAGE CONTAINER ================= */
+#responseBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ================= USER MESSAGE ================= */
+.response-bubble.user {
+  background: #ff7a00;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  max-width: 90%;
+  align-self: flex-end;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* ================= BOT MESSAGE ================= */
+.response-bubble.assistant {
+  background: #ffffff;
+  color: #333;
+  padding: 10px 20px;
+  border-radius: 12px;
+  max-width: 85%;
+  align-self: flex-start;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.response-bubble.assistant img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-bottom: 6px;
+}
+
+/* ================= BUTTON OPTIONS ================= */
+.chatbot-options {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-options button {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-align: left;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chatbot-options button:hover {
+  text-decoration: underline;
+}
+
+/* ================= SUGGESTIONS ================= */
+.chatbot-suggestions {
+  background: #ffffff;
+  max-height: 150px;
+  overflow-y: auto;
+  border-top: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+.chatbot-suggestions div {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  transition: background 0.2s ease;
+}
+
+.chatbot-suggestions div:hover {
+  background: #ff7a00;
+  color: white;
+}
+
+/* ================= INPUT ================= */
+.chatbot-input {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 6px;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.chatbot-input button {
+  background: none;
+  border: none;
+  color: #ff7a00;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ================= FLOATING BUTTON ================= */
+#chatbotCircleBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 58px;
+  height: 58px;
+  background: #ff7a00;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#chatbotCircleBtn img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* ================= SCROLLBAR ================= */
+.chatbot-body::-webkit-scrollbar,
+.chatbot-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbot-body::-webkit-scrollbar-thumb,
+.chatbot-suggestions::-webkit-scrollbar-thumb {
+  background: #ff7a00;
+  border-radius: 3px;
+}

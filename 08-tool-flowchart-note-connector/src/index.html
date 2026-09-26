@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowNotes</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div id="bar">
+    <div id="bar-logo">Flow<span>Notes</span></div>
+    <div class="sep"></div>
+    <button class="btn pri" id="btn-add">+ Add Card</button>
+    <div class="sep"></div>
+    <button class="btn" id="btn-zi">+</button>
+    <span id="zoom-lbl">100%</span>
+    <button class="btn" id="btn-zo">−</button>
+    <button class="btn" id="btn-rst">⌖ Reset</button>
+    <div class="sep"></div>
+    <button class="btn" id="btn-clear">🗑 Clear</button>
+    <div class="sep"></div>
+    <button class="btn act" id="btn-cv">⇢ Connections</button>
+    <div class="sp"></div>
+    <span id="hint">Scroll to zoom · Drag background to pan · Add connections in the Connections panel →</span>
+  </div>
+  <div id="main-area">
+    <div id="wrap">
+      <canvas id="grid"></canvas>
+      <div id="cvs"></div>
+      <div id="svg-layer">
+        <svg id="svg" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;top:0;left:0;overflow:visible"></svg>
+      </div>
+    </div>
+
+    <!-- CONNECTIONS PANEL -->
+    <div id="conn-panel">
+      <div id="cp-head">
+        <div id="cp-head-row">
+          <h3>⇄ Connections</h3>
+          <button id="cp-close">✕</button>
+        </div>
+        <div id="cp-add-section">
+          <h4>Add Connections</h4>
+          <!-- Step 1: pick FROM -->
+          <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">From</div>
+          <select class="cp-select" id="cp-from-sel">
+            <option value="">Choose a card…</option>
+          </select>
+          <!-- Step 2: checkboxes for TO targets -->
+          <div id="cp-to-section" style="display:none">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Connect to (pick one or more)</div>
+            <div id="cp-to-list"></div>
+            <div style="margin-top:7px">
+              <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Label for all</div>
+              <input id="cp-add-label-inp" placeholder="e.g. links to… (optional)">
+            </div>
+            <div id="cp-conn-color-row">
+              <label>Color</label>
+              <div id="cp-conn-dots"></div>
+            </div>
+            <button id="cp-add-btn" disabled>Connect Selected</button>
+          </div>
+        </div>
+      </div>
+      <div id="cp-body">
+        <div id="cp-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+          <span>No connections yet.<br>Choose a "From" card above.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CARD MODAL -->
+<div id="modal-bg">
+  <div id="modal">
+    <div id="modal-head">
+      <h2>Add a card</h2>
+      <p>Pick a layout style, then fill in the details</p>
+    </div>
+    <div id="card-grid"></div>
+    <div id="modal-form">
+      <div class="form-row"><label>Title</label><input id="f-title" placeholder="Card title…"></div>
+      <div class="form-row"><label>Description</label><textarea id="f-desc" placeholder="Short description or label…" rows="2"></textarea></div>
+      <div class="form-row" id="f-url-row" style="display:none"><label>URL / Link</label><input id="f-url" placeholder="www.example.com"></div>
+      <div class="form-row" id="f-price-row" style="display:none"><label>Price / Amount</label><input id="f-price" placeholder="$29/mo"></div>
+      <div class="form-row"><label>Accent color</label><div id="color-row"></div></div>
+    </div>
+    <div id="modal-footer">
+      <button class="mbtn" id="modal-cancel">Cancel</button>
+      <button class="mbtn pri" id="modal-ok">Add Card</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

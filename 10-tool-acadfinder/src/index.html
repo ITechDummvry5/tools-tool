@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta Information -->
+  <meta charset="UTF-8">
+  <title>Scholarship Finder</title>
+  <meta name="description" content="ANNA NICOLE I HERRERA">
+
+  <!-- Favicon -->
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+
+<body>
+
+<!-- ================= CHATBOT POPUP ================= -->
+<div class="chatbot-popup" id="chatbotPopup">
+  <div class="chatbot-box">
+
+    <!-- Chatbot Header -->
+    <div class="chatbot-header">
+      <img src="img/Logo/favicon.ico" alt="Bot Logo">
+      <span>ACADLINKS</span>
+      <button id="closeChatbot">&times;</button>
+    </div>
+
+    <!-- Chatbot Body -->
+    <div class="chatbot-body">
+      <div id="responseBox">
+        <div class="response-bubble assistant">
+          <img src="img/Logo/favicon.ico" alt="Bot Icon">
+          <span>
+            <b>ACADLINKS Terms and Conditions</b><br><br>
+            Before we start, do you agree to abide by the terms and conditions in the use of the chatbot?
+          </span>
+
+          <!-- Chatbot Options -->
+          <div class="chatbot-options">
+            <button>Learn More</button>
+            <button>No, I don't</button>
+            <button>Yes, I agree</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div id="suggestions" class="chatbot-suggestions"></div>
+
+    <!-- Chatbot Input -->
+    <div class="chatbot-input">
+      <input type="text" id="textInput" placeholder="Type your message...">
+      <button onclick="sendText()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Chatbot Floating Button -->
+<button id="chatbotCircleBtn" class="chatbot-circle">
+  <img src="img/Logo/favicon.ico" alt="Chatbot Button">
+</button>
+<!-- ================================================= -->
+
+
+
+<!-- ================= LOADER ================= -->
+<div class="loader-overlay" id="loader">
+  <div class="loader"></div>
+</div>
+<!-- =========================================== -->
+
+
+<div class="page-wrapper">
+
+<!-- ================= HEADER ================= -->
+<header class="top-bar">
+  <div class="brand">
+    <img src="img/Logo/favicon.ico" alt="Logo">
+    <h1 id="header-title">ACADLINK</h1>
+  </div>
+
+  <div class="header-right">
+    <nav class="header-nav">
+      <span id="clock" class="header-clock"></span>
+
+      <a href="tools.html" class="header-btn">
+        <i class="fas fa-tools"></i> Tools
+      </a>
+    </nav>
+
+    <p class="header-desc">- Your gateway to scholarships and opportunities</p>
+  </div>
+</header>
+<!-- =========================================== -->
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="container">
+
+  <!-- Filters Sidebar -->
+  <aside class="filters">
+    <h3>Filter Scholarships</h3>
+
+    <input type="text" id="search" placeholder="Keyword (STEM, IT, Org)">
+    <input type="text" id="location" placeholder="Location (Philippines)">
+
+    <select id="course">
+      <option value="">All Strands</option>
+      <option value="STEM">STEM</option>
+      <option value="ABM">ABM</option>
+      <option value="HUMSS">HUMSS</option>
+      <option value="GAS">GAS</option>
+      <option value="TVL">TVL</option>
+    </select>
+
+    <button onclick="searchScholarships()" id="searchBtn">Search</button>
+    <button onclick="resetSearch()" id="resetBtn">Reset</button>
+  </aside>
+
+  <!-- Blur Background Script -->
+  <script>
+    const searchBtn = document.getElementById('searchBtn');
+    searchBtn.addEventListener('click', () => {
+      document.body.classList.add('blur-bg');
+    });
+  </script>
+
+  <!-- Scholarship Results -->
+  <main class="results" id="results">
+    <!-- Scholarship cards appear here dynamically -->
+  </main>
+
+</div>
+<!-- ================================================ -->
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-container">
+
+    <!-- Left: Logo & Copyright -->
+    <div class="footer-left">
+      <img src="img/Logo/favicon.ico" alt="Logo" class="footer-logo">
+      <div class="footer-left-text">
+        <p>Scholarship Finders</p>
+        <span>ACADLINK © 2026</span>
+      </div>
+    </div>
+
+    <!-- Center: Quick Links -->
+    <div class="footer-center">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="tools.html">Tools</a></li>
+      </ul>
+    </div>
+
+    <!-- Right: Contact & Subscribe -->
+    <div class="footer-right">
+      <p><span>Connecting</span> students to scholarships and opportunities</p>
+      <p>
+        <span>Email:</span> info@acadlink.com |
+        Phone: +63 912 345 6789 |
+        @itechdummvry
+      </p>
+
+      <!-- Email Subscription -->
+      <div class="footer-subscribe">
+        <input type="email" placeholder="Your email">
+        <button>Subscribe</button>
+      </div>
+
+      <!-- Social Media -->
+      <div class="footer-socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+<!-- =========================================== -->
+
+</div>
+
+
+<!-- ================= JAVASCRIPTS ================= -->
+<script src="js/script.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/pop-up.js"></script>
+<!-- ============================================== -->
+
+</body>
+</html>

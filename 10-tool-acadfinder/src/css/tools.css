@@ -1,0 +1,93 @@
+/* ===================== FONT ===================== */
+@font-face {
+  font-family: "Cairo";
+  src: url("../fonts/Cairo-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "GameOfSquids";
+  src: url("../fonts/GameOfSquids.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Cairo', sans-serif; background:#1e1e1e; color:#eee; line-height:1.5; }
+
+/* ===================== LAYOUT ===================== */
+.main-section { display:flex; min-height:100vh; }
+.left-panel {
+  flex:0 0 30%;
+  background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('../images/Logo/contact.jpg') center/cover no-repeat;
+  color:#fff;
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:flex-end;
+  padding:40px;
+}
+.left-panel h2 {  font-size:2rem; text-transform:uppercase; border-bottom:2px solid #fff; padding-bottom:10px; }
+.left-panel a { color:#ddd; text-decoration:none; }
+.left-panel a:hover { color:#fff; }
+
+.right-panel { flex:1; padding:40px; display:flex; flex-direction:column; gap:30px; }
+
+/* ===================== HEADER ===================== */
+.header { text-align:center; margin-bottom:20px; }
+.header h1 a { font-family:'GameOfSquids', sans-serif; font-size:1.7em; color:#FFD700; text-decoration:none; }
+.header i { margin-right:6px; }
+
+/* ===================== API SECTION ===================== */
+.api-section { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
+.api-card { background:#2a2a2a; padding:20px; border-radius:8px; display:flex; flex-direction:column; gap:10px; }
+.api-card h3 { font-size:1.2em; color:#FFD700; display:flex; align-items:center; }
+.api-card h3 img { width:22px; height:22px; margin-right:6px; }
+.api-input-group label { font-size:0.9em; color:#ccc; }
+.api-input-group input {
+  width:100%; padding:10px; border:none; border-bottom:2px solid #555; background:transparent; color:#eee; font-family:monospace;
+}
+.api-input-group input:focus { border-bottom-color:#FFD700; }
+
+.api-status { display:flex; align-items:center; gap:8px; font-size:0.9em; color:#ccc; }
+.status-dot { width:10px; height:10px; border-radius:50%; background:#ff6b6b; }
+.status-dot.connected { background:#FFD700; animation: pulse 1.5s infinite; }
+
+.api-actions { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+button { padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; background:#FFD700; color:#1e1e1e; transition:0.2s; }
+button:hover { background:#e6c200; }
+#llamaLocalBtn { background:transparent; border:2px solid #e6c200; color:#e6c200; }
+
+/* ===================== SEARCH ===================== */
+.search-section { display:none; flex-direction:column; gap:15px; }
+.search-section.active { display:flex; }
+.search-controls { display:flex; gap:10px; flex-wrap:wrap; }
+#searchInput { flex:1; padding:12px; border:2px solid #555; border-radius:6px; background:transparent; color:#eee; outline:none; }
+#searchInput:focus { border-color:#FFD700; }
+#aiProvider { padding:10px; border:2px solid #555; border-radius:6px; background:transparent; color:#eee; min-width:180px; }
+#searchBtn { background:#FFD700; color:#1e1e1e; }
+#searchBtn:hover { background:#e6c200; }
+
+/* ===================== RESULTS ===================== */
+.results-section { display:none; flex-direction:column; gap:10px; }
+.results-section.active { display:flex; }
+.response-card { background:#2a2a2a; border-radius:6px; padding:10px; }
+.provider-badge { font-weight:600; font-size:1em; color:#FFD700; margin-bottom:5px; }
+.response-content { color:#eee; white-space:pre-wrap; }
+
+/* ===================== LOADING ===================== */
+.loading { display:none; text-align:center; padding:20px; }
+.loading.active { display:block; }
+.spinner { border:3px solid #444; border-top:3px solid #FFD700; border-radius:50%; width:30px; height:30px; animation:spin 1s linear infinite; margin:0 auto 10px; }
+
+/* ===================== STATUS BAR ===================== */
+.status-bar { display:flex; align-items:center; gap:10px; padding-top:10px; }
+.global-status { width:12px; height:12px; border-radius:50%; background:#ff6b6b; }
+.global-status.connected { background:#FFD700; animation:pulse 1.5s infinite; }
+.error { color:#ff6b6b; }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:992px) { .main-section { flex-direction:column; } .left-panel { height:200px; position:relative; } }

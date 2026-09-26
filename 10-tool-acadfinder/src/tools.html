@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarshipFinder – AI Tools</title>
+
+<link rel="shortcut icon" href="core/assets/images/Logo/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="core/assets/css/all.min.css">
+<link rel="stylesheet" href="core/assets/css/tools.css">
+
+</head>
+<body>
+
+<section class="main-section">
+
+  <div class="left-panel">
+    <div>
+      <h2>ACADLINK AI Tools</h2>
+      <h3><a href="index.html">Go Back</a></h3>
+    </div>
+  </div>
+
+  <div class="right-panel">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1><a href="index.html"><i class="fa-solid fa-graduation-cap"></i> ScholarshipFinder</a></h1>
+    </div>
+
+    <!-- API CONFIG -->
+    <div class="api-section" id="apiSection">
+      <div class="api-card">
+        <h3><img src="core/assets/images/Logo/DEEPSEEK.png" class="ai-icon"> DeepSeek</h3>
+        <div class="api-input-group">
+          <label>API KEY</label>
+          <input type="password" id="deepseekKey">
+        </div>
+        <div class="api-status">
+          <div class="status-dot" id="deepseekStatus"></div>
+          <span id="deepseekStatusText">Not configured</span>
+        </div>
+      </div>
+
+      <div class="api-card">
+        <h3><img src="core/assets/images/Logo/LAMA.png" class="ai-icon"> Ollama</h3>
+        <div class="api-input-group">
+          <label>API KEY</label>
+          <input type="password" id="ollamaKey">
+        </div>
+        <div class="api-status">
+          <div class="status-dot" id="ollamaStatus"></div>
+          <span id="ollamaStatusText">Not configured</span>
+        </div>
+      </div>
+
+      <div class="api-card">
+        <h3><img src="core/assets/images/Logo/GROK.png" class="ai-icon"> Grok</h3>
+        <div class="api-input-group">
+          <label>API KEY</label>
+          <input type="password" id="grokKey">
+        </div>
+        <div class="api-status">
+          <div class="status-dot" id="grokStatus"></div>
+          <span id="grokStatusText">Not configured</span>
+        </div>
+      </div>
+
+      <div class="api-card">
+        <h3><img src="core/assets/images/Logo/OPENAI.png" class="ai-icon"> OpenAI</h3>
+        <div class="api-input-group">
+          <label>API KEY</label>
+          <input type="password" id="openaiKey">
+        </div>
+        <div class="api-status">
+          <div class="status-dot" id="openaiStatus"></div>
+          <span id="openaiStatusText">Not configured</span>
+        </div>
+      </div>
+
+      <div class="api-actions">
+        <button id="testApisBtn">Test Connections</button>
+        <button id="saveConfigBtn">Save Keys</button>
+        <button id="llamaLocalBtn">🦙 LLaMA Local</button>
+      </div>
+    </div>
+
+    <!-- SEARCH SECTION -->
+    <div class="search-section" id="searchSection">
+      <div class="search-controls">
+        <input type="text" id="searchInput" placeholder="Enter your search query...">
+        <select id="aiProvider">
+          <option value="deepseek">DeepSeek Only</option>
+          <option value="ollama">Ollama Only</option>
+          <option value="grok">Grok Only</option>
+          <option value="openai">OpenAI Only</option>
+          <option value="llama-local">🦙 LLaMA Local (Offline)</option>
+          <option value="compare">Compare All</option>
+        </select>
+        <button id="searchBtn">SEARCH</button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Connecting to AI systems...</p>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+      <div id="resultsArea"></div>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="global-status" id="globalStatus"></div>
+      <span id="statusText">APP: Configure API keys to begin</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- SCRIPT -->
+<script src="core/assets/js/tools.js"></script>
+
+</body>
+</html>
