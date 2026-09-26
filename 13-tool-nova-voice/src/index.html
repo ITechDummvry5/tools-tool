@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="shortcut icon" href="img/contact.jpg" type="image/x-icon">
+</head>
+<body>
+  <div class="main-section">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-content">
+      <h2>NOVA AI</h2>
+      <p>Smart assistant demo</p>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1><a href="#">NOVA CHATBOT<i class="fas fa-robot"></i></a></h1>
+    </div>
+
+<!-- CHATBOX -->
+<div class="chat-container">
+  <div id="suggestions" class="suggestions"></div>
+
+  <div id="responseBox">  <!-- Loader / Status -->
+  <div id="statusBox" style="color:#FFD700; margin-bottom:5px; font-style:italic;"></div></div>
+<input type="text" id="textInput" placeholder="Type here..." autocomplete="off" />
+
+<button onclick="sendText()">Send</button>
+<button id="voiceBtn" onclick="startVoice()">Speak</button>
+
+
+  <!-- Voice Selector -->
+  <select id="voiceSelect">
+    <option value="">Select Voice</option>
+  </select>
+
+
+</div>
+
+
+  </div>
+
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>

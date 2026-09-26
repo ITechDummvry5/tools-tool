@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VYRE – Gear Customizer</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><polygon points="0,0 18,0 9,18" fill="#4a9eff"/></svg>
+      VYRE
+    </div>
+    <span class="topbar-title">Gear <b>Customizer</b></span>
+    <div class="topbar-right">
+      <button class="tbtn tbtn-ghost" onclick="resetAll()">Reset</button>
+      <button class="tbtn tbtn-solid" onclick="copyCSS()">Export CSS</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT PANEL -->
+    <div class="panel">
+
+      <!-- Upload -->
+      <div class="psec">
+        <div class="plabel">Model Image</div>
+        <div class="upzone" id="upZone">
+          <input type="file" id="fileIn" accept="image/*">
+          <div class="up-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a9eff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+          </div>
+          <div class="up-title">Upload Image</div>
+          <div class="up-hint">PNG · JPG · WEBP<br>Updates hero instantly</div>
+        </div>
+        <div class="thumb-wrap" id="thumbWrap">
+          <img id="thumbImg" src="" alt="">
+          <button class="thumb-rm" id="thumbRm">✕</button>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div class="psec">
+        <div class="plabel">Gear Color</div>
+        <div class="swatch-grid" id="swGrid"></div>
+        <div class="cprow">
+          <div class="cp-bubble">
+            <div class="cp-fill" id="cpFill"></div>
+            <input type="color" id="cpInput" value="#4a9eff">
+          </div>
+          <span class="cp-lbl">Color 1</span>
+          <span class="cp-hex" id="cpHex">#4A9EFF</span>
+        </div>
+        <div class="slrow">
+          <span class="sl-lbl">Intensity</span>
+          <input type="range" id="opSlider" min="0" max="80" value="28" style="--pct:28">
+          <span class="sl-val" id="opVal">28%</span>
+        </div>
+        <!-- Second color (gradient only) -->
+        <div class="cprow" id="color2Row" style="display:none; margin-top:8px;">
+          <div class="cp-bubble">
+            <div class="cp-fill" id="cpFill2"></div>
+            <input type="color" id="cpInput2" value="#0a0f1e">
+          </div>
+          <span class="cp-lbl">Color 2</span>
+          <span class="cp-hex" id="cpHex2">#0A0F1E</span>
+        </div>
+      </div>
+
+      <!-- Blend -->
+      <div class="psec">
+        <div class="plabel">Blend Mode</div>
+        <div class="blend-grid" id="blendGrid">
+          <button class="bln active" data-b="color">Color</button>
+          <button class="bln" data-b="multiply">Multiply</button>
+          <button class="bln" data-b="screen">Screen</button>
+          <button class="bln" data-b="overlay">Overlay</button>
+          <button class="bln" data-b="hue">Hue</button>
+          <button class="bln" data-b="luminosity">Luminosity</button>
+        </div>
+      </div>
+
+      <!-- Apply To -->
+      <div class="psec">
+        <div class="plabel">Apply To</div>
+        <div class="apply-grid" id="applyGrid">
+          <button class="apply-btn active" data-t="image">Image</button>
+          <button class="apply-btn" data-t="container">Container</button>
+          <button class="apply-btn" data-t="section">Section</button>
+        </div>
+      </div>
+
+      <!-- Gradient Mode -->
+      <div class="psec">
+        <div class="plabel">Effect Type</div>
+        <div class="effect-grid">
+          <button class="effect-btn active" id="solidBtn" data-e="solid">Solid</button>
+          <button class="effect-btn" id="gradientBtn" data-e="gradient">Gradient</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CENTER: LIVE HERO PREVIEW -->
+    <div class="hero-preview" id="heroPreview">
+
+      <!-- AIR bg -->
+      <div class="hp-air"><span class="hp-air-text">AIR</span></div>
+
+      <!-- man image -->
+      <div class="hp-man">
+        <img id="heroImg" src="/images/man.png" alt="Model"
+          onerror="this.style.opacity='0.15'">
+      </div>
+
+      <!-- color tint -->
+      <div class="hp-tint" id="hpTint"></div>
+
+      <!-- dark overlay -->
+      <div class="hp-overlay"></div>
+
+      <!-- no-image state -->
+      <div class="hp-noimg" id="hpNoImg" style="display:none;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(74,158,255,0.35)" stroke-width="1.3">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <p>Upload image to preview</p>
+      </div>
+
+      <!-- mini nav -->
+      <div class="hp-nav">
+        <div class="hp-logo">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><polygon points="0,0 18,0 9,18" fill="#4a9eff"/></svg>
+          VYRE
+        </div>
+        <ul class="hp-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Collection</a></li>
+          <li><a href="#">Gears</a></li>
+        </ul>
+        <button class="hp-cta">Shop Now</button>
+      </div>
+
+      <!-- hero content grid -->
+      <div class="hp-content">
+        <div class="hp-left">
+          <div class="hp-headline">Advanced<br>lightweight cold<br>weather gear.<br><em style="font-style:normal">Built to move.</em></div>
+          <div class="hp-sub-row">
+            <p class="hp-sub">Designed with advanced materials that retain heat without bulk.</p>
+            <div class="hp-subdiv"></div>
+            <p class="hp-sub">Engineered seams follow body contours for unrestricted motion.</p>
+          </div>
+          <a href="#" class="hp-explore"><span class="dot-r"></span>Explore Gear</a>
+          <div class="hp-stats">
+            <div class="hp-stat"><span class="sl">Temp Range</span><span class="sv">−15°C to 5°C</span></div>
+            <div class="hp-stat"><span class="sl">Weight</span><span class="sv">480g</span></div>
+          </div>
+        </div>
+        <div class="hp-center"></div>
+        <div class="hp-right">
+          <div class="hp-card">
+            <div class="hp-card-img">
+              <img id="cardImg" src="/images/man.png" alt="" onerror="this.style.opacity=0">
+            </div>
+            <div class="hp-card-body">
+              <div class="hp-card-title">Adaptive<br>Cold Armor</div>
+              <p class="hp-card-desc">4-way stretch, 20% elasticity.</p>
+              <button class="hp-card-btn">Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel right">
+      <div class="psec">
+        <div class="info-title">Live<br>Preview</div>
+        <p class="info-sub">Upload a model photo and pick a color — the hero updates instantly.</p>
+      </div>
+      <div class="psec">
+        <div class="plabel">Active Color</div>
+        <div class="cdisplay">
+          <div class="cd-swatch" id="cdSwatch" style="background:#4a9eff"></div>
+          <div>
+            <span class="cd-name" id="cdName">Glacier Blue</span>
+            <span class="cd-hex" id="cdHex">#4A9EFF</span>
+          </div>
+        </div>
+      </div>
+      <div class="psec" style="flex:1">
+        <div class="mstat"><span class="mstat-lbl">Effect</span><span class="mstat-val" id="dEffect">Solid</span></div>
+        <div class="mstat"><span class="mstat-lbl">Blend</span><span class="mstat-val" id="dBlend">Color</span></div>
+        <div class="mstat"><span class="mstat-lbl">Intensity</span><span class="mstat-val" id="dIntensity">28%</span></div>
+        <div class="mstat"><span class="mstat-lbl">Apply To</span><span class="mstat-val" id="dApplyTo">Image</span></div>
+        <div class="mstat"><span class="mstat-lbl">Image</span><span class="mstat-val" id="dImg">Default</span></div>
+      </div>
+      <div class="exp-wrap">
+        <button class="exp-btn" id="expBtn" onclick="copyCSS()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy CSS
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /shell -->
+
+<script src="js/script.js"></script>
+</body>
+</html>

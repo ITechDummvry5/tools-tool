@@ -1,0 +1,214 @@
+/* ===================== RESET ===================== */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Cairo', sans-serif; background:#1e1e1e; color:#eee; line-height:1.5; }
+
+/* ===================== LAYOUT ===================== */
+.main-section { display:flex; min-height:100vh; }
+.left-panel {
+  flex:0 0 30%;
+  background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url('/assets/images/contact.jpg') center/cover no-repeat;
+  color:#fff;
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:flex-end;
+  padding:40px;
+}
+.left-panel h2 {  font-size:2rem; text-transform:uppercase; border-bottom:2px solid #fff; padding-bottom:10px; }
+.left-panel a { color:#ddd; text-decoration:none; }
+.left-panel a:hover { color:#fff; }
+
+.right-panel { flex:1; padding:40px; display:flex; flex-direction:column; gap:30px; }
+
+/* ===================== HEADER ===================== */
+.header { text-align:center; margin-bottom:20px; }
+.header h1 a { font-family:'GameOfSquids', sans-serif; font-size:1.7em; color:#FFD700; text-decoration:none; }
+.header i { margin-right:6px; }
+
+
+/* ===================== CHATBOX ===================== */
+.chat-container {
+  background:#2a2a2a;
+  padding:20px;
+  border-radius:10px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+#responseBox {
+  min-height:150px;
+  max-height:300px;
+  overflow-y:auto;
+  background:#1e1e1e;
+  border:1px solid #444;
+  border-radius:6px;
+  padding:10px;
+  color:#eee;
+  font-family:monospace;
+}
+
+#textInput {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #555;
+  background:transparent;
+  color:#eee;
+  font-family:monospace;
+}
+
+button {
+  padding:10px 18px;
+  border:none;
+  border-radius:6px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  background:#FFD700;
+  color:#1e1e1e;
+  transition:0.2s;
+}
+
+button:hover { background:#e6c200; }
+#voiceBtn { background:transparent; border:2px solid #e6c200; color:#e6c200; }
+
+#suggestions {
+  margin-top: 5px;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: #121212;     /* darker background for minimalism */
+  padding: 6px;
+  border: 2px solid #FFD700;     /* solid yellow border, 2px */
+  border-radius: 4px;            /* subtle rounded corners */
+  box-sizing: border-box;
+}
+
+#suggestions div {
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: calc(50% - 8px);
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 2px;            /* small corner radius for box shape */
+  color: #FFD700;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  padding: 0 12px;
+  background-color: #1e1e1e;
+  border: 2px solid transparent; /* no border by default */
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#suggestions div:hover {
+  color: #fff;
+  background-color: #333333;
+  border-color: #FFD700;         /* show yellow border on hover */
+}
+
+
+/* ===================== API / STATUS SECTIONS ===================== */
+.api-section { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
+.api-card { background:#2a2a2a; padding:20px; border-radius:8px; display:flex; flex-direction:column; gap:10px; }
+.api-card h3 { font-size:1.2em; color:#FFD700; display:flex; align-items:center; }
+.api-card h3 img { width:22px; height:22px; margin-right:6px; }
+
+.api-input-group label { font-size:0.9em; color:#ccc; }
+.api-input-group input {
+  width:100%; padding:10px; border:none; border-bottom:2px solid #555; background:transparent; color:#eee; font-family:monospace;
+}
+.api-input-group input:focus { border-bottom-color:#FFD700; }
+
+.api-status { display:flex; align-items:center; gap:8px; font-size:0.9em; color:#ccc; }
+.status-dot { width:10px; height:10px; border-radius:50%; background:#ff6b6b; }
+.status-dot.connected { background:#FFD700; animation: pulse 1.5s infinite; }
+
+.api-actions { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+@keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.3);} 100%{transform:scale(1);} }
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:992px) {
+  .main-section { flex-direction:column; }
+  .left-panel { height:200px; position:relative; }
+}
+/* ===================== VOICE SELECT DROPDOWN ===================== */
+#voiceSelect {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #1e1e1e;
+  color: #eee;
+  font-family: monospace;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  appearance: none; /* remove default arrow on some browsers */
+}
+
+/* Hover and focus effects */
+#voiceSelect:hover, #voiceSelect:focus {
+  border-color: #FFD700;
+  outline: none;
+}
+
+/* Optional: Add a small dropdown arrow icon (custom) */
+#voiceSelect::-ms-expand { display: none; } /* IE fix */
+
+
+.chat-container {
+  background: #2a2a2a;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* reduce gap slightly for dropdown */
+}
+
+button, #voiceSelect {
+  width: 100%; /* make input, button, and dropdown full width */
+}
+
+#textInput {
+  width: 100%;
+}
+
+button {
+  margin-top: 5px;
+}
+/* Simple dot loader animation */
+#statusBox {
+  color: #FFD700;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.dot-loader::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: #FFD700;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 20%, 50%, 80%, 100% { opacity: 0; }
+  10%, 30%, 60%, 90% { opacity: 1; }
+}
