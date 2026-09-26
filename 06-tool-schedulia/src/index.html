@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedulia - Premium Student Class Scheduler</title>
+  <meta name="description" content="A gorgeous, customizable student scheduler with drag-and-drop, conflict detection, custom intervals, image uploads, statistics, and full keyboard shortcuts.">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <!-- CDNs for icons, PDF, PNG and Excel export -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@latest/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+  <!-- Design stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="layout-comfortable">
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="sidebar">
+    <a href="#" class="sidebar-brand">
+      <i class="ti ti-calendar-event"></i>
+      <span>Schedulia</span>
+    </a>
+    
+    <nav style="flex:1;">
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active" data-target="dashboard-page">
+          <a>
+            <i class="ti ti-smart-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="scheduler-page">
+          <a>
+            <i class="ti ti-calendar-time"></i>
+            <span>Weekly Grid</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="subjects-page">
+          <a>
+            <i class="ti ti-book"></i>
+            <span>Subjects List</span>
+          </a>
+        </li>
+
+        <li class="sidebar-section-label"><span>Master Data</span></li>
+        <li class="sidebar-item" data-target="room-page">
+          <a>
+            <i class="ti ti-door"></i>
+            <span>Room Management</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="instructor-page">
+          <a>
+            <i class="ti ti-user"></i>
+            <span>Instructor Management</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="section-page">
+          <a>
+            <i class="ti ti-users"></i>
+            <span>Section Management</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="subjectcatalog-page">
+          <a>
+            <i class="ti ti-notebook"></i>
+            <span>Subject Management</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" data-target="semester-page">
+          <a>
+            <i class="ti ti-archive"></i>
+            <span>Semesters</span>
+          </a>
+        </li>
+        <li class="sidebar-item" data-target="settings-page">
+          <a>
+            <i class="ti ti-settings"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer" style="border-top:1px solid var(--border-color); padding-top:1rem;">
+      <button class="btn btn-secondary btn-sm" id="keyboardHelpBtn" style="width:100%;">
+        <i class="ti ti-keyboard"></i>
+        <span>Shortcuts Help</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile sidebar backdrop overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    
+    <!-- Top Header / Navigation Navbar -->
+    <header class="navbar">
+      <div class="navbar-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggle">
+          <i class="ti ti-menu-2"></i>
+        </button>
+        <div class="form-group" style="margin:0; flex-direction:row; align-items:center; gap:8px;">
+          <label for="navSemesterSelect" style="margin:0;">Semester:</label>
+          <select id="navSemesterSelect" class="form-control" style="height:36px; padding:0 30px 0 10px; cursor:pointer; font-weight:700; border-radius:0.5rem;"></select>
+        </div>
+      </div>
+
+      <div class="navbar-right">
+        <!-- Search bar input -->
+        <div class="search-wrapper">
+          <input type="text" id="searchBar" class="search-input" placeholder="Search classes, rooms, teachers...">
+          <i class="ti ti-search"></i>
+        </div>
+
+        <button class="btn btn-primary trigger-add-subject">
+          <i class="ti ti-plus"></i>
+          <span>Add Subject</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable content area for active pages -->
+    <main class="page-container">
+      
+      <!-- 1. Dashboard Page -->
+      <section id="dashboard-page" class="page active">
+        <!-- 4 stats boxes -->
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <div>
+              <div class="stat-title">Total Classes</div>
+              <div class="stat-value" id="statsTotalSubjects">0</div>
+            </div>
+            <div class="stat-icon" style="background:var(--gradient-primary);"><i class="ti ti-books"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-title">Class Hours</div>
+              <div class="stat-value" id="statsTotalHours">0 hrs</div>
+            </div>
+            <div class="stat-icon" style="background:var(--gradient-info);"><i class="ti ti-clock"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-title">Weekly Free Hours</div>
+              <div class="stat-value" id="statsFreeHours">0 hrs</div>
+            </div>
+            <div class="stat-icon" style="background:var(--gradient-success);"><i class="ti ti-coffee"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-title">Longest Subject</div>
+              <div class="stat-value" id="statsLongestClass" style="font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">None</div>
+            </div>
+            <div class="stat-icon" style="background:var(--gradient-warning);"><i class="ti ti-hourglass-high"></i></div>
+          </div>
+        </div>
+
+        <!-- Hero Banners -->
+        <div class="banner-grid">
+          <!-- Banner Card 1: Developer Info -->
+          <div class="card hero-banner-card">
+            <div class="hero-banner-content">
+              <div>
+                <h5>Your semester, organized</h5>
+                <h3>Schedulia Dashboard</h3>
+                <p>From custom colors, absolute grids, layout densities to conflict warnings, you will find all weekly class details managed here.</p>
+              </div>
+              <a class="read-more-link" onclick="document.querySelector('[data-target=scheduler-page]').click();">Read More <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="hero-banner-image-container">
+              <img src="img/rocket_3d.png" alt="3D Rocket Launch">
+            </div>
+          </div>
+
+          <!-- Banner Card 2: Work with the Rockets -->
+          <div class="card dark-banner-card" style="background-image: url('img/student_study.png');">
+            <div class="dark-banner-overlay"></div>
+            <div class="dark-banner-content">
+              <div>
+                <h3>Launch your semester</h3>
+                <p>Set up your classes once, switch between semesters in a click, and let Schedulia handle the conflicts so you can focus on actually studying</p>
+              </div>
+              <a class="read-more-link" onclick="document.querySelector('[data-target=semester-page]').click();">Read More <i class="ti ti-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard sections: Today's list + Quick actions -->
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.5rem; flex-wrap:wrap; margin-top: 1.5rem;">
+          <!-- Left side: Today's classes list -->
+          <div class="card">
+            <h3 style="font-weight:700; margin-bottom:1rem; display:flex; align-items:center; gap:8px;">
+              <i class="ti ti-calendar-event" style="color:var(--accent-color);"></i>
+              Today's Schedule
+            </h3>
+            <div id="todayClassesContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Right side: Quick Action Buttons -->
+          <div class="card" style="display:flex; flex-direction:column; gap:1rem;">
+            <h3 style="font-weight:700;">Quick Actions</h3>
+            <button class="btn btn-primary trigger-add-subject" style="justify-content:flex-start;">
+              <i class="ti ti-plus"></i>
+              Add New Subject
+            </button>
+            <button class="btn btn-secondary" id="quickDuplicateBtn" style="justify-content:flex-start;">
+              <i class="ti ti-copy"></i>
+              Duplicate Class
+            </button>
+            <button class="btn btn-secondary" id="quickExportBtn" style="justify-content:flex-start;">
+              <i class="ti ti-file-download"></i>
+              Export PDF Grid
+            </button>
+            <button class="btn btn-secondary" id="quickImportBtn" style="justify-content:flex-start;">
+              <i class="ti ti-file-upload"></i>
+              Import JSON Backup
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Scheduler Page -->
+      <section id="scheduler-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Weekly Calendar</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Drag classes to reschedule, pull bottoms to resize duration</span>
+          </div>
+          
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-secondary" id="exportExcelBtn" title="Export Excel Table"><i class="ti ti-file-spreadsheet"></i> Excel</button>
+            <button class="btn btn-secondary" id="exportPngBtn" title="Export PNG Image"><i class="ti ti-photo"></i> Image</button>
+            <button class="btn btn-primary" id="exportPdfBtn" title="Export Landscape PDF"><i class="ti ti-file-text"></i> PDF</button>
+          </div>
+        </div>
+
+        <!-- The scheduler canvas wrapper element -->
+        <div class="scheduler-container" id="schedulerGridContainer">
+          <!-- Calendar grid rendered dynamically inside scheduler.js & ui.js -->
+        </div>
+      </section>
+
+      <!-- 3. Subjects List Page -->
+      <section id="subjects-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Subject Directory</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Browse, filter, and edit all scheduled subject cards</span>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <select id="filterInstructorSelect" class="form-control" style="width:160px;"></select>
+            <select id="filterRoomSelect" class="form-control" style="width:120px;"></select>
+            <button class="btn btn-primary trigger-add-subject"><i class="ti ti-plus"></i> Add New</button>
+          </div>
+        </div>
+
+        <!-- Directory Table -->
+        <div class="card" style="padding:0; overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; text-align:left;">
+            <thead>
+              <tr style="background-color:var(--bg-color); border-bottom:1px solid var(--border-color); font-size:0.75rem; text-transform:uppercase; font-weight:800; color:var(--text-muted);">
+                <th style="padding:1rem;">Subject</th>
+                <th style="padding:1rem;">Instructor</th>
+                <th style="padding:1rem;">Room</th>
+                <th style="padding:1rem;">Day</th>
+                <th style="padding:1rem;">Time Span</th>
+                <th style="padding:1rem; text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="subjectsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3a. Room Management Page -->
+      <section id="room-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Room Management</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Maintain the list of rooms available for scheduling</span>
+          </div>
+          <button class="btn btn-primary trigger-add-room"><i class="ti ti-plus"></i> Add Room</button>
+        </div>
+
+        <div id="roomListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 3b. Instructor Management Page -->
+      <section id="instructor-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Instructor Management</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Maintain the list of instructors available for scheduling</span>
+          </div>
+          <button class="btn btn-primary trigger-add-instructor"><i class="ti ti-plus"></i> Add Instructor</button>
+        </div>
+
+        <div id="instructorListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 3c. Section Management Page -->
+      <section id="section-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Section Management</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Maintain the list of sections available for scheduling</span>
+          </div>
+          <button class="btn btn-primary trigger-add-section"><i class="ti ti-plus"></i> Add Section</button>
+        </div>
+
+        <div id="sectionListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 3d. Subject Management Page (Course Catalog) -->
+      <section id="subjectcatalog-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Subject Management</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Maintain the catalog of subjects available for scheduling</span>
+          </div>
+          <button class="btn btn-primary trigger-add-subjectcatalog"><i class="ti ti-plus"></i> Add Subject</button>
+        </div>
+
+        <div id="subjectcatalogListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 4. Semesters Management Page -->
+      <section id="semester-page" class="page">
+        <div class="scheduler-controls">
+          <div>
+            <h2 style="font-weight:800; color:var(--text-main);">Semester Manager</h2>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Manage separate schedules for semesters or years</span>
+          </div>
+          <button class="btn btn-primary" id="addSemesterBtn"><i class="ti ti-folder-plus"></i> Create Semester</button>
+        </div>
+
+        <div id="semestersListContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 5. Settings / Customize Page -->
+      <section id="settings-page" class="page">
+        <h2 style="font-weight:800; color:var(--text-main); margin-bottom:-1rem;">Configuration Center</h2>
+        
+        <div class="settings-grid">
+          <!-- Column 1: UI Styles -->
+          <div class="card" style="display:flex; flex-direction:column; gap:1.25rem;">
+            <h3 style="font-weight:700; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem;"><i class="ti ti-palette" style="color:var(--accent-color);"></i> Appearance Styling</h3>
+            
+            <div class="form-group">
+              <label for="themeSelect">Theme Preset</label>
+              <select id="themeSelect" class="form-control">
+                <option value="auto">System Default (Auto)</option>
+                <option value="light">Light Theme Mode</option>
+                <option value="dark">Dark Theme Mode</option>
+                <option value="high-contrast">High Contrast Mode</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="layoutSelect">Density Layout</label>
+              <select id="layoutSelect" class="form-control">
+                <option value="comfortable">Comfortable Grid (Height 70px)</option>
+                <option value="compact">Compact Grid (Height 55px)</option>
+                <option value="dense">Dense Grid (Height 40px)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="sidebarSelect">Sidebar Position</label>
+              <select id="sidebarSelect" class="form-control">
+                <option value="icons-text">Comfortable (Icons + Text)</option>
+                <option value="icons-only">Compact (Icons Only)</option>
+                <option value="hidden">Hidden Sidebar</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fontSizeSelect">Global Font Scale</label>
+              <select id="fontSizeSelect" class="form-control">
+                <option value="0.85">Small Fonts</option>
+                <option value="1">Medium Fonts (Normal)</option>
+                <option value="1.15">Large Fonts</option>
+              </select>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:5px;">
+              <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Enable Glassmorphism overlay</span>
+              <label class="form-group" style="margin:0; flex-direction:row; align-items:center; cursor:pointer;">
+                <input type="checkbox" id="glassModeToggle" style="width:20px; height:20px;">
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label>Accent Highlights Color</label>
+              <div class="color-picker-wrapper" style="margin-top:5px;">
+                <div class="color-swatch accent-swatch" data-color="#7928ca" style="background:linear-gradient(310deg, #7928ca, #ff007f);" title="Purple"></div>
+                <div class="color-swatch accent-swatch" data-color="#21d4fd" style="background:linear-gradient(310deg, #21d4fd, #b721ff);" title="Blue"></div>
+                <div class="color-swatch accent-swatch" data-color="#17ad37" style="background:linear-gradient(310deg, #17ad37, #98ec2d);" title="Green"></div>
+                <div class="color-swatch accent-swatch" data-color="#ff9800" style="background:linear-gradient(310deg, #ff9800, #f44336);" title="Orange"></div>
+                <div class="color-swatch accent-swatch" data-color="#b90202" style="background:linear-gradient(310deg, #ff0000, #bd0561);" title="Red"></div>
+                <div class="color-swatch accent-swatch" data-color="#141727" style="background:linear-gradient(310deg, #141727, #3a416f);" title="Gray"></div>
+                <div class="color-swatch accent-swatch" data-color="#627594" style="background:linear-gradient(310deg, #627594, #a3b1c6);" title="White Gray"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Grid Rules -->
+          <div class="card" style="display:flex; flex-direction:column; gap:1.25rem;">
+            <h3 style="font-weight:700; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem;"><i class="ti ti-calendar" style="color:var(--accent-color);"></i> Calendar Grid Settings</h3>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+              <div class="form-group">
+                <label for="gridStartSelect">Grid Start Hour</label>
+                <select id="gridStartSelect" class="form-control">
+                  <option value="08:00">8:00 AM</option>
+                  <option value="09:00">9:00 AM</option>
+                  <option value="10:00">10:00 AM</option>
+                  <option value="11:00">11:00 AM</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="gridEndSelect">Grid End Hour</label>
+                <select id="gridEndSelect" class="form-control">
+<option value="13:00">1:00 PM</option>
+<option value="14:00">2:00 PM</option>
+<option value="15:00">3:00 PM</option>
+<option value="17:00">5:00 PM</option>
+<option value="18:00">6:00 PM</option>
+<option value="19:00">7:00 PM</option>
+<option value="20:00">8:00 PM</option>
+<option value="22:00">10:00 PM</option>
+      
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="gridIntervalSelect">Time Interval Snap</label>
+              <select id="gridIntervalSelect" class="form-control">
+                <option value="15">15 Minutes</option>
+                <option value="30">30 Minutes</option>
+                <option value="60">60 Minutes (1 Hour)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Days to Display</label>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="monday"> Monday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="tuesday"> Tuesday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="wednesday"> Wednesday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="thursday"> Thursday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="friday"> Friday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="saturday"> Saturday</label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.875rem;"><input type="checkbox" class="day-visible-check" data-day="sunday"> Sunday</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 3: Storage & Backups -->
+          <div class="card" style="display:flex; flex-direction:column; gap:1.25rem;">
+            <h3 style="font-weight:700; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem;"><i class="ti ti-device-floppy" style="color:var(--accent-color);"></i> Storage & Backups</h3>
+            <span style="font-size:0.875rem; color:var(--text-muted);">Your data is stored securely in your browser's local sandbox (IndexedDB). Back up your settings and classes regularly.</span>
+            
+            <button class="btn btn-primary" id="exportJsonBtn" style="margin-top:10px;"><i class="ti ti-download"></i> Download JSON Backup</button>
+            
+            <div class="form-group" style="margin-top:10px;">
+              <label>Restore JSON Backup</label>
+              <input type="file" id="importJsonFile" accept=".json" style="display:none;">
+              <button class="btn btn-secondary" onclick="document.getElementById('importJsonFile').click()"><i class="ti ti-upload"></i> Choose file & upload</button>
+            </div>
+
+            <div class="form-group" style="margin-top:10px; border-top:1px solid var(--border-color); padding-top:1rem;">
+              <label style="color:var(--text-main);">Delete Management Data</label>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Permanently clear a master data list. Existing schedules keep their saved values but lose the quick dropdown.</span>
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <select id="deleteManagementSelect" class="form-control" style="flex:1;">
+                  <option value="instructor">Instructors</option>
+                  <option value="room">Rooms</option>
+                  <option value="section">Sections</option>
+                  <option value="subject">Subjects</option>
+                  <option value="all">ALL Management Data</option>
+                </select>
+                <button class="btn-delete-gradient" id="deleteManagementBtn" style="white-space:nowrap; gap:6px;"><i class="ti ti-trash"></i> Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- --- Backdrop overlay containing modals --- -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    
+    <!-- 1. Add / Edit Subject Modal -->
+    <div class="modal-container" id="subjectModal" style="display:none;">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Subject</h3>
+        <button class="modal-close-btn"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="conflict-banner" id="modalConflictBanner"></div>
+
+        <form id="subjectForm">
+          <!-- Text Inputs -->
+          <div class="form-group">
+            <label for="subjectNameInput">Subject Name *</label>
+            <select id="subjectNameInput" class="form-control" required>
+              <option value="">Select a subject...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="subjectInstructorInput">Instructor</label>
+            <select id="subjectInstructorInput" class="form-control">
+              <option value="">Select an instructor...</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group">
+              <label for="subjectRoomInput">Room</label>
+              <select id="subjectRoomInput" class="form-control">
+                <option value="">Select a room...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="subjectSectionInput">Section</label>
+              <select id="subjectSectionInput" class="form-control">
+                <option value="">Select a section...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Time & Day -->
+          <div class="form-group">
+            <label for="subjectDaySelect">Day of Week</label>
+            <select id="subjectDaySelect" class="form-control" required>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group">
+              <label for="subjectStartInput">Start Time</label>
+              <input type="time" id="subjectStartInput" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="subjectEndInput">End Time</label>
+              <input type="time" id="subjectEndInput" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- Text Note -->
+          <div class="form-group">
+            <label for="subjectNotesInput">Notes / Description</label>
+            <textarea id="subjectNotesInput" class="form-control" style="height:60px; padding:10px; resize:none;" placeholder="Notes, quiz dates, links..."></textarea>
+          </div>
+
+          <!-- Colors customization -->
+          <div class="form-group" style="margin-top:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label>Custom Block Palette</label>
+              <button type="button" id="suggestColorsBtn" class="btn btn-secondary btn-sm" style="padding:2px 8px; font-size:10px;"><i class="ti ti-color-swatch"></i> Suggest colors</button>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-top:5px;">
+              <div class="form-group">
+                <label style="font-size:10px;">BG Color</label>
+                <input type="color" id="subjectBgInput" class="form-control" style="padding:0; height:32px; width:100%; border:none; cursor:pointer;">
+              </div>
+              <div class="form-group">
+                <label style="font-size:10px;">Text Color</label>
+                <input type="color" id="subjectTextInput" class="form-control" style="padding:0; height:32px; width:100%; border:none; cursor:pointer;">
+              </div>
+              <div class="form-group">
+                <label style="font-size:10px;">Border Color</label>
+                <input type="color" id="subjectBorderInput" class="form-control" style="padding:0; height:32px; width:100%; border:none; cursor:pointer;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Attachment uploads -->
+          <div class="form-group" style="margin-top:1rem;">
+            <label>Image Attachments (Logo, covers...)</label>
+            <div style="display:flex; border-bottom:1px solid var(--border-color); margin-bottom:10px;">
+              <div class="upload-slot-tab active" data-slot="subject" style="padding:5px 10px; cursor:pointer; font-size:10px; font-weight:700;">Subject</div>
+              <div class="upload-slot-tab" data-slot="instructor" style="padding:5px 10px; cursor:pointer; font-size:10px; font-weight:700;">Teacher</div>
+              <div class="upload-slot-tab" data-slot="logo" style="padding:5px 10px; cursor:pointer; font-size:10px; font-weight:700;">Logo</div>
+            </div>
+            
+            <div class="image-upload-area" id="imageDragArea">
+              <i class="ti ti-cloud-upload"></i>
+              <span style="font-size:11px; font-weight:600; color:var(--text-muted);">Drop image here, click, or paste clipboard</span>
+            </div>
+            <div class="image-preview-wrapper" id="imagePreviewsContainer"></div>
+          </div>
+
+          <!-- Actions Duplication block (Only shown in edit mode) -->
+          <div id="modalActionDuplication" style="display:none; border-top:1px solid var(--border-color); padding-top:1.5rem; margin-top:1.5rem;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Schedule Operations</label>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:5px;">
+              <select id="copyToDaySelect" class="form-control" style="flex:1;">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+              <button type="button" class="btn btn-secondary btn-sm" id="copyToDayBtn" style="white-space:nowrap;"><i class="ti ti-copy"></i> Copy to Day</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="duplicateClassBtn" style="white-space:nowrap;"><i class="ti ti-folders"></i> Duplicate</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteSubjectBtn" style="display:none;"><i class="ti ti-trash"></i> Delete</button>
+        <button type="submit" form="subjectForm" class="btn btn-primary"><i class="ti ti-device-floppy"></i> Save Subject</button>
+      </div>
+    </div>
+
+    <!-- 2. Add / Edit Master Data Modal (Room / Instructor / Section / Subject) -->
+    <div class="modal-container" id="masterItemModal" style="display:none; max-width:420px;">
+      <div class="modal-header">
+        <h3 id="masterItemModalTitle">Add Room</h3>
+        <button class="modal-close-btn"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="masterItemForm">
+          <div class="form-group">
+            <label id="masterItemNameLabel" for="masterItemNameInput">Name *</label>
+            <input type="text" id="masterItemNameInput" class="form-control" required placeholder="e.g. Room 204">
+          </div>
+          <div class="form-group">
+            <label id="masterItemDetailLabel" for="masterItemDetailInput">Details</label>
+            <input type="text" id="masterItemDetailInput" class="form-control" placeholder="Optional notes">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteMasterItemBtn" style="display:none;"><i class="ti ti-trash"></i> Delete</button>
+        <button type="submit" form="masterItemForm" class="btn btn-primary"><i class="ti ti-device-floppy"></i> Save</button>
+      </div>
+    </div>
+
+    <!-- 3. Keyboard shortcuts help modal -->
+    <div class="modal-container" id="keyboardHelpModal" style="display:none; max-width:400px;">
+      <div class="modal-header">
+        <h3 style="font-weight:700;"><i class="ti ti-keyboard"></i> Keyboard Shortcuts</h3>
+        <button class="modal-close-btn"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body" style="padding:1.5rem 0;">
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:12px;">
+          <li style="display:flex; justify-content:space-between; padding:0 1.5rem;"><kbd style="background:var(--border-color); padding:2px 6px; border-radius:4px; font-weight:700; font-family:monospace;">Ctrl + Z</kbd> <span>Undo last action</span></li>
+          <li style="display:flex; justify-content:space-between; padding:0 1.5rem;"><kbd style="background:var(--border-color); padding:2px 6px; border-radius:4px; font-weight:700; font-family:monospace;">Ctrl + Y</kbd> <span>Redo last action</span></li>
+          <li style="display:flex; justify-content:space-between; padding:0 1.5rem;"><kbd style="background:var(--border-color); padding:2px 6px; border-radius:4px; font-weight:700; font-family:monospace;">Ctrl + N</kbd> <span>Create new class block</span></li>
+          <li style="display:flex; justify-content:space-between; padding:0 1.5rem;"><kbd style="background:var(--border-color); padding:2px 6px; border-radius:4px; font-weight:700; font-family:monospace;">Ctrl + P</kbd> <span>Print visual schedule</span></li>
+          <li style="display:flex; justify-content:space-between; padding:0 1.5rem;"><kbd style="background:var(--border-color); padding:2px 6px; border-radius:4px; font-weight:700; font-family:monospace;">ESC</kbd> <span>Close active modal</span></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary modal-close-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Toast Notification overlay element -->
+  <div class="toast-notification" id="toastNotification">
+    <i class="ti ti-info-circle"></i>
+    <span>Message</span>
+  </div>
+
+  <!-- Custom Confirm / Prompt Dialog (replaces native browser popups) -->
+  <div class="confirm-backdrop" id="confirmBackdrop">
+    <div class="confirm-dialog">
+      <div class="confirm-icon" id="confirmIcon"><i class="ti ti-alert-triangle"></i></div>
+      <h3 id="confirmTitle">Are you sure?</h3>
+      <p id="confirmMessage">This action cannot be undone.</p>
+
+      <div class="form-group" id="confirmInputWrapper" style="display:none;">
+        <input type="text" id="confirmInputField" class="form-control" placeholder="">
+      </div>
+
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="confirmOkBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrapping main application module -->
+  <script type="module" src="js/script.js"></script>
+  <!-- Custom-styled dropdown panels (replaces native OS option list look) -->
+  <script src="js/script-customn.js" defer></script>
+</body>
+</html>

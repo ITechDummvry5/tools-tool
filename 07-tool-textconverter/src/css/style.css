@@ -1,0 +1,173 @@
+:root {
+  --bg-dark: #0d0d0d;
+  --accent: #ff4d00;
+  --accent-light: #ff784e;
+  --text: #ffffff;
+  --muted: #c5c5c5;
+  --radius: 6px;
+  font-family: "Poppins", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  height: 100vh;
+background: linear-gradient(
+  135deg,
+  #000000 0%,
+  #000000 94%,
+  #ff4d00 94%,
+  #ff4d00 100%,
+  #000000 96%,
+  #000000 100%
+);
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Add dark fade at bottom */
+body::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px; /* how tall the fade is */
+  background: linear-gradient(to top, #000000 0%, rgba(253, 69, 69, 0) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* angled orange overlay stripe */
+.overlay {
+  position: absolute;
+  top: 0;
+  right: -10%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(120deg, #320074cc, rgba(255, 77, 0, 0.1));
+  transform: skewX(-25deg);
+  pointer-events: none;
+}
+
+/* container */
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+  color: var(--text);
+}
+
+/* title */
+.container h1 {
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.container h1 span {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* orange part of the title */
+.container h1 {
+  color: var(--text);
+}
+
+.container h1 span {
+  color: var(--accent);
+}
+
+/* subtitle */
+.container p {
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 10px 0 25px;
+}
+
+/* textarea */
+textarea {
+  width: 100%;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 1rem;
+  border-radius: var(--radius);
+  padding: 15px;
+  resize: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* select (default state) */
+select {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: none;
+  outline: none;
+  background: #ffffff14;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+/* when dropdown is focused or active */
+select:focus {
+  background: #ffffff14;
+  color: #ffffff;
+  box-shadow: 0 0 20px #320074cc;
+}
+
+/* dropdown options */
+option {
+  background: #13002cf6; /* black background for the dropdown list */
+  color: #fff;
+    border: none;
+  outline: none;
+}
+
+/* button */
+.listen-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.listen-btn:hover {
+  background: var(--accent-light);
+}
+
+.listen-btn img {
+  width: 18px;
+  height: 18px;
+}

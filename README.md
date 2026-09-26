@@ -2,10 +2,10 @@
 Tools — Useful utilities, scripts, or developer tools.
 
 
-mkdir -p 05-tool-sidebar-note/{docs,src/css,src/js}
 
-touch 05-tool-sidebar-note/{README.md,LICENSE,.gitignore}
-touch 05-tool-sidebar-note/docs/{overview.md,setup.md,usage.md}
-touch 05-tool-sidebar-note/src/index.html
-touch 05-tool-sidebar-note/src/css/style.css
-touch 05-tool-sidebar-note/src/js/script.js
+mkdir -p 07-tool-textconverter/{docs,src/css,src/js}
+touch 07-tool-textconverter/{README.md,LICENSE,.gitignore}
+touch 07-tool-textconverter/docs/{overview.md,setup.md,usage.md}
+touch 07-tool-textconverter/src/index.html
+touch 07-tool-textconverter/src/css/style.css
+touch 07-tool-textconverter/src/js/script.js
