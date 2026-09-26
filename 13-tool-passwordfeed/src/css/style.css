@@ -1,0 +1,133 @@
+:root {
+  --card-w:340px; --card-w-full:380px; --radius:2px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+}
+
+/* Background */
+html,body{height:100%;margin:0;overflow:hidden;}
+body{display:flex;justify-content:center;align-items:center;min-height:100vh;
+  background:linear-gradient(135deg,#121412 0%,#000000 50%,#050706 100%);
+  color:#222;overflow-x:hidden;}
+
+/* Decorative shapes: Sun & Moon */
+.shape-one,.shape-two{position:absolute;border-radius:50%;z-index:0;pointer-events:none;box-shadow:0 0 60px rgba(0,0,0,.15);}
+.shape-one{width:320px;height:320px;background:radial-gradient(circle,#0f0f0f,#1d1c1a);top:-100px;left:-100px;
+  box-shadow:0 0 80px #ffc10799,0 0 120px rgba(255,152,0,.5);}
+.shape-two{width:240px;height:240px;background:radial-gradient(circle,#0c0c0c,#030303);bottom:-80px;right:-80px;
+  box-shadow:0 0 70px rgba(128,222,234,.5),0 0 110px rgba(0,188,212,.4);}
+
+/* Layout */
+.container{position:relative;z-index:1;width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:20px;}
+
+/* Header */
+.header{display:flex;align-items:center;font-size:48px;font-weight:600;gap:12px;}
+.header-icon{width:56px;height:56px;}
+.header h1{font-weight: 600; font-size:80px;}
+
+.input-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: 14px 16px;
+  font-size: 16px;
+}
+
+.input-group input::placeholder {
+  color: #bbb;
+}
+
+/* Password Form Wrapper */
+.pass-form {
+  width: 100%;
+  max-width: 480px; /* ⬅️ increased width from ~340px to 480px */
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+
+/* Image button */
+.input-group button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.input-group button:hover {
+  transform: scale(1.1);
+}
+
+.input-group button img {
+  width: 32px;
+  height: 32px;
+  filter: invert(1); /* makes white icon on dark bg */
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.input-group button:hover img {
+  opacity: 1;
+}
+/* Strength Bar Container */
+.strength {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  height: 10px; /* ensure visible height */
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Inner bar */
+.strength .bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(135deg, #f00, #ff7300);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* Strength label */
+#strengthText {
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  padding: 0;
+}
+
+#suggestion {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+
+
+/* Footer */
+.footer{position:fixed;bottom:10px;left:10px;font-size:14px;color:#fff;z-index:10;}
+.footer span{color:#ffc10799;font-weight:600;}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Password Strength Feed</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Decorative shapes -->
+  <div class="shape-one"></div>
+  <div class="shape-two"></div>
+
+  <!-- Wrapper -->
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <img src="favicon.ico" alt="App Logo" class="header-icon">
+      <!-- App Title Here -->
+       <h1>Password Feed</h1>
+    </div>
+
+<form class="pass-form">
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Enter your password">
+    <button type="button" id="checkBtn">
+      <img src="favicon.ico" alt="Check Strength">
+    </button>
+  </div>
+
+  <div class="strength">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <p id="strengthText">Strength Bar</p>
+<p id="suggestion"></p>
+</form>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">Made by <span>TechDummvry!</span></div>
+
+  <!-- JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>
