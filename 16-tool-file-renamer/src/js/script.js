@@ -32,7 +32,7 @@ $('fi').onchange=e=>{[...e.target.files].forEach(f=>add(f,''));e.target.value=''
 $('di').onchange=e=>{[...e.target.files].forEach(f=>{const p=f.webkitRelativePath.split('/');p.pop();add(f,p.join('/')+(p.length?'/':''))});e.target.value='';run()};
 $('clr').onclick=()=>{items.forEach(i=>i.url&&URL.revokeObjectURL(i.url));items=[];run()};
 document.querySelectorAll('#scope button').forEach(b=>b.onclick=()=>{scope=b.dataset.v;document.querySelectorAll('#scope button').forEach(x=>x.classList.toggle('a',x===b));run()});
-document.querySelectorAll('aside input,aside select').forEach(el=>el.addEventListener('input',run));
+document.querySelectorAll('.ctl input,.ctl select').forEach(el=>el.addEventListener('input',run));
 $('theme').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark'};
 
 function words(s){return s.replace(/([a-z0-9])([A-Z])/g,'$1 $2').split(/[\s_\-.]+/).filter(Boolean)}

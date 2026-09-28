@@ -11,48 +11,33 @@
 </head>
 <body>
 <div class="wrap">
-<header>
-  <div><h1>Rename<span> — everything.</span></h1><p class="sub">Files, folders and images. Batch rules, live preview, zero uploads — it all stays in your browser.</p></div>
-  <button id="theme">◐ Theme</button>
-</header>
-<div class="grid">
-  <aside class="card">
-    <div class="drop" id="drop"><b>Drop files or folders</b><small>or use the buttons below</small></div>
-    <div class="row"><button id="pf">Add files</button><button id="pd">Add folder</button><button id="clr">Clear</button></div>
-    <input type="file" id="fi" multiple hidden><input type="file" id="di" webkitdirectory hidden>
-
-    <label class="l">Apply to</label>
-    <div class="seg" id="scope"><button data-v="files" class="a">Files</button><button data-v="folders">Folders</button><button data-v="both">Both</button></div>
-
-    <label class="l">Find &amp; replace</label>
-    <div class="two"><input type="text" id="find" placeholder="Find"><input type="text" id="rep" placeholder="Replace with"></div>
-    <label class="chk"><input type="checkbox" id="rx"> Regular expression</label>
-
-    <label class="l">Prefix &amp; suffix</label>
-    <div class="two"><input type="text" id="pre" placeholder="Prefix"><input type="text" id="suf" placeholder="Suffix"></div>
-
-    <label class="l">Case &amp; cleanup</label>
-    <div class="two">
+<header><div><h1>Rename<span style="color:var(--muted);font-weight:500"> — everything.</span></h1><span class="sub">Files, folders and images. Batch rules, live preview, zero uploads — it all stays in your browser.</span></div><button id="theme">◐ Theme</button></header>
+<div class="layout">
+<aside class="card side ctl">
+  <div class="drop" id="drop"><b>Drop files or folders</b><small>or use the buttons below</small></div>
+  <div class="row"><button id="pf">Add files</button><button id="pd">Add folder</button><button id="clr">Clear</button></div>
+  <input type="file" id="fi" multiple hidden><input type="file" id="di" webkitdirectory hidden>
+  <div class="g"><label class="l">Apply to</label><div class="seg" id="scope"><button data-v="files" class="a">Files</button><button data-v="folders">Folders</button><button data-v="both">Both</button></div></div>
+  <div class="g"><label class="l">Find &amp; replace</label><div class="two"><input type="text" id="find" placeholder="Find"><input type="text" id="rep" placeholder="Replace with"></div>
+    <label class="chk" style="margin-top:8px"><input type="checkbox" id="rx"> Regular expression</label></div>
+  <div class="g"><label class="l">Prefix &amp; suffix</label><div class="two"><input type="text" id="pre" placeholder="Prefix"><input type="text" id="suf" placeholder="Suffix"></div></div>
+</aside>
+<main class="card ctl">
+  <div class="bar"><div class="stat"><span id="stat">No items yet</span> <span id="warn" style="color:var(--bad)"></span></div></div>
+  <div class="list" id="list"><div class="empty">Drop something to preview the new names.</div></div>
+  <div class="foot"><button class="pri" id="zip" disabled>Download renamed ZIP</button><button id="sh" disabled>Download rename script</button><button id="cp" disabled>Copy mapping</button></div>
+  <p class="note">Browsers can't rename files on disk, so export a ZIP with the new names, or a shell script that copies the originals into a renamed/ folder (run it from the folder's parent).</p>
+  <div class="extras">
+    <div class="g"><label class="l">Case &amp; cleanup</label><div class="two">
       <select id="case"><option value="">Keep case</option><option value="lower">lowercase</option><option value="upper">UPPERCASE</option><option value="title">Title Case</option><option value="kebab">kebab-case</option><option value="snake">snake_case</option><option value="camel">camelCase</option></select>
-      <select id="sp"><option value="">Keep spaces</option><option value="-">Spaces → -</option><option value="_">Spaces → _</option><option value=" ">Remove spaces</option></select>
-    </div>
-    <label class="chk"><input type="checkbox" id="strip"> Strip special characters</label>
-
-    <label class="l">Numbering (files)</label>
-    <label class="chk" style="margin-top:0"><input type="checkbox" id="num"> Add sequence number</label>
-    <div class="two" style="margin-top:8px"><input type="number" id="start" value="1" min="0" title="Start"><input type="number" id="pad" value="3" min="1" max="8" title="Digits"></div>
-    <select id="npos" style="margin-top:8px"><option value="suf">Number at end</option><option value="pre">Number at start</option><option value="only">Replace name entirely</option></select>
-
-    <label class="l">Extension</label>
-    <div class="two"><select id="ext"><option value="">Keep</option><option value="lower">lowercase</option><option value="set">Set to…</option></select><input type="text" id="extv" placeholder="jpg"></div>
-  </aside>
-
-  <main class="card">
-    <div class="bar"><div class="stat" id="stat">No items yet</div><div class="stat" id="warn"></div></div>
-    <div class="list" id="list"><div class="empty">Drop something to preview the new names.</div></div>
-    <div class="foot"><button class="pri" id="zip" disabled>Download renamed ZIP</button><button id="sh" disabled>Download rename script</button><button id="cp" disabled>Copy mapping</button></div>
-    <p class="note">Browsers can't rename files on disk directly, so export a ZIP with the new names, or a shell script that renames the originals in place (run it from the folder's parent).</p>
-  </main>
+      <select id="sp"><option value="">Keep spaces</option><option value="-">Spaces → -</option><option value="_">Spaces → _</option><option value=" ">Remove spaces</option></select></div>
+      <label class="chk" style="margin-top:8px"><input type="checkbox" id="strip"> Strip special characters</label></div>
+    <div class="g"><label class="l">Numbering (files)</label><label class="chk"><input type="checkbox" id="num"> Add sequence number</label>
+      <div class="two" style="margin-top:8px"><input type="number" id="start" value="1" min="0" title="Start"><input type="number" id="pad" value="3" min="1" max="8" title="Digits"></div>
+      <select id="npos" style="margin-top:6px"><option value="suf">Number at end</option><option value="pre">Number at start</option><option value="only">Replace name entirely</option></select></div>
+    <div class="g"><label class="l">Extension</label><div class="two"><select id="ext"><option value="">Keep</option><option value="lower">lowercase</option><option value="set">Set to…</option></select><input type="text" id="extv" placeholder="jpg"></div></div>
+  </div>
+</main>
 </div>
 </div>
 <script src="js/script.js"></script>
