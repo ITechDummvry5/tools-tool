@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Code Formatter</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav><span class="logo"><i>{}</i>Format</span><span><a href="#tool">Formatter</a><a href="#features">Features</a></span></nav>
+<section class="hero">
+  <h1>Make code beautiful.</h1>
+  <p>JSON, CSS, JavaScript and HTML. Paste it and it formats itself.</p>
+</section>
+<section class="stage" id="tool">
+ <div class="tool" id="card">
+  <div class="bar">
+    <div class="seg" id="langSeg" role="group" aria-label="Language">
+      <span class="thumb"></span>
+      <button data-l="json" aria-pressed="true">JSON</button>
+      <button data-l="css" aria-pressed="false">CSS</button>
+      <button data-l="js" aria-pressed="false">JavaScript</button>
+      <button data-l="html" aria-pressed="false">HTML</button>
+    </div>
+    <div class="right">
+      <button class="pill" id="sample">Sample</button>
+      <button class="pill" id="clear">Clear</button>
+      <button class="pill main" id="copy">Copy</button>
+    </div>
+  </div>
+  <div class="bar opts">
+    <div class="seg" id="seg" role="group" aria-label="Indentation">
+      <span class="thumb"></span>
+      <button data-i="2" aria-pressed="true">2 spaces</button>
+      <button data-i="4" aria-pressed="false">4 spaces</button>
+      <button data-i="tab" aria-pressed="false">Tab</button>
+    </div>
+    <div class="right">
+      <button class="pill" id="sort" aria-pressed="false">Sort keys</button>
+      <button class="pill" id="min" aria-pressed="false">Minify</button>
+    </div>
+  </div>
+  <div class="split">
+    <div class="pane" id="drop"><div class="lab"><span>Input</span><span id="dropHint">Drop a .json file here</span></div>
+      <textarea id="in" spellcheck="false" autocomplete="off" placeholder='Paste JSON here'></textarea></div>
+    <div class="pane"><div class="lab"><span id="modeLabel">Formatted</span><span></span></div>
+      <pre class="out" id="out" aria-live="polite"></pre>
+      <div class="empty" id="empty">Your formatted code<br>appears here.</div></div>
+  </div>
+  <div class="stats" id="stats">
+    <div class="stat status" id="st"><span>Status</span><b><i class="dot"></i><span id="state">Waiting</span></b></div>
+    <div class="stat"><span>Size</span><b id="vSize">0 B</b></div>
+    <div class="stat"><span id="l3">Keys</span><b id="vKeys">0</b></div>
+    <div class="stat"><span id="l4">Depth</span><b id="vDepth">0</b></div>
+    <div class="stat"><span>Lines</span><b id="vLines">0</b></div>
+  </div>
+ </div>
+</section>
+<section class="light" id="features">
+  <h2>Everything you need. Nothing you don't.</h2>
+  <div class="grid">
+    <div class="tile dark"><h3>Instant.</h3><p>Every keystroke reformats. No button, no waiting.</p></div>
+    <div class="tile"><h3>Four languages.</h3><p>JSON, CSS, JavaScript and HTML, each with its own syntax colors.</p></div>
+    <div class="tile"><h3>Private.</h3><p>Your code never leaves your browser. Nothing is uploaded.</p></div>
+  </div>
+</section>
+<footer>Formatting runs entirely in your browser.</footer>
+<script src="https://cdn.jsdelivr.net/npm/acorn@8.11.3/dist/acorn.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

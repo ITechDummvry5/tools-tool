@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rename — files, folders & images</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--ink:#0a0a0a;--muted:#6b6b72;--line:rgba(10,10,10,.09);--card:rgba(255,255,255,.72);--field:rgba(255,255,255,.85);--btn:#0a0a0a;--btnink:#fff;--hi:rgba(10,10,10,.05);--bad:#b42318;
+--bg:radial-gradient(900px 520px at 8% -8%,#fff 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#dcdce0 0,transparent 55%),radial-gradient(700px 500px at 60% 110%,#cfcfd4 0,transparent 60%),linear-gradient(160deg,#fbfbfb,#ececee 55%,#f7f7f8)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f5f5f5;--muted:#9a9aa2;--line:rgba(255,255,255,.1);--card:rgba(24,24,26,.7);--field:rgba(255,255,255,.06);--btn:#fff;--btnink:#0a0a0a;--hi:rgba(255,255,255,.07);--bad:#ff8a80;
+--bg:radial-gradient(900px 520px at 8% -8%,#2a2a2e 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#1c1c20 0,transparent 55%),linear-gradient(160deg,#0b0b0c,#141416 55%,#09090a)}}
+:root[data-theme="dark"]{--ink:#f5f5f5;--muted:#9a9aa2;--line:rgba(255,255,255,.1);--card:rgba(24,24,26,.7);--field:rgba(255,255,255,.06);--btn:#fff;--btnink:#0a0a0a;--hi:rgba(255,255,255,.07);--bad:#ff8a80;
+--bg:radial-gradient(900px 520px at 8% -8%,#2a2a2e 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#1c1c20 0,transparent 55%),linear-gradient(160deg,#0b0b0c,#141416 55%,#09090a)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);background-attachment:fixed;background-color:#f4f4f5;color:var(--ink);font:14px/1.5 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;min-height:100%;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:44px 22px 60px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+h1{font-size:34px;letter-spacing:-.04em;margin:0;font-weight:700;line-height:1.05}
+h1 span{color:var(--muted);font-weight:500}
+.sub{color:var(--muted);margin:6px 0 0}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:18px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--line);border-radius:22px;box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 24px 60px -28px rgba(0,0,0,.25);padding:20px}
+.drop{border:1.5px dashed rgba(120,120,128,.45);border-radius:18px;padding:26px 16px;text-align:center;transition:.2s;cursor:pointer}
+.drop.on{background:var(--hi);border-color:var(--ink);transform:scale(1.01)}
+.drop b{display:block;font-size:15px;margin-bottom:4px}
+.drop small{color:var(--muted)}
+.row{display:flex;gap:8px;margin-top:12px}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);padding:9px 14px;font-weight:600;transition:.15s}
+button:hover{transform:translateY(-1px)}
+button.pri{background:var(--btn);color:var(--btnink);border-color:transparent;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+button:disabled{opacity:.4;pointer-events:none}
+.row button{flex:1}
+label.l{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;font-weight:600}
+input[type=text],input[type=number],select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:11px;padding:9px 11px;outline:none;transition:.15s}
+input:focus,select:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--hi)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:flex;background:var(--hi);border-radius:12px;padding:3px}
+.seg button{flex:1;border:0;background:transparent;padding:7px;box-shadow:none}
+.seg button.a{background:var(--btn);color:var(--btnink)}
+.chk{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:#0a0a0a;width:16px;height:16px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.stat{color:var(--muted)}
+.stat b{color:var(--ink)}
+.list{max-height:640px;overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--field)}
+.it{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.it:last-child{border:0}
+.th{width:38px;height:38px;border-radius:10px;background:var(--hi);object-fit:cover;display:grid;place-items:center;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.04em;overflow:hidden}
+.o{color:var(--muted);text-decoration:none;word-break:break-all;font-size:12.5px}
+.n{font-weight:600;word-break:break-all}
+.n.same{color:var(--muted);font-weight:500}
+.n.bad{color:var(--bad)}
+.empty{padding:70px 20px;text-align:center;color:var(--muted)}
+.tag{font-size:10px;font-weight:700;background:var(--btn);color:var(--btnink);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.foot{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.foot button{flex:0 1 auto}
+.note{color:var(--muted);font-size:12px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1>Rename<span> — everything.</span></h1><p class="sub">Files, folders and images. Batch rules, live preview, zero uploads — it all stays in your browser.</p></div>
+  <button id="theme">◐ Theme</button>
+</header>
+<div class="grid">
+  <aside class="card">
+    <div class="drop" id="drop"><b>Drop files or folders</b><small>or use the buttons below</small></div>
+    <div class="row"><button id="pf">Add files</button><button id="pd">Add folder</button><button id="clr">Clear</button></div>
+    <input type="file" id="fi" multiple hidden><input type="file" id="di" webkitdirectory hidden>
+
+    <label class="l">Apply to</label>
+    <div class="seg" id="scope"><button data-v="files" class="a">Files</button><button data-v="folders">Folders</button><button data-v="both">Both</button></div>
+
+    <label class="l">Find &amp; replace</label>
+    <div class="two"><input type="text" id="find" placeholder="Find"><input type="text" id="rep" placeholder="Replace with"></div>
+    <label class="chk"><input type="checkbox" id="rx"> Regular expression</label>
+
+    <label class="l">Prefix &amp; suffix</label>
+    <div class="two"><input type="text" id="pre" placeholder="Prefix"><input type="text" id="suf" placeholder="Suffix"></div>
+
+    <label class="l">Case &amp; cleanup</label>
+    <div class="two">
+      <select id="case"><option value="">Keep case</option><option value="lower">lowercase</option><option value="upper">UPPERCASE</option><option value="title">Title Case</option><option value="kebab">kebab-case</option><option value="snake">snake_case</option><option value="camel">camelCase</option></select>
+      <select id="sp"><option value="">Keep spaces</option><option value="-">Spaces → -</option><option value="_">Spaces → _</option><option value=" ">Remove spaces</option></select>
+    </div>
+    <label class="chk"><input type="checkbox" id="strip"> Strip special characters</label>
+
+    <label class="l">Numbering (files)</label>
+    <label class="chk" style="margin-top:0"><input type="checkbox" id="num"> Add sequence number</label>
+    <div class="two" style="margin-top:8px"><input type="number" id="start" value="1" min="0" title="Start"><input type="number" id="pad" value="3" min="1" max="8" title="Digits"></div>
+    <select id="npos" style="margin-top:8px"><option value="suf">Number at end</option><option value="pre">Number at start</option><option value="only">Replace name entirely</option></select>
+
+    <label class="l">Extension</label>
+    <div class="two"><select id="ext"><option value="">Keep</option><option value="lower">lowercase</option><option value="set">Set to…</option></select><input type="text" id="extv" placeholder="jpg"></div>
+  </aside>
+
+  <main class="card">
+    <div class="bar"><div class="stat" id="stat">No items yet</div><div class="stat" id="warn"></div></div>
+    <div class="list" id="list"><div class="empty">Drop something to preview the new names.</div></div>
+    <div class="foot"><button class="pri" id="zip" disabled>Download renamed ZIP</button><button id="sh" disabled>Download rename script</button><button id="cp" disabled>Copy mapping</button></div>
+    <p class="note">Browsers can't rename files on disk directly, so export a ZIP with the new names, or a shell script that renames the originals in place (run it from the folder's parent).</p>
+  </main>
+</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let items=[],scope='files',res=[];
+const IMG=/^(png|jpe?g|gif|webp|avif|bmp|svg|ico)$/i;
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function add(file,dir){
+  const i=file.name.lastIndexOf('.');
+  const ext=i>0?file.name.slice(i+1):'';
+  const it={file,dir,base:i>0?file.name.slice(0,i):file.name,ext};
+  if(IMG.test(ext))it.url=URL.createObjectURL(file);
+  items.push(it);
+}
+async function walk(e,parent){
+  if(e.isFile){const f=await new Promise(r=>e.file(r));add(f,parent);}
+  else{const p=parent+e.name+'/';const rd=e.createReader();let all=[];
+    while(true){const b=await new Promise(r=>rd.readEntries(r));if(!b.length)break;all.push(...b);}
+    for(const c of all)await walk(c,p);}
+}
+const drop=$('drop');
+['dragenter','dragover'].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();drop.classList.add('on')}));
+['dragleave','drop'].forEach(t=>document.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('on')}));
+document.addEventListener('drop',async e=>{
+  const its=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean);
+  if(its.length)for(const en of its)await walk(en,'');
+  else for(const f of e.dataTransfer.files)add(f,'');
+  run();
+});
+drop.onclick=()=>$('fi').click();
+$('pf').onclick=()=>$('fi').click();$('pd').onclick=()=>$('di').click();
+$('fi').onchange=e=>{[...e.target.files].forEach(f=>add(f,''));e.target.value='';run()};
+$('di').onchange=e=>{[...e.target.files].forEach(f=>{const p=f.webkitRelativePath.split('/');p.pop();add(f,p.join('/')+(p.length?'/':''))});e.target.value='';run()};
+$('clr').onclick=()=>{items.forEach(i=>i.url&&URL.revokeObjectURL(i.url));items=[];run()};
+document.querySelectorAll('#scope button').forEach(b=>b.onclick=()=>{scope=b.dataset.v;document.querySelectorAll('#scope button').forEach(x=>x.classList.toggle('a',x===b));run()});
+document.querySelectorAll('aside input,aside select').forEach(el=>el.addEventListener('input',run));
+$('theme').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark'};
+
+function words(s){return s.replace(/([a-z0-9])([A-Z])/g,'$1 $2').split(/[\s_\-.]+/).filter(Boolean)}
+function casing(s,m){
+  if(m==='lower')return s.toLowerCase();
+  if(m==='upper')return s.toUpperCase();
+  if(m==='title')return s.toLowerCase().replace(/(^|[\s_\-])(\w)/g,(a,b,c)=>b+c.toUpperCase());
+  if(m==='kebab')return words(s).join('-').toLowerCase();
+  if(m==='snake')return words(s).join('_').toLowerCase();
+  if(m==='camel')return words(s).map((w,i)=>i?w[0].toUpperCase()+w.slice(1).toLowerCase():w.toLowerCase()).join('');
+  return s;
+}
+function core(s){
+  const f=$('find').value;
+  if(f){try{s=$('rx').checked?s.replace(new RegExp(f,'g'),$('rep').value):s.split(f).join($('rep').value)}catch(e){}}
+  const sp=$('sp').value;
+  if(sp)s=s.replace(/\s+/g,sp===' '?'':sp);
+  if($('strip').checked)s=s.replace(/[^\w\s.\-]/g,'');
+  s=casing(s,$('case').value);
+  return $('pre').value+s+$('suf').value;
+}
+function pathOf(it,idx){
+  const doF=scope!=='folders',doD=scope!=='files';
+  const dir=it.dir.split('/').filter(Boolean).map(d=>doD?core(d):d).join('/');
+  let base=it.base,ext=it.ext;
+  if(doF){
+    base=core(base);
+    if($('num').checked){
+      const n=String(+$('start').value+idx).padStart(+$('pad').value||1,'0'),p=$('npos').value;
+      base=p==='only'?n:p==='pre'?n+'_'+base:base+'_'+n;
+    }
+    const em=$('ext').value;
+    if(em==='lower')ext=ext.toLowerCase();
+    if(em==='set'&&$('extv').value)ext=$('extv').value.replace(/^\./,'');
+  }
+  return (dir?dir+'/':'')+(base||'unnamed')+(ext?'.'+ext:'');
+}
+function run(){
+  const seen={};
+  res=items.map((it,i)=>{const n=pathOf(it,i);seen[n]=(seen[n]||0)+1;return{it,old:it.dir+it.file.name,neu:n}});
+  let changed=0,dup=0;
+  const html=res.slice(0,400).map(r=>{
+    const same=r.old===r.neu,bad=seen[r.neu]>1;
+    const th=r.it.url?`<img class="th" src="${r.it.url}" alt="">`:`<div class="th">${esc((r.it.ext||'file').slice(0,4).toUpperCase())}</div>`;
+    return `<div class="it">${th}<div><div class="o">${esc(r.old)}</div><div class="n${same?' same':''}${bad?' bad':''}">${esc(r.neu)}${bad?'<span class="tag">CONFLICT</span>':''}</div></div></div>`}).join('');
+  res.forEach(r=>{if(r.old!==r.neu)changed++;if(seen[r.neu]>1)dup++});
+  $('list').innerHTML=items.length?html+(res.length>400?`<div class="empty" style="padding:16px">+ ${res.length-400} more (all included in export)</div>`:''):'<div class="empty">Drop something to preview the new names.</div>';
+  $('stat').innerHTML=items.length?`<b>${items.length}</b> items · <b>${changed}</b> will change`:'No items yet';
+  $('warn').textContent=dup?`${dup} name conflicts — resolve before exporting`:'';
+  const ok=items.length&&!dup;
+  ['zip','sh','cp'].forEach(id=>$(id).disabled=!ok);
+}
+function save(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+$('zip').onclick=async()=>{
+  if(typeof JSZip==='undefined')return alert('ZIP library failed to load.');
+  const z=new JSZip();res.forEach(r=>z.file(r.neu,r.it.file));
+  $('zip').textContent='Building…';
+  save(await z.generateAsync({type:'blob'}),'renamed.zip');$('zip').textContent='Download renamed ZIP';
+};
+const q=s=>"'"+s.replace(/'/g,"'\\''")+"'";
+$('sh').onclick=()=>{
+  const L=['#!/bin/sh','# Run from the folder that contains the original items','set -e'];
+  const dirs=new Set();
+  res.forEach(r=>{if(r.old!==r.neu){const d=r.neu.split('/').slice(0,-1).join('/');if(d&&!dirs.has(d)){dirs.add(d);L.push('mkdir -p '+q('renamed/'+d))}}});
+  res.forEach(r=>{if(r.old!==r.neu)L.push('cp '+q(r.old)+' '+q('renamed/'+r.neu))});
+  L.push('echo "Done — see ./renamed"');
+  save(new Blob([L.join('\n')+'\n'],{type:'text/plain'}),'rename.sh');
+};
+$('cp').onclick=async()=>{
+  const t=res.map(r=>r.old+'\t'+r.neu).join('\n');
+  try{await navigator.clipboard.writeText(t);$('cp').textContent='Copied ✓'}catch(e){$('cp').textContent='Copy failed'}
+  setTimeout(()=>$('cp').textContent='Copy mapping',1500);
+};
+run();
+</script>
+</body>
+</html>
