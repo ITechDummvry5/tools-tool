@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Clamp Generator</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<main class="card">
+  <header class="top">
+    <div>
+      <h1>CSS Clamp Generator</h1>
+      <p>Fluid sizes that scale between two screen widths.</p>
+    </div>
+    <div class="seg" role="tablist" aria-label="Output unit">
+      <button id="uRem" class="on" role="tab" aria-selected="true">rem</button>
+      <button id="uPx" role="tab" aria-selected="false">px</button>
+    </div>
+  </header>
+
+  <section class="body">
+    <div class="col form">
+      <label class="wide">Property
+        <select id="prop">
+          <option>font-size</option><option>padding</option><option>margin</option>
+          <option>gap</option><option>width</option><option>line-height</option>
+        </select>
+        <small>The CSS property that will receive the fluid value.</small>
+      </label>
+
+      <label>Min size (px)
+        <input id="minS" type="number" value="16" min="0" step="any">
+        <small>Smallest value. Used on screens at or below the min screen.</small>
+      </label>
+
+      <label>Max size (px)
+        <input id="maxS" type="number" value="32" min="0" step="any">
+        <small>Largest value. Used on screens at or above the max screen.</small>
+      </label>
+
+      <label>Min screen (px)
+        <input id="minV" type="number" value="320" min="1" step="any">
+        <small>Screen width where scaling starts (320 is a small phone).</small>
+      </label>
+
+      <label>Max screen (px)
+        <input id="maxV" type="number" value="1280" min="1" step="any">
+        <small>Screen width where scaling stops (1280 is a laptop).</small>
+      </label>
+
+      <label class="wide">Root font size (px)
+        <input id="root" type="number" value="16" min="1" step="any">
+        <small>Your page's base font size (usually 16). Used to convert px to rem.</small>
+      </label>
+    </div>
+
+    <div class="col out">
+      <div class="result">
+        <div class="bar"><span>CSS</span><button id="copy" class="primary">Copy</button></div>
+        <code id="code">clamp()</code>
+      </div>
+
+      <div class="preview">
+        <div class="bar"><span>Preview</span><span id="readout" class="muted"></span></div>
+        <div class="stage"><span id="sample">Fluid type</span></div>
+        <input id="vw" type="range" min="200" max="1920" value="800" aria-label="Screen width">
+        <svg id="graph" viewBox="0 0 400 70" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </section>
+
+  <footer class="stats">
+    <span id="status" class="status">Ready</span>
+    <span id="formula" class="muted"></span>
+  </footer>
+</main>
+<script src="js/script.js"></script>
+</body>
+</html>

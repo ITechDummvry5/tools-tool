@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base64 Tool</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="css/style.css".css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="glow g4"></div>
+
+<main class="card">
+  <header class="top">
+    <div>
+      <h1>Base64 Tool</h1>
+      <p>Encode and decode text instantly. Unicode safe.</p>
+    </div>
+    <div class="controls">
+      <div class="seg" role="tablist" aria-label="Mode">
+        <button id="modeEnc" class="on" role="tab" aria-selected="true">Encode</button>
+        <button id="modeDec" role="tab" aria-selected="false">Decode</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="urlSafe"><span>URL-safe</span></label>
+    </div>
+  </header>
+
+  <section class="panes">
+    <div class="pane">
+      <div class="bar"><span id="inLabel">Text</span>
+        <span class="acts"><button id="sample">Sample</button><button id="clear">Clear</button></span></div>
+      <textarea id="input" spellcheck="false" placeholder="Type or paste text here"></textarea>
+    </div>
+
+    <button id="swap" class="swap" title="Use output as input" aria-label="Swap">⇄</button>
+
+    <div class="pane">
+      <div class="bar"><span id="outLabel">Base64</span>
+        <span class="acts"><button id="copy" class="primary">Copy</button></span></div>
+      <textarea id="output" spellcheck="false" readonly placeholder="Result appears here"></textarea>
+    </div>
+  </section>
+
+  <footer class="stats">
+    <span id="status" class="status">Ready</span>
+    <span id="stats">0 chars in · 0 chars out</span>
+  </footer>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>

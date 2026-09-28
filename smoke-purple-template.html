@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Purple Smoke Background Template</title>
+<style>
+:root{--text:#fff;--muted:#c9a8e8;--accent:#ff1f9c}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);
+  background:#05000a;min-height:100vh;overflow-x:hidden}
+
+/* Smoke layer: fixed behind everything */
+#smoke{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+
+/* Page content sits above the smoke */
+.content{position:relative;z-index:1;min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center}
+.content h1{font-size:clamp(2.6rem,1.4rem + 6vw,6rem);font-weight:800;letter-spacing:-.04em;color:var(--accent);
+  text-shadow:0 0 40px rgba(255,31,156,.35)}
+.content p{color:var(--muted);margin-top:12px;font-size:1.1rem}
+.content a{display:inline-block;margin-top:28px;padding:12px 28px;border-radius:999px;color:#fff;text-decoration:none;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px);transition:background .2s}
+.content a:hover{background:rgba(255,255,255,.16)}
+</style>
+</head>
+<body>
+<canvas id="smoke" aria-hidden="true"></canvas>
+
+<main class="content">
+  <div>
+    <h1>Your Title</h1>
+    <p>Realistic purple smoke rolling across the background.</p>
+    <a href="#">Get Started</a>
+  </div>
+</main>
+
+<script>
+/* ===== Volumetric smoke (WebGL, domain-warped fractal noise) ===== */
+(() => {
+  const CONFIG = {
+    deep:    [0.06, 0.00, 0.14],  // shadowed smoke (dark violet)
+    mid:     [0.42, 0.05, 0.62],  // body of the smoke (purple)
+    glow:    [0.95, 0.10, 0.60],  // hot highlights (magenta)
+    speed:   1.0,                 // animation speed
+    density: 1.0,                 // smoke thickness
+    height:  0.85,                // how far up the screen it reaches (0 to 1)
+    scale:   0.6                  // render resolution (lower = faster)
+  };
+
+  const cv = document.getElementById('smoke');
+  const gl = cv.getContext('webgl', { antialias: false, alpha: false });
+  if (!gl) return; // no WebGL: page keeps its dark background
+
+  const VS = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+  const FS = `
+  precision highp float;
+  uniform vec2 r; uniform float t;
+  uniform vec3 cD, cM, cG; uniform float dens, hgt;
+
+  float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float n(vec2 p){
+    vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+    return mix(mix(h(i),h(i+vec2(1,0)),f.x), mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x), f.y);
+  }
+  float fbm(vec2 p){
+    float v=0., a=.5; mat2 R=mat2(.8,-.6,.6,.8);
+    for(int i=0;i<6;i++){ v+=a*n(p); p=R*p*2.02+vec2(1.7,9.2); a*=.5; }
+    return v;
+  }
+  void main(){
+    vec2 uv = gl_FragCoord.xy / r;
+    vec2 p  = uv * vec2(r.x/r.y, 1.) * 2.4;
+    float T = t * .06;
+
+    // Domain warping: noise bent by noise = billowing, curling smoke
+    vec2 q = vec2(fbm(p + vec2(0., -T*2.)), fbm(p + vec2(5.2, 1.3) + T));
+    vec2 w = vec2(fbm(p + 3.*q + vec2(1.7, 9.2) + T*1.5),
+                  fbm(p + 3.*q + vec2(8.3, 2.8) - T));
+    float d = fbm(p + 3.*w - vec2(0., T*3.));       // rises upward over time
+
+    // Thick at the bottom, thinning to wisps toward the top
+    float mask = smoothstep(hgt, 0., uv.y);
+    float s = smoothstep(.22, .9, d) * (.55 + .9*w.x) * mask * dens * 1.5;
+    s = clamp(s, 0., 1.);
+
+    vec3 col = mix(cD*.25, cD, smoothstep(0.,.35,s));
+    col = mix(col, cM, smoothstep(.2,.8,s));
+    col += cG * pow(s,3.) * .55 * (1.-uv.y*.8);      // glowing magenta cores
+    col *= 1. - .55*length(uv-.5);                    // soft vignette
+
+    gl_FragColor = vec4(col, 1.);
+  }`;
+
+  const sh = (type, src) => {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+    return s;
+  };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(pr); gl.useProgram(pr);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW); // fullscreen triangle
+  const loc = gl.getAttribLocation(pr, 'a');
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+  const U = n => gl.getUniformLocation(pr, n);
+  const uR = U('r'), uT = U('t');
+  gl.uniform3fv(U('cD'), CONFIG.deep);
+  gl.uniform3fv(U('cM'), CONFIG.mid);
+  gl.uniform3fv(U('cG'), CONFIG.glow);
+  gl.uniform1f(U('dens'), CONFIG.density);
+  gl.uniform1f(U('hgt'), CONFIG.height);
+
+  function resize() {
+    cv.width  = Math.max(1, Math.round(innerWidth  * CONFIG.scale));
+    cv.height = Math.max(1, Math.round(innerHeight * CONFIG.scale));
+    gl.viewport(0, 0, cv.width, cv.height);
+    gl.uniform2f(uR, cv.width, cv.height);
+  }
+
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t0 = performance.now(), raf = 0, offset = 20; // offset = start mid-flow, not from empty
+
+  function draw(now) {
+    gl.uniform1f(uT, offset + (now - t0) / 1000 * CONFIG.speed);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (!still) raf = requestAnimationFrame(draw);
+  }
+
+  resize();
+  addEventListener('resize', () => { resize(); if (still) draw(performance.now()); });
+  if (still) draw(t0); else raf = requestAnimationFrame(draw);
+
+  document.addEventListener('visibilitychange', () => {
+    if (still) return;
+    if (document.hidden) { cancelAnimationFrame(raf); offset += (performance.now() - t0) / 1000 * CONFIG.speed; }
+    else { t0 = performance.now(); raf = requestAnimationFrame(draw); }
+  });
+})();
+</script>
+</body>
+</html>
