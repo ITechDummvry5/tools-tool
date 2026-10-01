@@ -40,7 +40,18 @@ input[type=checkbox]:checked::after{left:20px}
 .chip button{padding:0 8px;background:none;color:var(--mu);font-size:16px}
 #st{color:var(--ok);font-weight:600;font-size:13px}
 
+#in,
+#out{
+  scrollbar-width:none;
+}
+
+#in::-webkit-scrollbar,
+#out::-webkit-scrollbar{
+  display:none;
+}
+
 .t{display:flex;flex-direction:column;overflow:auto}
+.sc,.sy,.ex{overflow:hidden}
 .t h2{font-size:1.4rem;margin-bottom:8px}
 textarea{flex:1;min-height:160px}
 .sws{display:flex;gap:6px 22px;justify-content:center;flex-wrap:wrap}

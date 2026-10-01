@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Source Code Divider</title>
+<style>
+:root{--tx:#f5f5f7;--mu:#86868b;--ac:#0071e3;--ok:#30d158;color-scheme:dark;box-sizing:border-box}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:#000;color:var(--tx);font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.wrap{margin:3vh 4%;padding:5%;background:#131314;border-radius:28px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;line-height:1.08;letter-spacing:-.03em;margin:0}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.t{background:#000;border-radius:22px;padding:18px 16px;min-width:0;text-align:center;display:flex;flex-direction:column;overflow:auto}
+.t small{display:block;color:var(--mu);font-size:12.5px;margin-bottom:4px}
+.t h2{font-size:1.4rem;font-weight:700;line-height:1.1;letter-spacing:-.02em;margin:0 0 8px}
+textarea,input[type=text]{width:100%;font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:10px 12px;border:1px solid #2a2a2d;border-radius:14px;background:#0c0c0d;color:#fff;outline:none;text-align:left}
+textarea:focus,input[type=text]:focus{border-color:var(--ac)}
+::placeholder{color:#5b5b60}
+textarea{flex:1;min-height:200px;resize:vertical}
+.t,textarea{scrollbar-width:thin;scrollbar-color:#3a3a3d transparent}
+.t::-webkit-scrollbar,textarea::-webkit-scrollbar{width:8px;height:8px}
+.t::-webkit-scrollbar-thumb,textarea::-webkit-scrollbar-thumb{background:#3a3a3d;border-radius:99px}
+.t>:first-child{margin-top:auto}
+.t>:last-child{margin-bottom:auto}
+label input[type=text]{width:60%}
+button{font:inherit;font-weight:600;padding:8px 16px;border:0;border-radius:99px;background:var(--ac);color:#fff;cursor:pointer}
+button:active{transform:scale(.96)}
+button.alt{background:#2a2a2d}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+.tabs button{background:#1f1f22;color:var(--mu);font-size:12.5px;padding:6px 12px}
+.tabs button.on{background:var(--ac);color:#fff}
+label{display:flex;gap:10px;align-items:center;justify-content:space-between;color:var(--mu);font-size:13.5px;padding:7px 0;border-top:1px solid #1f1f22;text-align:left}
+label:first-of-type{border-top:0}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;width:44px;height:26px;border-radius:99px;background:#3a3a3d;position:relative;cursor:pointer;transition:.2s;margin:0}
+input[type=checkbox]::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+input[type=checkbox]:checked{background:#34c759}
+input[type=checkbox]:checked::after{left:20px}
+.nm{gap:8px}
+#st{color:var(--ok);font-weight:600;font-size:13px;line-height:1.7}
+@media(min-width:900px){
+  html,body{height:100%;overflow:hidden}
+  .wrap{height:calc(100vh - 20px);margin:10px;padding:1.6vw 2vw;display:flex;flex-direction:column}
+  .top{margin-bottom:12px;flex:none}
+  h1{font-size:clamp(1.5rem,2.6vw,2.4rem)}
+  .grid{flex:1;min-height:0;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr))}
+  .in{grid-column:1/5;grid-row:1/4}
+  .out{grid-column:8/13;grid-row:1/4}
+  .op{grid-column:5/8;grid-row:1}
+  .nm{grid-column:5/8;grid-row:2}
+  .sx{grid-column:5/8;grid-row:3}
+  .t{padding:12px;overflow-y:auto}
+  .t h2{font-size:clamp(1.05rem,1.7vw,1.5rem);margin-bottom:6px}
+}
+@media(min-width:900px) and (max-height:760px){.t small{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><h1>Split it up.<br>One file to many.</h1></div>
+<main class="grid">
+
+<div class="t op"><small>Options</small><h2>Split</h2>
+<label>Link files in index.html<input type="checkbox" id="lk" checked></label>
+<label>Keep library tags in html<input type="checkbox" id="kl" checked></label>
+<label>Dedent code<input type="checkbox" id="dd" checked></label>
+<label>Blank lines<input type="checkbox" id="bl" checked></label></div>
+
+<div class="t nm"><small>File names</small><h2>Output</h2>
+<label>HTML file<input type="text" id="nh" value="index.html" spellcheck="false"></label>
+<label>CSS file<input type="text" id="nc" value="style.css" spellcheck="false"></label>
+<label>JS file<input type="text" id="nj" value="app.js" spellcheck="false"></label></div>
+
+<div class="t sx"><small>Found</small><h2>Summary</h2><div id="st"></div></div>
+
+<div class="t in"><small>Paste here</small><h2>Input</h2>
+<textarea id="in" spellcheck="false"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body{font-family:Inter,sans-serif;color:red}
+</style>
+</head>
+<body>
+<h1 class="text-center">Hello</h1>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  console.log("hello")
+</script>
+</body>
+</html></textarea></div>
+
+<div class="t out"><small>Updates live</small><h2>Files</h2>
+<div class="tabs" id="tabs"></div>
+<textarea id="out" readonly spellcheck="false"></textarea>
+<div class="row"><button id="cp">Copy</button><button class="alt" id="dl">Download</button><button class="alt" id="zp">Download all (.zip)</button></div></div>
+
+</main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const on = id => $(id).checked;
+  let files = [], cur = 0;
+
+  const FONT = /fonts\.(googleapis|gstatic)\.com|typekit|fontshare|fonts\.bunny\.net/i;
+  const EXT = /^(https?:)?\/\//i;
+  const attr = (s, n) => { const m = s.match(new RegExp('\\b' + n + '\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\'|([^\\s>]+))', 'i')); return m ? (m[1] ?? m[2] ?? m[3]) : ''; };
+
+  function dedent(s) {
+    const lines = s.replace(/\t/g, '  ').split('\n');
+    let min = Infinity;
+    lines.forEach(l => { if (l.trim()) min = Math.min(min, l.match(/^ */)[0].length); });
+    if (!isFinite(min)) return s.trim();
+    return lines.map(l => l.slice(min)).join('\n').trim();
+  }
+
+  function split(src) {
+    const css = [], js = [], libs = { fonts: [], css: [], js: [] };
+    const seen = new Set();
+    const addLib = (k, tag) => { if (!seen.has(tag)) { seen.add(tag); libs[k].push(tag.trim()); } };
+    let html = src, nCss = 0, nJs = 0;
+
+    html = html.replace(/([ \t]*)<style\b[^>]*>([\s\S]*?)<\/style\s*>/gi, (m, ind, body) => {
+      nCss++; css.push(body);
+      return nCss === 1 ? ind + '@@CSS@@' : '';
+    });
+
+    html = html.replace(/([ \t]*)<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi, (m, ind, a, body) => {
+      const s = attr(a, 'src'), type = attr(a, 'type');
+      if (s) { if (EXT.test(s)) addLib('js', m); return on('kl') || !EXT.test(s) ? m : ''; }
+      if (/json|importmap|template/i.test(type)) return m;
+      nJs++; js.push(body);
+      return ind + '@@JS@@';
+    });
+
+    html = html.replace(/<link\b[^>]*>/gi, m => {
+      const h = attr(m, 'href');
+      if (!EXT.test(h)) return m;
+      if (FONT.test(h)) { addLib('fonts', m); return on('kl') ? m : ''; }
+      if (/stylesheet/i.test(attr(m, 'rel'))) { addLib('css', m); return on('kl') ? m : ''; }
+      return m;
+    });
+
+    css.forEach((c, i) => {
+      c.replace(/@import\s+(?:url\()?['"]?(https?:[^'")\s]+)/gi, (_, u) => {
+        addLib(FONT.test(u) ? 'fonts' : 'css', '@import url("' + u + '");');
+      });
+    });
+
+    // keep only the last JS marker so scripts load after the DOM
+    let k = 0;
+    html = html.replace(/[ \t]*@@JS@@/g, m => ++k === nJs ? m : '');
+    const nc = $('nc').value.trim() || 'style.css', nj = $('nj').value.trim() || 'app.js';
+    const link = on('lk');
+    html = html.replace('@@CSS@@', css.length && link ? '<link rel="stylesheet" href="' + nc + '">' : '');
+    html = html.replace('@@JS@@', js.length && link ? '<script src="' + nj + '"><\/script>' : '');
+    html = html.replace(/@@(CSS|JS)@@/g, '');
+    if (on('bl')) html = html.replace(/[ \t]+$/gm, '').replace(/^\s*\n/gm, '');
+
+    const fix = arr => arr.map(x => on('dd') ? dedent(x) : x.trim()).filter(Boolean).join('\n\n');
+    const lib = [['Fonts', libs.fonts], ['CSS libraries', libs.css], ['JS libraries', libs.js]]
+      .filter(g => g[1].length).map(g => '# ' + g[0] + '\n' + g[1].join('\n')).join('\n\n');
+
+    const out = [{ name: $('nh').value.trim() || 'index.html', text: html }];
+    if (css.length) out.push({ name: nc, text: fix(css) + '\n' });
+    if (js.length) out.push({ name: nj, text: fix(js) + '\n' });
+    if (lib) out.push({ name: 'libraries.txt', text: lib + '\n' });
+    const n = libs.fonts.length + libs.css.length + libs.js.length;
+    return { out, stat: [nCss + ' style block' + (nCss === 1 ? '' : 's') + ' \u2192 ' + nc, nJs + ' script block' + (nJs === 1 ? '' : 's') + ' \u2192 ' + nj, n + ' external librar' + (n === 1 ? 'y' : 'ies')] };
+  }
+
+  function run() {
+    const r = split($('in').value);
+    files = r.out;
+    if (cur >= files.length) cur = 0;
+    $('st').innerHTML = r.stat.join('<br>');
+    drawTabs(); show();
+  }
+
+  function drawTabs() {
+    const box = $('tabs'); box.textContent = '';
+    files.forEach((f, i) => {
+      const b = document.createElement('button');
+      b.textContent = f.name;
+      if (i === cur) b.className = 'on';
+      b.onclick = () => { cur = i; drawTabs(); show(); };
+      box.append(b);
+    });
+  }
+  const show = () => { $('out').value = files[cur] ? files[cur].text : ''; };
+
+  function save(name, blob) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  // minimal store-only zip
+  const CRC = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = d => { let c = 0xFFFFFFFF; for (let i = 0; i < d.length; i++) c = CRC[(c ^ d[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  function zip(list) {
+    const enc = new TextEncoder(), parts = [], cen = [];
+    let off = 0;
+    list.forEach(f => {
+      const nm = enc.encode(f.name), d = enc.encode(f.text), crc = crc32(d);
+      const h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true);
+      h.setUint16(12, 0x21, true); h.setUint32(14, crc, true); h.setUint32(18, d.length, true);
+      h.setUint32(22, d.length, true); h.setUint16(26, nm.length, true);
+      parts.push(h.buffer, nm, d);
+      const c = new DataView(new ArrayBuffer(46));
+      c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+      c.setUint16(14, 0x21, true); c.setUint32(16, crc, true); c.setUint32(20, d.length, true);
+      c.setUint32(24, d.length, true); c.setUint16(28, nm.length, true); c.setUint32(42, off, true);
+      cen.push(c.buffer, nm);
+      off += 30 + nm.length + d.length;
+    });
+    const cs = cen.reduce((s, b) => s + b.byteLength, 0);
+    const e = new DataView(new ArrayBuffer(22));
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, list.length, true); e.setUint16(10, list.length, true);
+    e.setUint32(12, cs, true); e.setUint32(16, off, true);
+    return new Blob([...parts, ...cen, e.buffer], { type: 'application/zip' });
+  }
+
+  async function copy() {
+    const b = $('cp'), l = b.textContent;
+    try { await navigator.clipboard.writeText($('out').value); b.textContent = 'Copied'; }
+    catch (e) { $('out').select(); b.textContent = 'Press Ctrl+C'; }
+    setTimeout(() => { b.textContent = l; }, 1500);
+  }
+
+  $('cp').onclick = copy;
+  $('dl').onclick = () => files[cur] && save(files[cur].name, new Blob([files[cur].text], { type: 'text/plain' }));
+  $('zp').onclick = () => save('source.zip', zip(files));
+  ['in', 'lk', 'kl', 'dd', 'bl', 'nh', 'nc', 'nj'].forEach(id => $(id).addEventListener('input', run));
+  run();
+})();
+</script>
+</body>
+</html>
