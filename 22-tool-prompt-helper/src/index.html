@@ -4,99 +4,153 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Image Prompt Helper</title>
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--fg:#0a0a0a;--mut:#6b6b6b;--line:#e6e6e6;--card:#fafafa;--hover:#f0f0f0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f5f5f5;--mut:#8f8f8f;--line:#222;--card:#0e0e0e;--hover:#1a1a1a;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#000;--fg:#f5f5f5;--mut:#8f8f8f;--line:#222;--card:#0e0e0e;--hover:#1a1a1a;color-scheme:dark}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+:root{--bg:#fff;--fg:#000;--mut:#767676;--line:#e4e4e4;--soft:#f2f2f2;--d:"Bricolage Grotesque","Arial Black",Arial,sans-serif;--b:"Instrument Sans",-apple-system,"Segoe UI",Arial,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#fff;--mut:#8c8c8c;--line:#242424;--soft:#141414;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--fg:#fff;--mut:#8c8c8c;--line:#242424;--soft:#141414;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px);scroll-behavior:smooth}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:14px 24px}
-.logo{font-weight:700;letter-spacing:-.02em;font-size:17px}.logo span{color:var(--mut);font-weight:500}
-.sp{flex:1}
+/* hide scrollbar everywhere, keep scrolling */
+html,body,nav,pre{
+  -ms-overflow-style:none;   /* old Edge/IE */
+  scrollbar-width:none;      /* Firefox */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+nav::-webkit-scrollbar,
+pre::-webkit-scrollbar{
+  display:none;              /* Chrome, Safari, new Edge */
+  width:0;height:0;
+}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--b);-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
-.btn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:13px;transition:.15s}
-.btn:hover{background:var(--hover)}
-.btn.pri{background:var(--fg);color:var(--bg);border-color:var(--fg);font-weight:600}
-.btn.pri:hover{opacity:.85}
-.wrap{display:grid;grid-template-columns:200px minmax(0,1fr) 380px;gap:32px;max-width:1280px;margin:0 auto;padding:28px 24px 120px}
-nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start;display:flex;flex-direction:column;gap:1px;max-height:calc(100vh - 110px);overflow-y:auto}
-nav a{display:flex;align-items:center;gap:10px;padding:5px 10px;border-radius:10px;color:var(--mut);text-decoration:none;font-size:13px}
-nav a:hover{background:var(--hover);color:var(--fg)}
-nav a.act{color:var(--fg);background:var(--hover)}
-nav i{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--mut);flex:none}
-nav a.done i{background:var(--fg);border-color:var(--fg)}
-.meter{height:3px;background:var(--line);border-radius:3px;margin:12px 10px 0;overflow:hidden}
-.meter b{display:block;height:100%;background:var(--fg);width:0;transition:.3s}
-.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;align-items:center}
-.presets small{color:var(--mut);margin-right:4px}
-.card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:20px;margin-bottom:14px}
-.card h3{margin:0;font-size:16px;letter-spacing:-.01em;display:flex;gap:10px;align-items:baseline}
-.card h3 em{font-style:normal;color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}
-.card p{margin:2px 0 14px;color:var(--mut);font-size:13px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 13px;font-size:13px;transition:.12s}
-.chip:hover{border-color:var(--fg)}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;align-items:center;gap:8px;padding:16px clamp(18px,4vw,48px)}
+.logo{font:700 20px var(--d);letter-spacing:-.03em;display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo:before{content:"";width:18px;height:18px;border-radius:50%;background:linear-gradient(90deg,var(--fg) 50%,var(--bg) 50%);border:2px solid var(--fg)}
+.lnk{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500;padding:8px 10px}.lnk:hover{color:var(--fg)}
+.btn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:500;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--fg)}
+.cp{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.wrap{display:grid;grid-template-columns:170px minmax(0,1fr);gap:clamp(24px,4vw,64px);max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,48px) 140px}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 90px);align-self:start;max-height:calc(100vh - 120px);overflow-y:auto;border-left:1px solid var(--line);margin-top:clamp(40px,8vw,110px)}
+nav a{display:block;position:relative;padding:4px 0 4px 16px;color:var(--mut);text-decoration:none;font-size:13.5px;transition:color .15s}
+nav a:hover,nav a.act{color:var(--fg)}
+nav a.act:before{content:"";position:absolute;left:-1px;top:3px;bottom:3px;width:2px;background:var(--fg)}
+nav a.done:after{content:"";position:absolute;right:6px;top:50%;width:5px;height:5px;margin-top:-2px;border-radius:50%;background:var(--fg)}
+.meter{height:2px;background:var(--line);margin:14px 0 0 16px}.meter b{display:block;height:100%;background:var(--fg);width:0;transition:width .4s}
+h1{font:700 clamp(46px,9vw,124px)/.9 var(--d);letter-spacing:-.05em;margin:clamp(40px,8vw,110px) 0 22px}
+h1 span{display:block;overflow:hidden;padding-bottom:.08em}h1 span>b{display:block;font-weight:inherit;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+h1 span:nth-child(2)>b{animation-delay:.12s;color:var(--mut)}
+@keyframes rise{from{transform:translateY(105%)}}
+.sub{max-width:46ch;color:var(--mut);font-size:19px;margin:0 0 34px}
+.out{background:var(--fg);color:var(--bg);border-radius:32px;padding:clamp(22px,3vw,36px)}
+.oh{display:flex;justify-content:space-between;font-size:14px;opacity:.6;margin-bottom:14px}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font:400 clamp(17px,2vw,22px)/1.5 var(--b);min-height:96px;max-height:52vh;overflow:auto}
+pre.empty{opacity:.45}
+.neg{margin-top:16px;padding-top:16px;border-top:1px solid rgba(128,128,128,.4);font-size:15px;opacity:.75}
+.tools{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
+.out .cp{background:var(--bg);color:var(--fg);border:0;border-radius:999px;padding:12px 24px;font-weight:600}
+.seg{display:inline-flex;border:1px solid rgba(128,128,128,.5);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-size:13.5px}
+.seg button.on{background:var(--bg);color:var(--fg)}
+.hint{margin:16px 4px 0;color:var(--mut);font-size:15px}
+.hint b{color:var(--fg);font-weight:600}.hint button{border:0;background:none;padding:0;color:var(--fg);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* Showcase */
+.show{margin:clamp(64px,9vw,120px) 0 24px}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.sh small{display:block;font:600 14px var(--d);color:var(--mut);margin-bottom:10px;letter-spacing:.02em}
+.sh h2{margin:0;font:700 clamp(36px,6vw,76px)/.95 var(--d);letter-spacing:-.045em}
+.sh h2 em{font-style:normal;color:var(--mut)}
+.sh p{margin:0;max-width:30ch;color:var(--mut);font-size:15px}
+.gal{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(14px,2vw,24px)}
+.fig{position:relative;display:flex;flex-direction:column;gap:12px;padding:0;border:0;background:none;text-align:left;min-width:0}
+.fig:nth-child(1){grid-column:1/6;grid-row:1/3}
+.fig:nth-child(2){grid-column:6/13}
+.fig:nth-child(3){grid-column:6/13}
+.fig:nth-child(4){grid-column:1/7}
+.fig:nth-child(5){grid-column:7/13}
+.fig:nth-child(n+4) .ph{aspect-ratio:4/3;flex:none}
+.ph{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:28px;background:var(--soft)}
+.fig:nth-child(2) .ph{aspect-ratio:4/3;flex:none}
+.fig:nth-child(3) .ph{aspect-ratio:16/9;flex:none}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.fig:hover .ph img{transform:scale(1.045)}
+.no{position:absolute;top:16px;left:18px;z-index:2;font:600 14px var(--d);color:#fff;mix-blend-mode:difference}
+.go{position:absolute;right:14px;bottom:14px;z-index:2;background:var(--bg);color:var(--fg);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;opacity:0;transform:translateY(8px);transition:.25s}
+.fig:hover .go,.fig:focus-visible .go{opacity:1;transform:none}
+@media (hover:none){.go{opacity:1;transform:none}}
+.cap{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:0 4px}
+.cap h3{margin:0;font:700 clamp(20px,2.4vw,28px)/1.05 var(--d);letter-spacing:-.035em}
+.cap span{color:var(--mut);font-size:13.5px;white-space:nowrap}
+.cap p{margin:4px 0 0;color:var(--mut);font-size:14px;max-width:44ch}
+.steps-h{margin:clamp(56px,8vw,96px) 0 0;font:700 clamp(28px,4vw,44px)/1 var(--d);letter-spacing:-.04em}
+.steps-h em{font-style:normal;color:var(--mut)}
+
+.card{display:grid;grid-template-columns:minmax(150px,230px) minmax(0,1fr);gap:24px;padding:38px 0;border-top:1px solid var(--line)}
+.rh b{display:block;font:600 14px var(--d);color:var(--mut);margin-bottom:4px}
+.rh h3{margin:0;font:700 clamp(24px,3vw,32px)/1.05 var(--d);letter-spacing:-.035em}
+.rb p{margin:0 0 16px;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:10px 19px;font-size:15px;transition:background .15s,border-color .15s,color .15s}
+.chip:hover{border-color:var(--fg);background:var(--soft)}
 .chip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-input[type=text],textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:10px 13px;font:inherit;font-size:14px;outline:none;transition:.15s}
-input[type=text]:focus,textarea:focus{border-color:var(--fg)}
-textarea{resize:vertical;min-height:60px}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start}
-.out{border:1px solid var(--fg);border-radius:18px;padding:18px;background:var(--bg)}
-.out h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);display:flex;justify-content:space-between}
-pre{margin:0;white-space:pre-wrap;word-break:break-word;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:120px;max-height:46vh;overflow:auto}
-pre.empty{color:var(--mut)}
-.neg{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--mut)}
-.tools{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.tools .pri{flex:1}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-.seg button{border:0;background:transparent;padding:6px 12px;font-size:12px}
-.seg button.on{background:var(--fg);color:var(--bg)}
-.hint{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--mut);background:var(--card)}
-.hint button{border:0;background:none;color:var(--fg);text-decoration:underline;padding:0;font-size:13px}
-.bar{display:none}
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:9px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+input[type=text]{width:100%;margin-top:18px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--fg);padding:10px 0;font:inherit;font-size:18px;outline:none;border-radius:0;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--fg)}
+input::placeholder{color:var(--mut);opacity:.7}
+.bar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:30;width:min(720px,calc(100% - 28px));transform:translate(-50%,160%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;gap:14px;padding:8px 8px 8px 24px;border-radius:999px;background:var(--fg);color:var(--bg);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.bar.on{transform:translate(-50%,0)}
+.bar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}
+.bar .cp{background:var(--bg);color:var(--fg);border:0;border-radius:999px;padding:11px 22px;font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,16px);background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@media (max-width:1060px){.wrap{grid-template-columns:minmax(0,1fr);padding-bottom:140px}nav{display:none}aside{position:static;order:-1}pre{max-height:none}
-.bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}.bar .btn{flex:1;padding:11px}}
-@media (max-width:600px){header{padding:12px 16px}.wrap{padding:20px 16px 140px}}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}nav{display:none}.card{grid-template-columns:1fr;gap:14px;padding:30px 0}.rh{display:flex;align-items:baseline;gap:12px}.rh b{margin:0}
+.gal{grid-template-columns:1fr}.fig:nth-child(n){grid-column:auto;grid-row:auto}.fig:nth-child(1) .ph{aspect-ratio:4/5;flex:none}}
+@media (max-width:520px){#rand,#reset,.lnk{display:none}}
+@media (prefers-reduced-motion:reduce){h1 span>b{animation:none}html{scroll-behavior:auto}.bar,.ph img{transition:none}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">Prompt<span> Helper</span></div>
-  <div class="sp"></div>
-  <button class="btn" id="rand">Randomize</button>
+  <div class="logo">promptkit</div>
+  <a class="lnk" href="#showcase">Showcase</a>
+  <a class="lnk" href="#builder">Builder</a>
+  <button class="btn" id="rand">Surprise me</button>
   <button class="btn" id="reset">Reset</button>
-  <button class="btn" id="theme" aria-label="Toggle theme">◐</button>
+  <button class="btn" id="theme" aria-label="Switch light or dark">◐</button>
 </header>
-
 <div class="wrap">
   <nav id="nav"><div class="meter"><b id="meter"></b></div></nav>
-
   <main>
-    <div class="presets" id="presets"><small>Start from</small></div>
-    <div id="steps"></div>
-  </main>
-
-  <aside id="preview">
-    <div class="out">
-      <h4><span>Your prompt</span><span id="count">0 words</span></h4>
-      <pre id="pre" class="empty">Pick options or type in the steps to build your prompt.</pre>
+    <h1><span><b>Build image prompts</b></span><span><b>by clicking.</b></span></h1>
+    <p class="sub">Pick from 20 steps. Every click adds a clean phrase, and your prompt writes itself.</p>
+    <div class="out" id="preview">
+      <div class="oh"><span>Your prompt</span><span id="count">0 words</span></div>
+      <pre id="pre" class="empty"></pre>
       <div class="neg" id="neg" hidden></div>
-      <div class="tools">
-        <button class="btn pri" id="copy">Copy prompt</button>
-        <div class="seg" id="fmt"><button data-f="lines" class="on">Lines</button><button data-f="para">Paragraph</button></div>
-      </div>
+      <div class="tools"><button class="btn cp" id="copy">Copy prompt</button>
+        <div class="seg" id="fmt"><button data-f="lines" class="on">Lines</button><button data-f="para">Paragraph</button></div></div>
     </div>
     <div class="hint" id="hint"></div>
-  </aside>
+
+    <section class="show" id="showcase">
+      <div class="sh">
+        <div><small>Showcase / 05 presets</small><h2>Start from a result,<br><em>not a blank page.</em></h2></div>
+        <p>Each preset made the image beside it. Pick one to load its prompt, then make it yours.</p>
+      </div>
+      <div class="gal" id="gal"></div>
+    </section>
+
+    <h2 class="steps-h" id="builder">Build it <em>step by step.</em></h2>
+    <div id="steps"></div>
+  </main>
 </div>
-
-<div class="bar"><button class="btn" id="view">View prompt</button><button class="btn pri" id="copy2">Copy prompt</button></div>
+<div class="bar" id="dock"><span id="dk"></span><button class="btn cp" id="copy2">Copy prompt</button></div>
 <div class="toast" id="toast">Copied to clipboard</div>
-
 <script>
 const R=[
 ['subject','Subject','What is in the image?','e.g. a premium iPhone 17 smartphone','Person=a person;Animal=an animal;Object=an object;Product=a product;Character=a character'],
@@ -123,24 +177,36 @@ const R=[
 const STEPS=R.map(r=>({id:r[0],t:r[1],q:r[2],ph:r[3],c:r[4].split(';').map(x=>x.split('=')),...(r[5]||{})}));
 const ESS=['subject','environment','composition','camera','lighting','style','constraints'];
 const $=s=>document.querySelector(s);
+const IMG={
+  fashion:'img/fashion.png',
+  product:'img/product.png',
+  fantasy:'img/fantasy.png',
+  game:'img/game.png',
+  car:'img/car.png'
+};
 const PRESETS=[
-{n:'Product shot',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'}},
-{n:'Fashion portrait',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'3:4'},
-{n:'Fantasy character',v:{subject:'a lone elven ranger',appearance:'weathered green cloak, silver bow, braided hair',pose:'standing on a cliff edge',environment:'misty ancient forest at dawn',composition:'full body, wide shot',camera:'low angle',lighting:'golden hour backlight',style:'cinematic digital illustration',mood:'moody, epic atmosphere',constraints:'no text, single subject'},ar:'16:9'}
+{n:'Fashion portrait',img:'fashion',d:'Monochrome studio editorial with dramatic side light.',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'3:4'},
+{n:'Product shot',img:'product',d:'Premium titanium phone, soft studio light, clean backdrop.',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'},ar:'1:1'},
+{n:'Fantasy character',img:'fantasy',d:'An elven ranger above a misty valley at golden hour.',v:{subject:'a lone elven ranger',appearance:'weathered green cloak, silver bow, braided hair',pose:'standing on a cliff edge',environment:'misty ancient forest at dawn',composition:'full body, wide shot',camera:'low angle',lighting:'golden hour backlight',style:'cinematic digital illustration',mood:'moody, epic atmosphere',constraints:'no text, single subject'},ar:'16:9'},
+{n:'Pixel game',img:'game',d:'16-bit side-scrolling hero in a torch-lit dungeon.',v:{subject:'a pixel art knight hero',appearance:'chunky 16-bit sprite, bold outline, vibrant palette',pose:'mid-jump with sword raised',environment:'in a side-scrolling dungeon level with platforms',composition:'side view, wide shot',camera:'orthographic side view',lighting:'flat retro lighting with glowing torches',style:'16-bit pixel art, retro video game style',color:'limited retro color palette',mood:'playful, nostalgic',constraints:'no text, no ui, single subject'},ar:'16:9'},
+{n:'Car showcase',img:'car',d:'Matte black sports car in a dark showroom, strip-light reflections.',v:{subject:'a sleek matte black sports car',appearance:'low aerodynamic body, sharp LED headlights, alloy wheels',pose:'parked, slightly angled',environment:'in a dark modern showroom',composition:'wide shot',camera:'low front three-quarter view, 35mm lens',lighting:'dramatic studio lighting with strip light reflections',style:'premium automotive commercial photography',materials:'glossy paint, carbon fiber, polished chrome',mood:'powerful, luxurious',constraints:'no text, no logo, no people'},ar:'16:9'}
 ];
 let S={sel:{},txt:{}, fmt:'lines'};
 try{const x=JSON.parse(localStorage.getItem('iph2')||'null');if(x)S=Object.assign(S,x)}catch(e){}
 const save=()=>{try{localStorage.setItem('iph2',JSON.stringify(S))}catch(e){}};
 const nav=$('#nav'),box=$('#steps');
 STEPS.forEach((s,i)=>{
-  const a=document.createElement('a');a.href='#s-'+s.id;a.id='n-'+s.id;a.innerHTML='<i></i>'+s.t;nav.insertBefore(a,$('.meter'));
+  const a=document.createElement('a');a.href='#s-'+s.id;a.id='n-'+s.id;a.textContent=s.t;nav.insertBefore(a,$('.meter'));
   const d=document.createElement('section');d.className='card';d.id='s-'+s.id;
-  d.innerHTML=`<h3><em>${String(i+1).padStart(2,'0')}</em>${s.t}</h3><p>${s.q}</p>
-  <div class="chips" data-id="${s.id}">${s.c.map(c=>`<button class="chip" data-v="${c[0]}" title="adds: ${c[1]}">${c[0]}</button>`).join('')}</div>
-  ${s.noin?'':`<input type="text" id="t-${s.id}" placeholder="${s.ph}" autocomplete="off">`}`;
+  d.innerHTML=`<div class="rh"><b>${String(i+1).padStart(2,'0')}</b><h3>${s.t}</h3></div><div class="rb"><p>${s.q}</p><div class="chips" data-id="${s.id}">${s.c.map(c=>`<button class="chip" data-v="${c[0]}" title="adds: ${c[1]}">${c[0]}</button>`).join('')}</div>${s.noin?'':`<input type="text" id="t-${s.id}" placeholder="${s.ph}" autocomplete="off" aria-label="${s.t}">`}</div>`;
   box.appendChild(d);
 });
-PRESETS.forEach(p=>{const b=document.createElement('button');b.className='btn';b.textContent=p.n;b.onclick=()=>{S.sel={};S.txt={...p.v};if(p.ar)S.sel.ar=[p.ar];sync();update();toast('Preset loaded')};$('#presets').appendChild(b)});
+PRESETS.forEach((p,i)=>{
+  const b=document.createElement('button');b.className='fig';b.type='button';
+  b.innerHTML=`<div class="ph"><span class="no">0${i+1}</span><img src="${IMG[p.img]}" alt="${p.n} result" loading="lazy"><span class="go">Use this prompt →</span></div><div class="cap"><div><h3>${p.n}</h3><p>${p.d}</p></div><span>${p.ar}</span></div>`;
+  b.onclick=()=>{S.sel={};S.txt={...p.v};if(p.ar)S.sel.ar=[p.ar];sync();update();toast('Preset loaded');$('#preview').scrollIntoView({block:'center'})};
+  $('#gal').appendChild(b);
+});
 function sync(){
   STEPS.forEach(s=>{const e=$('#t-'+s.id);if(e)e.value=S.txt[s.id]||''});
   document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',(S.sel[c.parentNode.dataset.id]||[]).includes(c.dataset.v)));
@@ -165,15 +231,16 @@ function update(){
     if(s.id==='neg')neg=it;else lines.push((s.p||'')+it.join(', '))});
   const pre=$('#pre');
   let text=S.fmt==='lines'?lines.join(',\n'):lines.join(', ');if(text)text+='.';
-  pre.textContent=text||'Click options or type in the steps to build your prompt.';
+  pre.textContent=text||'Click a chip below, or type your own words. Your prompt appears here.';
   pre.classList.toggle('empty',!text);
+  $('#dk').textContent=text||'Click chips to build your prompt';
   $('#count').textContent=(text?text.split(/\s+/).length:0)+' words';
   const ng=$('#neg');ng.hidden=!neg.length;ng.textContent='Negative prompt: '+neg.join(', ');
   let first=null,done=0;
   STEPS.forEach(s=>{const ok=items(s).length>0;$('#n-'+s.id).classList.toggle('done',ok);if(ESS.includes(s.id)){ok?done++:first=first||s}});
   $('#meter').style.width=done/ESS.length*100+'%';
   const h=$('#hint'),has=lines.length;
-  if(!has)h.innerHTML='Tip: click a <b>Subject</b> chip like Person or Product, then work down the steps. Chips add clean phrases to the prompt.';
+  if(!has)h.innerHTML='Tip: pick a preset from the showcase, or click a <b>Subject</b> chip like Person or Product and work down the steps.';
   else if(first){const m={subject:'Start with a subject',environment:'An environment grounds the subject',composition:'Composition controls framing',camera:'A camera angle gives a clear viewpoint',lighting:'Lighting shapes realism and mood',style:'A style keeps the look consistent',constraints:'Constraints keep unwanted elements out'}[first.id];
     h.innerHTML=`${m}. <button data-j="${first.id}">Add ${first.t.toLowerCase()} →</button>`}
   else h.innerHTML='Core steps covered. Refine with color, mood, negative prompt or references.';
@@ -188,7 +255,7 @@ async function copy(){
 }
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1600)}
 $('#copy').onclick=copy;$('#copy2').onclick=copy;
-$('#view').onclick=()=>$('#preview').scrollIntoView();
+new IntersectionObserver(e=>$('#dock').classList.toggle('on',!e[0].isIntersecting)).observe($('#preview'));
 $('#fmt').onclick=e=>{const f=e.target.dataset.f;if(f){S.fmt=f;sync();update()}};
 $('#reset').onclick=()=>{S={sel:{},txt:{},fmt:S.fmt};sync();update();toast('Cleared')};
 $('#rand').onclick=()=>{S.sel={};S.txt={};const pick=a=>a[Math.random()*a.length|0][0];
