@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Image Prompt Helper</title>
+<style>
+:root{--bg:#fff;--fg:#0a0a0a;--mut:#6b6b6b;--line:#e6e6e6;--card:#fafafa;--hover:#f0f0f0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f5f5f5;--mut:#8f8f8f;--line:#222;--card:#0e0e0e;--hover:#1a1a1a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--fg:#f5f5f5;--mut:#8f8f8f;--line:#222;--card:#0e0e0e;--hover:#1a1a1a;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:14px 24px}
+.logo{font-weight:700;letter-spacing:-.02em;font-size:17px}.logo span{color:var(--mut);font-weight:500}
+.sp{flex:1}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:13px;transition:.15s}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--fg);color:var(--bg);border-color:var(--fg);font-weight:600}
+.btn.pri:hover{opacity:.85}
+.wrap{display:grid;grid-template-columns:200px minmax(0,1fr) 380px;gap:32px;max-width:1280px;margin:0 auto;padding:28px 24px 120px}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start;display:flex;flex-direction:column;gap:1px;max-height:calc(100vh - 110px);overflow-y:auto}
+nav a{display:flex;align-items:center;gap:10px;padding:5px 10px;border-radius:10px;color:var(--mut);text-decoration:none;font-size:13px}
+nav a:hover{background:var(--hover);color:var(--fg)}
+nav a.act{color:var(--fg);background:var(--hover)}
+nav i{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--mut);flex:none}
+nav a.done i{background:var(--fg);border-color:var(--fg)}
+.meter{height:3px;background:var(--line);border-radius:3px;margin:12px 10px 0;overflow:hidden}
+.meter b{display:block;height:100%;background:var(--fg);width:0;transition:.3s}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;align-items:center}
+.presets small{color:var(--mut);margin-right:4px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:20px;margin-bottom:14px}
+.card h3{margin:0;font-size:16px;letter-spacing:-.01em;display:flex;gap:10px;align-items:baseline}
+.card h3 em{font-style:normal;color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}
+.card p{margin:2px 0 14px;color:var(--mut);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 13px;font-size:13px;transition:.12s}
+.chip:hover{border-color:var(--fg)}
+.chip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+input[type=text],textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:10px 13px;font:inherit;font-size:14px;outline:none;transition:.15s}
+input[type=text]:focus,textarea:focus{border-color:var(--fg)}
+textarea{resize:vertical;min-height:60px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start}
+.out{border:1px solid var(--fg);border-radius:18px;padding:18px;background:var(--bg)}
+.out h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);display:flex;justify-content:space-between}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:120px;max-height:46vh;overflow:auto}
+pre.empty{color:var(--mut)}
+.neg{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--mut)}
+.tools{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tools .pri{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:12px}
+.seg button.on{background:var(--fg);color:var(--bg)}
+.hint{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--mut);background:var(--card)}
+.hint button{border:0;background:none;color:var(--fg);text-decoration:underline;padding:0;font-size:13px}
+.bar{display:none}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:9px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1060px){.wrap{grid-template-columns:minmax(0,1fr);padding-bottom:140px}nav{display:none}aside{position:static;order:-1}pre{max-height:none}
+.bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}.bar .btn{flex:1;padding:11px}}
+@media (max-width:600px){header{padding:12px 16px}.wrap{padding:20px 16px 140px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Prompt<span> Helper</span></div>
+  <div class="sp"></div>
+  <button class="btn" id="rand">Randomize</button>
+  <button class="btn" id="reset">Reset</button>
+  <button class="btn" id="theme" aria-label="Toggle theme">◐</button>
+</header>
+
+<div class="wrap">
+  <nav id="nav"><div class="meter"><b id="meter"></b></div></nav>
+
+  <main>
+    <div class="presets" id="presets"><small>Start from</small></div>
+    <div id="steps"></div>
+  </main>
+
+  <aside id="preview">
+    <div class="out">
+      <h4><span>Your prompt</span><span id="count">0 words</span></h4>
+      <pre id="pre" class="empty">Pick options or type in the steps to build your prompt.</pre>
+      <div class="neg" id="neg" hidden></div>
+      <div class="tools">
+        <button class="btn pri" id="copy">Copy prompt</button>
+        <div class="seg" id="fmt"><button data-f="lines" class="on">Lines</button><button data-f="para">Paragraph</button></div>
+      </div>
+    </div>
+    <div class="hint" id="hint"></div>
+  </aside>
+</div>
+
+<div class="bar"><button class="btn" id="view">View prompt</button><button class="btn pri" id="copy2">Copy prompt</button></div>
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+const R=[
+['subject','Subject','What is in the image?','e.g. a premium iPhone 17 smartphone','Person=a person;Animal=an animal;Object=an object;Product=a product;Character=a character'],
+['appearance','Appearance','What does it look like?','e.g. clean modern design with a titanium frame','Face=detailed face;Hair=styled hair;Clothing=stylish clothing;Body=natural body proportions;Materials=realistic materials;Colors=rich colors'],
+['pose','Pose / Action','What is it doing?','e.g. standing upright','Standing=standing;Sitting=sitting;Walking=walking;Holding=holding an item;Running=running'],
+['environment','Environment','Where is it?','e.g. in a minimalist studio','Studio=in a studio;Indoor=indoors;Outdoor=outdoors;Forest=in a forest;City=in a city;Beach=on a beach'],
+['composition','Composition','How is it arranged?','e.g. centered, close-up composition','Close-up=close-up composition;Medium Shot=medium shot;Full Body=full body shot;Wide Shot=wide shot;Centered=centered in the frame'],
+['camera','Camera','How is it viewed?','e.g. front three-quarter view, eye-level','Front=front view;Side=side view;Back=back view;Eye-level=eye-level camera;Low Angle=low angle;High Angle=high angle'],
+['lighting','Lighting','How is it illuminated?','e.g. soft studio lighting with a subtle rim light','Natural=natural lighting;Studio=studio lighting;Soft=soft lighting;Dramatic=dramatic lighting;Backlight=backlight;Golden Hour=golden hour light'],
+['style','Style','What visual style is used?','e.g. premium commercial product photography','Realistic=realistic style;Cinematic=cinematic style;Anime=anime style;Illustration=illustration style;3D=3D render;Editorial=editorial style'],
+['background','Background','What appears behind the subject?','e.g. clean minimal background','Plain=plain background;White=white background;Black=black background;Transparent=transparent background;Blurred=blurred background;Detailed=detailed background'],
+['color','Color','What colors are used?','e.g. black and white palette','Palette=cohesive color palette;Monochrome=monochrome;Warm=warm tones;Cool=cool tones;Contrast=high contrast'],
+['materials','Materials & Texture','What does the surface look and feel like?','e.g. brushed titanium, polished glass','Metal=metal;Leather=leather;Fabric=fabric;Glass=glass;Wood=wood;Skin=natural skin texture'],
+['details','Details','What specific details are included?','e.g. detailed camera lenses, polished edges','Features=distinctive features;Accessories=accessories;Patterns=patterns;Surface Details=fine surface details'],
+['mood','Mood','What feeling or atmosphere does it have?','e.g. calm and premium','Calm=calm mood;Dark=dark mood;Energetic=energetic mood;Dramatic=dramatic mood;Peaceful=peaceful mood'],
+['perspective','Perspective','From what spatial viewpoint is it seen?','e.g. third-person view','First Person=first-person view;Third Person=third-person view;Wide=wide perspective;Distortion=lens distortion'],
+['ar','Aspect Ratio','What are the image proportions?','','1:1=1:1 aspect ratio;4:5=4:5 aspect ratio;3:4=3:4 aspect ratio;16:9=16:9 aspect ratio;9:16=9:16 aspect ratio',{one:1,noin:1}],
+['constraints','Constraints','What should or should not appear?','e.g. no hands, no extra objects','No Text=no text;No Logo=no logo;Single Subject=single subject;Clean Background=clean background',{lc:1}],
+['neg','Negative Prompting','What unwanted elements should be avoided?','e.g. blurry, extra fingers, watermark','Remove Objects=extra objects;Avoid Artifacts=artifacts, blur, distortion;Avoid Styles=unwanted styles',{}],
+['reference','Reference Images','What existing image should guide the result?','e.g. match the lighting of the reference','Image-to-Image=image-to-image;Style=style;Character=character;Product=product',{p:'Use the reference image to guide: '}],
+['consistency','Consistency','What elements need to remain consistent?','e.g. same face and outfit','Character=character;Product=product;Clothing=clothing;Environment=environment',{p:'Keep consistent: '}],
+['editing','Image Editing','What should be changed in an existing image?','e.g. replace the background with a studio','Add=add;Remove=remove;Replace=replace;Extend=extend;Change=change;Restore=restore',{p:'Edit the existing image: '}]
+];
+const STEPS=R.map(r=>({id:r[0],t:r[1],q:r[2],ph:r[3],c:r[4].split(';').map(x=>x.split('=')),...(r[5]||{})}));
+const ESS=['subject','environment','composition','camera','lighting','style','constraints'];
+const $=s=>document.querySelector(s);
+const PRESETS=[
+{n:'Product shot',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'}},
+{n:'Fashion portrait',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'3:4'},
+{n:'Fantasy character',v:{subject:'a lone elven ranger',appearance:'weathered green cloak, silver bow, braided hair',pose:'standing on a cliff edge',environment:'misty ancient forest at dawn',composition:'full body, wide shot',camera:'low angle',lighting:'golden hour backlight',style:'cinematic digital illustration',mood:'moody, epic atmosphere',constraints:'no text, single subject'},ar:'16:9'}
+];
+let S={sel:{},txt:{}, fmt:'lines'};
+try{const x=JSON.parse(localStorage.getItem('iph2')||'null');if(x)S=Object.assign(S,x)}catch(e){}
+const save=()=>{try{localStorage.setItem('iph2',JSON.stringify(S))}catch(e){}};
+const nav=$('#nav'),box=$('#steps');
+STEPS.forEach((s,i)=>{
+  const a=document.createElement('a');a.href='#s-'+s.id;a.id='n-'+s.id;a.innerHTML='<i></i>'+s.t;nav.insertBefore(a,$('.meter'));
+  const d=document.createElement('section');d.className='card';d.id='s-'+s.id;
+  d.innerHTML=`<h3><em>${String(i+1).padStart(2,'0')}</em>${s.t}</h3><p>${s.q}</p>
+  <div class="chips" data-id="${s.id}">${s.c.map(c=>`<button class="chip" data-v="${c[0]}" title="adds: ${c[1]}">${c[0]}</button>`).join('')}</div>
+  ${s.noin?'':`<input type="text" id="t-${s.id}" placeholder="${s.ph}" autocomplete="off">`}`;
+  box.appendChild(d);
+});
+PRESETS.forEach(p=>{const b=document.createElement('button');b.className='btn';b.textContent=p.n;b.onclick=()=>{S.sel={};S.txt={...p.v};if(p.ar)S.sel.ar=[p.ar];sync();update();toast('Preset loaded')};$('#presets').appendChild(b)});
+function sync(){
+  STEPS.forEach(s=>{const e=$('#t-'+s.id);if(e)e.value=S.txt[s.id]||''});
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',(S.sel[c.parentNode.dataset.id]||[]).includes(c.dataset.v)));
+  document.querySelectorAll('#fmt button').forEach(b=>b.classList.toggle('on',b.dataset.f===S.fmt));
+}
+box.addEventListener('click',e=>{
+  const c=e.target.closest('.chip');if(!c)return;
+  const id=c.parentNode.dataset.id,v=c.dataset.v,s=STEPS.find(x=>x.id===id);
+  let a=S.sel[id]||(S.sel[id]=[]);const i=a.indexOf(v);
+  if(i>-1)a.splice(i,1);else{if(s.one)a.length=0;a.push(v)}
+  sync();update();
+});
+box.addEventListener('input',e=>{if(e.target.id.startsWith('t-')){S.txt[e.target.id.slice(2)]=e.target.value;update()}});
+function items(s){
+  const a=(S.sel[s.id]||[]).map(l=>s.c.find(c=>c[0]===l)[1]);
+  (S.txt[s.id]||'').split(',').forEach(x=>{x=x.trim();if(x)a.push(x)});
+  return a.map(x=>s.lc||/^no /i.test(x)?x.toLowerCase():x);
+}
+function update(){
+  const lines=[];let neg=[];
+  STEPS.forEach(s=>{const it=items(s);if(!it.length)return;
+    if(s.id==='neg')neg=it;else lines.push((s.p||'')+it.join(', '))});
+  const pre=$('#pre');
+  let text=S.fmt==='lines'?lines.join(',\n'):lines.join(', ');if(text)text+='.';
+  pre.textContent=text||'Click options or type in the steps to build your prompt.';
+  pre.classList.toggle('empty',!text);
+  $('#count').textContent=(text?text.split(/\s+/).length:0)+' words';
+  const ng=$('#neg');ng.hidden=!neg.length;ng.textContent='Negative prompt: '+neg.join(', ');
+  let first=null,done=0;
+  STEPS.forEach(s=>{const ok=items(s).length>0;$('#n-'+s.id).classList.toggle('done',ok);if(ESS.includes(s.id)){ok?done++:first=first||s}});
+  $('#meter').style.width=done/ESS.length*100+'%';
+  const h=$('#hint'),has=lines.length;
+  if(!has)h.innerHTML='Tip: click a <b>Subject</b> chip like Person or Product, then work down the steps. Chips add clean phrases to the prompt.';
+  else if(first){const m={subject:'Start with a subject',environment:'An environment grounds the subject',composition:'Composition controls framing',camera:'A camera angle gives a clear viewpoint',lighting:'Lighting shapes realism and mood',style:'A style keeps the look consistent',constraints:'Constraints keep unwanted elements out'}[first.id];
+    h.innerHTML=`${m}. <button data-j="${first.id}">Add ${first.t.toLowerCase()} →</button>`}
+  else h.innerHTML='Core steps covered. Refine with color, mood, negative prompt or references.';
+  save();
+}
+$('#hint').addEventListener('click',e=>{const j=e.target.dataset.j;if(j){$('#s-'+j).scrollIntoView();setTimeout(()=>{const i=$('#t-'+j);i&&i.focus({preventScroll:true})},350)}});
+async function copy(){
+  const t=$('#pre');if(t.classList.contains('empty'))return toast('Nothing to copy yet');
+  let out=t.textContent;if(!$('#neg').hidden)out+='\n\n'+$('#neg').textContent;
+  try{await navigator.clipboard.writeText(out)}catch(e){const r=document.createRange();r.selectNodeContents(t);const g=getSelection();g.removeAllRanges();g.addRange(r);document.execCommand('copy')}
+  toast('Copied to clipboard');
+}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1600)}
+$('#copy').onclick=copy;$('#copy2').onclick=copy;
+$('#view').onclick=()=>$('#preview').scrollIntoView();
+$('#fmt').onclick=e=>{const f=e.target.dataset.f;if(f){S.fmt=f;sync();update()}};
+$('#reset').onclick=()=>{S={sel:{},txt:{},fmt:S.fmt};sync();update();toast('Cleared')};
+$('#rand').onclick=()=>{S.sel={};S.txt={};const pick=a=>a[Math.random()*a.length|0][0];
+  ['subject','appearance','pose','environment','composition','camera','lighting','style','background','mood','ar'].forEach(id=>{S.sel[id]=[pick(STEPS.find(s=>s.id===id).c)]});
+  S.sel.constraints=['No Text'];sync();update()};
+$('#theme').onclick=()=>{const r=document.documentElement;r.dataset.theme=getComputedStyle(r).colorScheme==='dark'?'light':'dark'};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('act',a.id==='n-'+e.target.id.slice(2)))}),{rootMargin:'-30% 0px -60% 0px'});
+document.querySelectorAll('.card').forEach(c=>io.observe(c));
+sync();update();
+</script>
+</body>
+</html>
