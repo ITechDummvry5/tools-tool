@@ -15,14 +15,14 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px);scroll-behavio
 *{box-sizing:border-box}
 /* hide scrollbar everywhere, keep scrolling */
 html,body,nav,pre{
-  -ms-overflow-style:none;   /* old Edge/IE */
-  scrollbar-width:none;      /* Firefox */
+  -ms-overflow-style:none;
+  scrollbar-width:none;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
 nav::-webkit-scrollbar,
 pre::-webkit-scrollbar{
-  display:none;              /* Chrome, Safari, new Edge */
+  display:none;
   width:0;height:0;
 }
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--b);-webkit-font-smoothing:antialiased}
@@ -61,33 +61,31 @@ pre.empty{opacity:.45}
 .hint b{color:var(--fg);font-weight:600}.hint button{border:0;background:none;padding:0;color:var(--fg);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 
 /* Showcase */
-.show{margin:clamp(64px,9vw,120px) 0 24px}
+.show{margin:clamp(64px,9vw,120px) 0 24px;container-type:inline-size}
 .sh{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
 .sh small{display:block;font:600 14px var(--d);color:var(--mut);margin-bottom:10px;letter-spacing:.02em}
 .sh h2{margin:0;font:700 clamp(36px,6vw,76px)/.95 var(--d);letter-spacing:-.045em}
 .sh h2 em{font-style:normal;color:var(--mut)}
 .sh p{margin:0;max-width:30ch;color:var(--mut);font-size:15px}
-.gal{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(14px,2vw,24px)}
-.fig{position:relative;display:flex;flex-direction:column;gap:12px;padding:0;border:0;background:none;text-align:left;min-width:0}
-.fig:nth-child(1){grid-column:1/6;grid-row:1/3}
-.fig:nth-child(2){grid-column:6/13}
-.fig:nth-child(3){grid-column:6/13}
-.fig:nth-child(4){grid-column:1/7}
-.fig:nth-child(5){grid-column:7/13}
-.fig:nth-child(n+4) .ph{aspect-ratio:4/3;flex:none}
-.ph{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:28px;background:var(--soft)}
-.fig:nth-child(2) .ph{aspect-ratio:4/3;flex:none}
-.fig:nth-child(3) .ph{aspect-ratio:16/9;flex:none}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
-.fig:hover .ph img{transform:scale(1.045)}
-.no{position:absolute;top:16px;left:18px;z-index:2;font:600 14px var(--d);color:#fff;mix-blend-mode:difference}
-.go{position:absolute;right:14px;bottom:14px;z-index:2;background:var(--bg);color:var(--fg);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;opacity:0;transform:translateY(8px);transition:.25s}
+.gal{--g:clamp(10px,1.4vw,18px);--u:calc((100cqw - 11*var(--g))/12);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:var(--u);gap:var(--g)}
+.fig{position:relative;overflow:hidden;border-radius:28px;background:var(--soft);padding:0;border:0;text-align:left;color:#fff;min-width:0}
+.t-car{grid-column:1/4;grid-row:1/6}
+.t-fantasy{grid-column:4/13;grid-row:1/6}
+.t-product{grid-column:1/5;grid-row:6/11}
+.t-fashion{grid-column:5/10;grid-row:6/11}
+.t-game{grid-column:10/13;grid-row:6/10}
+.note{grid-column:10/13;grid-row:10/11;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 14px;border:1px solid var(--line);border-radius:28px;color:var(--mut);font-size:13.5px;line-height:1.3}
+.fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.fig:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 55%);pointer-events:none}
+.fig:hover img{transform:scale(1.045)}
+.no{position:absolute;top:16px;left:18px;z-index:2;font:600 14px var(--d);color:#fff}
+.go{position:absolute;right:14px;top:14px;z-index:2;background:var(--bg);color:var(--fg);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;opacity:0;transform:translateY(-8px);transition:.25s}
 .fig:hover .go,.fig:focus-visible .go{opacity:1;transform:none}
 @media (hover:none){.go{opacity:1;transform:none}}
-.cap{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:0 4px}
-.cap h3{margin:0;font:700 clamp(20px,2.4vw,28px)/1.05 var(--d);letter-spacing:-.035em}
-.cap span{color:var(--mut);font-size:13.5px;white-space:nowrap}
-.cap p{margin:4px 0 0;color:var(--mut);font-size:14px;max-width:44ch}
+.cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:clamp(14px,2vw,24px)}
+.cap .ar{display:block;font-size:12.5px;opacity:.75;margin-bottom:2px}
+.cap h3{margin:0;font:700 clamp(20px,2.4vw,30px)/1.05 var(--d);letter-spacing:-.035em}
+.cap p{margin:6px 0 0;color:rgba(255,255,255,.78);font-size:13.5px;line-height:1.4;max-width:40ch}
 .steps-h{margin:clamp(56px,8vw,96px) 0 0;font:700 clamp(28px,4vw,44px)/1 var(--d);letter-spacing:-.04em}
 .steps-h em{font-style:normal;color:var(--mut)}
 
@@ -109,9 +107,12 @@ input::placeholder{color:var(--mut);opacity:.7}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,16px);background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}nav{display:none}.card{grid-template-columns:1fr;gap:14px;padding:30px 0}.rh{display:flex;align-items:baseline;gap:12px}.rh b{margin:0}
-.gal{grid-template-columns:1fr}.fig:nth-child(n){grid-column:auto;grid-row:auto}.fig:nth-child(1) .ph{aspect-ratio:4/5;flex:none}}
+.gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;align-items:start}
+.gal .fig{grid-column:auto;grid-row:auto;aspect-ratio:var(--r)}
+.gal .t-fantasy{grid-column:1/-1}
+.note,.cap p{display:none}}
 @media (max-width:520px){#rand,#reset,.lnk{display:none}}
-@media (prefers-reduced-motion:reduce){h1 span>b{animation:none}html{scroll-behavior:auto}.bar,.ph img{transition:none}}
+@media (prefers-reduced-motion:reduce){h1 span>b{animation:none}html{scroll-behavior:auto}.bar,.fig img{transition:none}}
 </style>
 </head>
 <body>
@@ -177,19 +178,21 @@ const R=[
 const STEPS=R.map(r=>({id:r[0],t:r[1],q:r[2],ph:r[3],c:r[4].split(';').map(x=>x.split('=')),...(r[5]||{})}));
 const ESS=['subject','environment','composition','camera','lighting','style','constraints'];
 const $=s=>document.querySelector(s);
+/* Image paths: edit these to match your files in the img/ folder */
 const IMG={
   fashion:'img/fashion.png',
   product:'img/product.png',
-  fantasy:'img/fantasy.png',
   game:'img/game.png',
+  fantasy:'img/fantasy.png',
   car:'img/car.png'
 };
+/* Card shape follows each preset's "ar" value */
 const PRESETS=[
-{n:'Fashion portrait',img:'fashion',d:'Monochrome studio editorial with dramatic side light.',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'3:4'},
-{n:'Product shot',img:'product',d:'Premium titanium phone, soft studio light, clean backdrop.',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'},ar:'1:1'},
+{n:'Car showcase',img:'car',d:'Black hypercar from above in a dark showroom with vertical light strips.',v:{subject:'a black hypercar',appearance:'aggressive angular body, sharp Y-shaped LED headlights, carbon fiber front splitter, large rear wing',pose:'parked, facing the camera',environment:'in a dark minimalist showroom with a polished concrete floor',composition:'symmetrical, centered front view, vertical composition',camera:'high angle front view',lighting:'dramatic lighting with vertical LED light strips and sharp reflections',style:'premium automotive commercial photography',background:'dark walls with glowing light strips',color:'monochrome black and gray palette',materials:'glossy black paint, carbon fiber, polished concrete floor',mood:'powerful, dark, luxurious',constraints:'no text, no logo, no people'},ar:'9:16'},
 {n:'Fantasy character',img:'fantasy',d:'An elven ranger above a misty valley at golden hour.',v:{subject:'a lone elven ranger',appearance:'weathered green cloak, silver bow, braided hair',pose:'standing on a cliff edge',environment:'misty ancient forest at dawn',composition:'full body, wide shot',camera:'low angle',lighting:'golden hour backlight',style:'cinematic digital illustration',mood:'moody, epic atmosphere',constraints:'no text, single subject'},ar:'16:9'},
-{n:'Pixel game',img:'game',d:'16-bit side-scrolling hero in a torch-lit dungeon.',v:{subject:'a pixel art knight hero',appearance:'chunky 16-bit sprite, bold outline, vibrant palette',pose:'mid-jump with sword raised',environment:'in a side-scrolling dungeon level with platforms',composition:'side view, wide shot',camera:'orthographic side view',lighting:'flat retro lighting with glowing torches',style:'16-bit pixel art, retro video game style',color:'limited retro color palette',mood:'playful, nostalgic',constraints:'no text, no ui, single subject'},ar:'16:9'},
-{n:'Car showcase',img:'car',d:'Matte black sports car in a dark showroom, strip-light reflections.',v:{subject:'a sleek matte black sports car',appearance:'low aerodynamic body, sharp LED headlights, alloy wheels',pose:'parked, slightly angled',environment:'in a dark modern showroom',composition:'wide shot',camera:'low front three-quarter view, 35mm lens',lighting:'dramatic studio lighting with strip light reflections',style:'premium automotive commercial photography',materials:'glossy paint, carbon fiber, polished chrome',mood:'powerful, luxurious',constraints:'no text, no logo, no people'},ar:'16:9'}
+{n:'Product shot',img:'product',d:'Premium titanium phone, soft studio light, clean backdrop.',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'},ar:'4:5'},
+{n:'Fashion portrait',img:'fashion',d:'Monochrome studio editorial with dramatic side light.',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'1:1'},
+{n:'Pixel game',img:'game',d:'16-bit side-scrolling hero in a torch-lit dungeon.',v:{subject:'a pixel art knight hero',appearance:'chunky 16-bit sprite, bold outline, vibrant palette',pose:'mid-jump with sword raised',environment:'in a side-scrolling dungeon level with platforms',composition:'side view, centered in the frame',camera:'orthographic side view',lighting:'flat retro lighting with glowing torches',style:'16-bit pixel art, retro video game style',color:'limited retro color palette',mood:'playful, nostalgic',constraints:'no text, no ui, single subject'},ar:'3:4'}
 ];
 let S={sel:{},txt:{}, fmt:'lines'};
 try{const x=JSON.parse(localStorage.getItem('iph2')||'null');if(x)S=Object.assign(S,x)}catch(e){}
@@ -202,11 +205,13 @@ STEPS.forEach((s,i)=>{
   box.appendChild(d);
 });
 PRESETS.forEach((p,i)=>{
-  const b=document.createElement('button');b.className='fig';b.type='button';
-  b.innerHTML=`<div class="ph"><span class="no">0${i+1}</span><img src="${IMG[p.img]}" alt="${p.n} result" loading="lazy"><span class="go">Use this prompt →</span></div><div class="cap"><div><h3>${p.n}</h3><p>${p.d}</p></div><span>${p.ar}</span></div>`;
+  const b=document.createElement('button');b.className='fig t-'+p.img;b.type='button';
+  b.style.setProperty('--r',p.ar.replace(':','/'));
+  b.innerHTML=`<img src="${IMG[p.img]}" alt="${p.n} result" loading="lazy"><span class="no">0${i+1}</span><span class="go">Use this prompt →</span><div class="cap"><span class="ar">${p.ar}</span><h3>${p.n}</h3><p>${p.d}</p></div>`;
   b.onclick=()=>{S.sel={};S.txt={...p.v};if(p.ar)S.sel.ar=[p.ar];sync();update();toast('Preset loaded');$('#preview').scrollIntoView({block:'center'})};
   $('#gal').appendChild(b);
 });
+$('#gal').insertAdjacentHTML('beforeend','<div class="note">Click any tile to load its prompt</div>');
 function sync(){
   STEPS.forEach(s=>{const e=$('#t-'+s.id);if(e)e.value=S.txt[s.id]||''});
   document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',(S.sel[c.parentNode.dataset.id]||[]).includes(c.dataset.v)));
