@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Image Prompt Helper</title>
-<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="icon" href="favicon.ico" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -191,7 +191,7 @@ input::placeholder{color:var(--mut);opacity:.7}
   <nav id="nav"><div class="meter"><b id="meter"></b></div></nav>
   <main>
     <h1><span><b>Build image prompts</b></span><span><b>by clicking.</b></span></h1>
-    <p class="sub">Pick from 20 steps. Every click adds a clean phrase, and your prompt writes itself.</p>
+    <p class="sub">Pick from 26 steps. Every click adds a clean phrase, and your prompt writes itself.</p>
     <div class="out" id="preview">
       <div class="oh"><span>Your prompt</span><span id="count">0 words</span></div>
       <pre id="pre" class="empty"></pre>
@@ -256,6 +256,12 @@ input::placeholder{color:var(--mut);opacity:.7}
 <script>
 const R=[
 ['subject','Subject','What is in the image?','e.g. a premium iPhone 17 smartphone','Person=a person;Animal=an animal;Object=an object;Product=a product;Character=a character'],
+['subpart','Subject Part','Which part of the subject do you want to show?','e.g. upper rear section','Upper Rear=upper rear section;Front Section=front section;Engine Bay=engine bay;Camera Module=camera module;Wheel=wheel;Interior=interior'],
+['framing','Framing / Crop','How much of that part should be visible?','e.g. tight crop','Tight Crop=tight crop;Extreme Close-up=extreme close-up;Partial View=partial view;Full View=full view'],
+['campos','Camera Position','Where is the camera physically located?','e.g. above the phone','Above=above the subject;Behind=behind the subject;In Front=in front of the subject;Beside=beside the subject;Inside=inside the subject'],
+['camangle','Camera Angle','What direction is the camera looking?','e.g. eye-level','Eye-level=eye-level angle;High Angle=high angle;Top-down=top-down angle;Low Angle=low angle'],
+['vieworient','View / Orientation','Which side or orientation of the subject is shown?','e.g. rear three-quarter view','Front=front view;Rear=rear view;Side=side view;Front 3/4=front three-quarter view;Rear 3/4=rear three-quarter view'],
+['focuspt','Point of Focus','What specific detail should receive attention?','e.g. camera lenses','Camera Lenses=camera lenses;Turbocharger=turbocharger;Leather Stitching=leather stitching;Surface Texture=surface texture'],
 ['appearance','Appearance','What does it look like?','e.g. clean modern design with a titanium frame','Face=detailed face;Hair=styled hair;Clothing=stylish clothing;Body=natural body proportions;Materials=realistic materials;Colors=rich colors'],
 ['pose','Pose / Action','What is it doing?','e.g. standing upright','Standing=standing;Sitting=sitting;Walking=walking;Holding=holding an item;Running=running'],
 ['environment','Environment','Where is it?','e.g. in a minimalist studio','Studio=in a studio;Indoor=indoors;Outdoor=outdoors;Forest=in a forest;City=in a city;Beach=on a beach'],
@@ -291,7 +297,7 @@ const IMG={
 const PRESETS=[
 {n:'Car showcase',img:'car',d:'Black hypercar from above in a dark showroom with vertical light strips.',v:{subject:'a black hypercar',appearance:'aggressive angular body, sharp Y-shaped LED headlights, carbon fiber front splitter, large rear wing',pose:'parked, facing the camera',environment:'in a dark minimalist showroom with a polished concrete floor',composition:'symmetrical, centered front view, vertical composition',camera:'high angle front view',lighting:'dramatic lighting with vertical LED light strips and sharp reflections',style:'premium automotive commercial photography',background:'dark walls with glowing light strips',color:'monochrome black and gray palette',materials:'glossy black paint, carbon fiber, polished concrete floor',mood:'powerful, dark, luxurious',constraints:'no text, no logo, no people'},ar:'9:16'},
 {n:'Fantasy character',img:'fantasy',d:'An elven ranger above a misty valley at golden hour.',v:{subject:'a lone elven ranger',appearance:'weathered green cloak, silver bow, braided hair',pose:'standing on a cliff edge',environment:'misty ancient forest at dawn',composition:'full body, wide shot',camera:'low angle',lighting:'golden hour backlight',style:'cinematic digital illustration',mood:'moody, epic atmosphere',constraints:'no text, single subject'},ar:'16:9'},
-{n:'Product shot',img:'product',d:'Premium titanium phone, soft studio light, clean backdrop.',v:{subject:'a premium iPhone 17 smartphone',appearance:'clean modern design with a titanium frame',pose:'standing upright',environment:'in a minimalist studio',composition:'centered in the frame, close-up product composition',camera:'front three-quarter view, eye-level camera',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',details:'detailed camera lenses, polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'},ar:'4:5'},
+{n:'Product shot',img:'product',d:'Top-down tight crop of the rear camera module, soft studio light.',v:{subject:'a premium iPhone 17 smartphone',subpart:'upper rear section with the camera module',framing:'tight crop',campos:'above the phone',camangle:'top-down angle',vieworient:'rear three-quarter view',focuspt:'camera lenses',appearance:'clean modern design with a titanium frame',pose:'resting flat on a surface',environment:'in a minimalist studio',composition:'centered in the frame',lighting:'soft studio lighting with a subtle rim light',style:'premium commercial product photography',background:'clean minimal background',materials:'brushed titanium, polished glass',details:'polished edges, realistic materials',constraints:'no hands, no people, no text, no extra objects'},ar:'4:5'},
 {n:'Fashion portrait',img:'fashion',d:'Monochrome studio editorial with dramatic side light.',v:{subject:'a young woman model',appearance:'sleek black tailored coat, slicked-back hair',pose:'looking over her shoulder',environment:'plain gray studio',composition:'medium shot',camera:'eye-level, 85mm lens',lighting:'dramatic side lighting',style:'high-end editorial photography',color:'monochrome palette',materials:'fine fabric detail, natural skin texture',constraints:'no text, no logo, single subject'},ar:'1:1'},
 {n:'Pixel game',img:'game',d:'16-bit side-scrolling hero in a torch-lit dungeon.',v:{subject:'a pixel art knight hero',appearance:'chunky 16-bit sprite, bold outline, vibrant palette',pose:'mid-jump with sword raised',environment:'in a side-scrolling dungeon level with platforms',composition:'side view, centered in the frame',camera:'orthographic side view',lighting:'flat retro lighting with glowing torches',style:'16-bit pixel art, retro video game style',color:'limited retro color palette',mood:'playful, nostalgic',constraints:'no text, no ui, single subject'},ar:'3:4'}
 ];
