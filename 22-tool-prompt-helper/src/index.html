@@ -104,7 +104,7 @@ input::placeholder{color:var(--mut);opacity:.7}
 .bar.on{transform:translate(-50%,0)}
 .bar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}
 .bar .cp{background:var(--bg);color:var(--fg);border:0;border-radius:999px;padding:11px 22px;font-weight:600}
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,16px);background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast{position:fixed;left:50%;width:max-content;max-width:calc(100% - 28px);white-space:nowrap;text-align:center;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translate(-50%,16px);background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}nav{display:none}.card{grid-template-columns:1fr;gap:14px;padding:30px 0}.rh{display:flex;align-items:baseline;gap:12px}.rh b{margin:0}
 .gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;align-items:start}
@@ -113,6 +113,69 @@ input::placeholder{color:var(--mut);opacity:.7}
 .note,.cap p{display:none}}
 @media (max-width:520px){#rand,#reset,.lnk{display:none}}
 @media (prefers-reduced-motion:reduce){h1 span>b{animation:none}html{scroll-behavior:auto}.bar,.fig img{transition:none}}
+
+/* Commands */
+.cmds{display:grid;grid-template-columns:170px minmax(0,1fr);gap:clamp(24px,4vw,64px);max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,48px) 160px;border-top:1px solid var(--line)}
+.cside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 90px);align-self:start;max-height:calc(100vh - 120px);overflow-y:auto;border-left:1px solid var(--line);margin-top:clamp(40px,6vw,80px);scrollbar-width:none}
+.cside::-webkit-scrollbar{display:none}
+.cside h4{margin:18px 0 6px 16px;font:600 12px var(--d);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.cside h4:first-child{margin-top:0}
+.cside a{display:block;position:relative;padding:4px 0 4px 16px;color:var(--mut);text-decoration:none;font-size:13.5px;transition:color .15s}
+.cside a:hover,.cside a.on{color:var(--fg)}
+.cside a.on:before{content:"";position:absolute;left:-1px;top:3px;bottom:3px;width:2px;background:var(--fg)}
+.cmain{min-width:0}
+.ch{margin:clamp(40px,6vw,80px) 0 28px}
+.ch small{display:block;font:600 14px var(--d);color:var(--mut);margin-bottom:10px}
+.ch h2{margin:0 0 20px;font:700 clamp(32px,5vw,64px)/.95 var(--d);letter-spacing:-.045em}
+.ch h2 em{font-style:normal;color:var(--mut)}
+.srch{width:100%;max-width:420px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:11px 18px;font:inherit;font-size:15px}
+.srch:focus{outline:none;border-color:var(--fg)}
+.cg{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 90px);margin-top:40px}
+.cg h3{margin:0 0 14px;font:700 clamp(22px,3vw,32px)/1 var(--d);letter-spacing:-.03em;display:flex;align-items:baseline;gap:10px}
+.cg h3 span{font:500 13px var(--b);color:var(--mut);letter-spacing:0}
+.cr{display:grid;grid-template-columns:44px minmax(150px,240px) 1fr;align-items:center;gap:14px;padding:5px 0;width:100%;border:0;background:none;text-align:left}
+.cr .n{color:var(--mut);font-size:14px;text-align:right}
+.cr code{font:500 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,color .15s,border-color .15s}
+.cr:hover code{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.cr .d{font-size:15.5px}
+.none{color:var(--mut);margin-top:40px}
+@media (max-width:760px){
+  .cmds{grid-template-columns:minmax(0,1fr);gap:0}
+  .cside{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;max-height:none;overflow-x:auto;overflow-y:hidden;border-left:0;border-bottom:1px solid var(--line);background:var(--bg);margin:20px 0 0;display:flex;gap:4px;white-space:nowrap;padding:10px 0}
+  .cside h4{display:none}
+  .cside a{padding:6px 12px;border:1px solid var(--line);border-radius:999px}
+  .cside a.on{border-color:var(--fg)}.cside a.on:before{display:none}
+  .cr{grid-template-columns:30px 1fr;row-gap:2px}.cr .n{grid-row:1/3;align-self:start;padding-top:12px}.cr .d{grid-column:2}
+}
+
+.cbuild{max-width:820px}
+.ta{display:block;width:100%;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:24px;padding:14px 20px;font:inherit;font-size:16px;resize:vertical;min-height:64px;margin-bottom:12px}
+.ta:focus{outline:none;border-color:var(--fg)}
+.cbuild pre{min-height:56px;max-height:40vh}
+.cchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.cchips[hidden]{display:none}
+.cchip{border:1px solid rgba(128,128,128,.55);background:transparent;color:inherit;border-radius:999px;padding:4px 12px;font:500 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.cchip:hover{border-color:currentColor}
+.out .btn.ghost{background:transparent;color:inherit;border-color:rgba(128,128,128,.5)}
+.cr.sel code{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.cr.sel .n{color:var(--fg);font-weight:700}
+.cr.sel .d{font-weight:600}
+.bar.hid{display:none}
+.cnote{color:var(--mut);font-size:14px;margin:12px 4px 0}
+.cshow{container-type:inline-size;margin-top:clamp(40px,6vw,72px)}
+.cshow .sh h2{font-size:clamp(28px,4vw,48px)}
+.flowbox{border:1px dashed rgba(128,128,128,.6);border-radius:20px;padding:12px 14px;margin-bottom:14px;font-size:14px}
+.flowbox[hidden]{display:none}
+.fl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.fl span{border:1px solid rgba(128,128,128,.55);border-radius:999px;padding:3px 11px}
+.fl i{font-style:normal;opacity:.6}
+.fopts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.fopts label{display:flex;align-items:center;gap:8px;opacity:.85}
+.fin{background:transparent;color:inherit;border:1px solid rgba(128,128,128,.55);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;width:120px}
+.fin:focus{outline:none;border-color:currentColor}
+.out .btn.ghost.on{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+.finfo{margin-top:10px;font-size:13px;opacity:.8}
+.fin option{color:#000}
 </style>
 </head>
 <body>
@@ -150,6 +213,44 @@ input::placeholder{color:var(--mut);opacity:.7}
     <div id="steps"></div>
   </main>
 </div>
+<section class="cmds" id="commands">
+  <aside class="cside" id="cside"></aside>
+  <div class="cmain">
+    <div class="ch"><small>Commands / <span id="ccount">241</span> shortcuts</small><h2>Type a slash,<br><em>get a result.</em></h2>
+      <div class="cbuild">
+        <textarea class="ta" id="ctask" rows="2" placeholder="Describe your task… e.g. landing page for a coffee shop"></textarea>
+        <div class="out" id="cout">
+          <div class="oh"><span>Your command prompt</span><span id="cwords">0 words</span></div>
+          <div class="cchips" id="csel" hidden></div>
+          <div class="flowbox" id="cflowbox" hidden>
+            <div class="fl"><span>1 Video in Google Flow</span><i>→</i><span>2 Video → image sequence</span><i>→</i><span>3 On-scroll animation</span></div>
+            <div class="fopts">
+              <label>Clip (sec) <input class="fin" id="cflows" type="number" min="1" step="0.5" value="6" style="width:76px"></label>
+              <label>FPS <input class="fin" id="cflowfps" type="number" min="1" max="60" value="20" style="width:70px"></label>
+              <label>Width (px) <input class="fin" id="cfloww" type="number" min="320" step="10" value="1280" style="width:88px"></label>
+              <label>Format <select class="fin" id="cflowext" style="width:90px"><option value="webp">WebP</option><option value="jpg">JPG</option><option value="png">PNG</option></select></label>
+              <label>Folder <input class="fin" id="cflowpath" value="frames/" autocomplete="off"></label>
+            </div>
+            <div class="finfo" id="cflowinfo"></div>
+          </div>
+          <pre id="cpre" class="empty"></pre>
+          <div class="tools"><button class="btn cp" id="ccopy">Copy prompt</button>
+            <div class="seg" id="cfmt"><button data-f="inline" class="on">Inline</button><button data-f="detailed">Detailed</button></div>
+            <button class="btn ghost" id="cflow" aria-pressed="false">Scroll frames flow: Off</button>
+            <button class="btn ghost" id="cclear">Clear</button></div>
+        </div>
+        <div class="cnote">Tap commands below to stack them. Order = order you tap.</div>
+      </div>
+      <div class="cshow">
+        <div class="sh"><div><small>Ready-made / 05 presets</small><h2>Skip the setup,<br><em>load a stack.</em></h2></div>
+          <p>Each preset stacks the right commands for a site. Pick one, then edit the task.</p></div>
+        <div class="gal" id="cgal"></div>
+      </div>
+      <input class="srch" style="margin-top:28px" id="csrch" type="search" placeholder="Search commands…" aria-label="Search commands"></div>
+    <div id="cbody"></div>
+  </div>
+</section>
+<div class="bar" id="cdock"><span id="cdk"></span><button class="btn cp" id="ccopy2">Copy prompt</button></div>
 <div class="bar" id="dock"><span id="dk"></span><button class="btn cp" id="copy2">Copy prompt</button></div>
 <div class="toast" id="toast">Copied to clipboard</div>
 <script>
@@ -270,6 +371,126 @@ $('#theme').onclick=()=>{const r=document.documentElement;r.dataset.theme=getCom
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('act',a.id==='n-'+e.target.id.slice(2)))}),{rootMargin:'-30% 0px -60% 0px'});
 document.querySelectorAll('.card').forEach(c=>io.observe(c));
 sync();update();
+
+/* Commands data: "cmd|description" */
+const CMDS=[
+["Web · UI · UX · Motion",[
+["Layout & Style","editorial|Design an editorial magazine-style layout;swiss|Use a Swiss grid-based minimal style;bento|Build a bento grid layout;brutalist|Create a raw neo-brutalist layout;minimal|Design a clean minimal layout;monochrome|Use a black-and-white palette;sidebar|Build a sticky sidebar plus main layout;masonry|Build a masonry grid layout;splitscreen|Design a split-screen layout;asymmetric|Create an asymmetric broken-grid layout;cardlayout|Build a card-based layout;hero|Design a bold hero section;fullscreen|Design full-screen sections;horizontalscroll|Build a horizontal scroll layout;glassmorphism|Apply a frosted-glass style;dashboardlayout|Design a dashboard layout"],
+["Web & Motion","scrollanimation|Build scroll-triggered animations;scrollytelling|Tell a story as the user scrolls;parallax|Add layered parallax depth;reveal|Fade and slide elements in on scroll;smoothscroll|Add smooth eased scrolling;imagesequence|Scrub an image sequence on scroll"],
+["Product & UX","wireframe|Describe a wireframe layout;userstory|Write a user story;sprint|Plan a sprint;standup|Summarize a daily standup;retro|Run a sprint retrospective;bugreport|Write a clear bug report;changelog|Write release notes;apidocs|Draft API documentation;styleguide|Create a style guide;accessibility|Review for accessibility"]
+]],
+["Slash commands",[
+["Business & Finance","swot|Perform a SWOT analysis;businessmodel|Build a business model canvas;investor|Draft an investor update;budget|Create a budget plan;invoice|Draft a professional invoice;forecast|Build a financial forecast;breakeven|Calculate the break-even point;valuation|Estimate a company's valuation;equity|Explain an equity split;taxtips|Summarize general tax-saving tips"],
+["HR & People","jobdescription|Write a job description;interviewprep|Prepare interview questions;onboarding|Build an onboarding plan;feedback|Give constructive feedback;review|Write a performance review;delegate|Delegate a task effectively;conflict|Resolve a conflict;culture|Define company culture and values;exitinterview|Prepare exit interview questions;references|Draft a reference check"],
+["Legal & Compliance","contract|Draft a contract clause;tos|Write terms of service;privacy|Write a privacy policy;disclaimer|Write a legal disclaimer;trademark|Explain trademark basics;nda|Draft an NDA;compliance|Build a compliance checklist;gdpr|Summarize GDPR requirements;riskregister|Build a risk register;dispute|Draft a dispute resolution letter"],
+["Sales & Growth","coldemail|Write a cold outreach email;followup|Write a sales follow-up;proposal|Draft a business proposal;casestudy|Write a case study;testimonial|Request a testimonial;upsell|Create an upsell offer;retention|Build a retention strategy;referralprogram|Design a referral program;abtest|Design an A/B test;landingpage|Write landing page copy"],
+["Content & Media","podcast|Plan a podcast episode;webinar|Structure a webinar;newsletter|Write a newsletter;course|Outline an online course;ebook|Outline an e-book;leadmagnet|Create a lead magnet idea;pressrelease|Write a press release;mediapitch|Pitch a journalist or media outlet;influencer|Draft an influencer outreach message;sponsorship|Write a sponsorship pitch"],
+["Personal Growth","goals|Set clear, achievable goals;habit|Build a new habit;morningroutine|Design a morning routine;journaling|Create journaling prompts;mindset|Reframe a limiting belief;confidence|Build public speaking confidence;networking|Prepare for a networking event;icebreaker|Suggest icebreaker questions;publicspeaking|Prepare a public speaking outline;motivation|Write a motivational message"],
+["Lifestyle","recipe|Suggest a recipe;mealplan|Build a weekly meal plan;grocerylist|Create a grocery list;workout|Build a workout plan;stretching|Suggest a stretching routine;sleep|Improve a sleep routine;travel|Plan a travel itinerary;packinglist|Create a packing list;declutter|Plan a decluttering session;movingchecklist|Build a moving checklist"],
+["Tech & Data","database|Design a database schema;architecture|Sketch a system architecture;security|Run a security checklist;refactor|Suggest a code refactor;codereview|Review code for issues;datacleaning|Clean and structure raw data;dashboard|Design a KPI dashboard;abtestdata|Analyze A/B test results;automation|Map out a workflow automation;integration|Plan a tool integration"],
+["Communication","apology|Write an apology message;complaint|Respond to a customer complaint;refund|Write a refund policy response;announcement|Write a company announcement;crisiscomm|Draft a crisis communication statement;outofoffice|Write an out-of-office reply;emailsignature|Design an email signature;meetingagenda|Build a meeting agenda;minutes|Summarize meeting minutes;introduction|Write a warm introduction message"],
+["Creative Extras","tagline|Write a brand tagline;slogan|Write a catchy slogan;namebrainstorm|Brainstorm brand or product names;colorpalette|Suggest a color palette;packaging|Concept a product packaging idea;charactersheet|Build a character profile;worldbuilding|Develop a fictional setting;dialogue|Write natural dialogue;plottwist|Suggest a plot twist;shortstory|Write a short story premise"]
+]],
+["Power prefixes",[
+["Roles & Modes","human|Natural writing in a human style;expert|Answers at an expert level;ceo|Analyze with the mindset of a company founder;viral|Ideas for highly engaging content;seo|Search-engine-optimized content;critic|Identify weaknesses and flaws;teacher|Clear and simple explanation;eli5|Explain it to me as if I were five;brief|The shortest possible answer;strategy|Long-term strategic planning;copywriter|Persuasive marketing copy"],
+["Research & Explain","research|In-depth research;brainstorm|Generate creative ideas;promptengineer|Improve any prompt;summarize|Summarize the main points;simplify|Simplify complex content;detailed|Provide a comprehensive explanation;stepbystep|Explain step by step;examples|Provide practical examples;analyst|Analyze data or information;compare|Compare multiple options;proscons|Present the pros and cons"],
+["Planning & Learning","decision|Help in making the best decision;planner|Build an actionable plan;roadmap|Create a roadmap to achieve a goal;action|Turn ideas into practical steps;prioritize|Arrange tasks according to importance;productivity|Improve productivity;focus|Identify the most important task;time|Create a time-management plan;learn|Build a learning plan;study|Create an effective study strategy;quiz|Test knowledge with questions"],
+["Career & Editing","flashcards|Create educational flashcards for memorization;interview|Prepare for interviews;resume|Improve resume content;career|Provide career guidance;mentor|Respond as a personal mentor;coach|Provide practical training;consultant|Provide professional recommendations;editor|Improve clarity and quality;proofread|Identify grammatical and spelling errors;rewrite|Rewrite in a better style;professional|Make the writing professional"],
+["Tone & Social","casual|Make the writing conversational;friendly|Make the writing warm and friendly;persuasive|Make the message more persuasive;concise|Remove unnecessary words;polish|Improve the final version;tone|Adjust the writing tone;storyteller|Turn information into a story;hook|Create attention-grabbing openings;headline|Create strong headlines;caption|Write captions for social media platforms;linkedin|Create content for LinkedIn"],
+["Video & Sales","instagram|Create content for Instagram;youtube|Create content for YouTube;reels|Generate short-video ideas;script|Write a video or presentation script;email|Write an effective email;sales|Create sales-focused messages;offer|Create an irresistible offer;brand|Develop a brand message;customer|Think from the customer's perspective;audience|Analyze the target audience;competitor|Analyze competitors"],
+["Strategy & Ideas","market|Analyze market opportunities;startup|Think like an expert strategist for startups;business|Develop business ideas;pricing|Develop a pricing strategy;funnel|Build a marketing funnel;growth|Identify growth opportunities;content|Build a content strategy;calendar|Create a content calendar;ideas|Generate new ideas;creative|Think creatively and differently;unpopular|Challenge conventional ideas"],
+["Critical Thinking","devilsadvocate|Discuss the opposing viewpoint;contrarian|Discover alternative viewpoints;assumptions|Identify hidden assumptions;risks|Identify potential risks;factcheck|Separate facts from claims;verify|Identify what needs to be verified;logic|Examine reasoning and logic;rootcause|Identify the root cause of the problem;debug|Identify problems and fix them;solution|Generate practical solutions;alternative|Suggest better alternatives"],
+["Systems & Formats","optimize|Improve an existing approach;automate|Find ways to automate the task;template|Create a reusable template;checklist|Create a practical checklist;framework|Build an organized framework;matrix|Organize options in a decision matrix;table|Convert information into a table;json|Structure the answer in JSON format;roleplay|Simulate a realistic scenario;reverse|Work backwards from the desired result;ultimate|Provide the most comprehensive answer"],
+["Social & Pitching","tiktok|Create content for TikTok;thread|Write a multi-post thread;carousel|Plan a slide-by-slide carousel;repurpose|Turn one piece into many formats;cta|Write a strong call to action;objection|Handle customer objections;pitch|Build a persuasive pitch;negotiate|Prepare a negotiation strategy;metrics|Define the KPIs to track;premortem|Imagine why it fails before you start;mvp|Find the smallest testable version"]]]
+];
+(function(){
+  const side=document.getElementById('cside'),body=document.getElementById('cbody'),q=document.getElementById('csrch');
+  const slug=t=>'c-'+t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  let sh='',bh='',total=0;
+  CMDS.forEach(([grp,cats])=>{
+    sh+=`<h4>${grp}</h4>`;let n=0;
+    cats.forEach(([name,list])=>{
+      const id=slug(grp+'-'+name);sh+=`<a href="#${id}" data-id="${id}">${esc(name)}</a>`;
+      const rows=list.split(';').map(r=>{n++;total++;const [c,d]=r.split('|');
+        return `<button class="cr" data-c="/${c}:" data-d="${esc(d)}" data-s="${(c+' '+d).toLowerCase()}"><span class="n">${n}</span><code>/${c}:</code><span class="d">${esc(d)}</span></button>`}).join('');
+      bh+=`<section class="cg" id="${id}"><h3>${esc(name)} <span>${list.split(';').length}</span></h3>${rows}</section>`;
+    });
+  });
+  side.innerHTML=sh;body.innerHTML=bh+'<p class="none" id="cnone" hidden>No commands match.</p>';
+  document.getElementById('ccount').textContent=total;
+  const $c=id=>document.getElementById(id);
+  let setFlow;const sel=[];let fmt='inline',inView=false,flowOn=false;
+  const copyText=async t=>{try{await navigator.clipboard.writeText(t)}catch(_){const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove()}};
+  function compose(){
+    if(!sel.length&&!flowOn)return '';
+    const tk=$c('ctask').value.trim()||'[your task]';
+    let path=($c('cflowpath').value.trim()||'frames/');if(!/\/$/.test(path))path+='/';
+    const v=flowVals(),n=v.n,file=path+'frame_0001.'+v.ext;
+    if(fmt==='inline'){
+      let t=(sel.length?sel.map(x=>x.c).join(' ')+' ':'')+tk;
+      if(flowOn)t+='\n\nFlow: video generated in Google Flow ('+v.secs+'s clip), converted to an image sequence ('+n+' '+v.ext.toUpperCase()+' frames at '+v.fps+' fps, '+v.w+'px wide, '+file+' onward), used for on-scroll motion. Build a scroll-scrubbed canvas animation that maps scroll progress to the frame index.';
+      return t;
+    }
+    let t='Task: '+tk;
+    if(sel.length)t+='\n\nApply these modes:\n'+sel.map(x=>'- '+x.c+' '+x.d).join('\n');
+    if(flowOn)t+='\n\nScroll image-sequence flow:\n- Source: a '+v.secs+'s video generated in Google Flow\n- Converted with a video-to-image-sequence converter: '+n+' '+v.ext.toUpperCase()+' frames at '+v.fps+' fps, '+v.w+'px wide, in '+path+' ('+file.slice(path.length)+' onward)\n- Preload all frames and draw them on a sticky full-screen canvas\n- Map scroll progress to the frame index, updated with requestAnimationFrame\n- Show the first frame while loading and respect reduced motion';
+    return t;
+  }
+  function flowVals(){const secs=parseFloat($c('cflows').value)||6,fps=parseInt($c('cflowfps').value,10)||20,w=parseInt($c('cfloww').value,10)||1280;return{secs,fps,w,n:Math.max(2,Math.round(secs*fps)),ext:$c('cflowext').value}}
+  function flowInfo(){const v=flowVals(),kb={webp:80,jpg:110,png:600}[v.ext]*Math.pow(v.w/1280,2),mb=Math.round(v.n*kb/100)/10;
+    const m=v.fps<12?'⚠ FPS too low, it will look steppy.':v.n>200?'⚠ Heavy. Lower the FPS or shorten the clip.':v.fps>30?'⚠ FPS higher than needed.':'✓ Good setup.';
+    $c('cflowinfo').textContent=v.n+' frames · ~'+mb+' MB · Recommended: 20 fps, 1280px, WebP. '+m}
+  function render(){
+    const t=compose(),pre=$c('cpre');
+    pre.textContent=t||'Pick commands below, then describe your task.';
+    pre.classList.toggle('empty',!t);
+    $c('cwords').textContent=(t?t.split(/\s+/).length:0)+' words';
+    const ch=$c('csel');ch.hidden=!sel.length;
+    ch.innerHTML=sel.map(x=>`<button class="cchip" data-c="${x.c}" title="Remove">${x.c} ×</button>`).join('');
+    body.querySelectorAll('.cr').forEach(r=>r.classList.toggle('sel',sel.some(x=>x.c===r.dataset.c)));
+    flowInfo();
+    $c('cdk').textContent=sel.length+' selected'+(flowOn?' + flow':'');
+    $c('cdock').classList.toggle('on',(sel.length>0||flowOn)&&inView);
+  }
+  function toggle(c,d){const i=sel.findIndex(x=>x.c===c);i>-1?sel.splice(i,1):sel.push({c,d});render()}
+  body.addEventListener('click',e=>{const b=e.target.closest('.cr');if(b)toggle(b.dataset.c,b.dataset.d)});
+  $c('csel').addEventListener('click',e=>{const b=e.target.closest('.cchip');if(b)toggle(b.dataset.c)});
+  $c('ctask').addEventListener('input',render);
+  $c('cfmt').addEventListener('click',e=>{const f=e.target.dataset.f;if(!f)return;fmt=f;$c('cfmt').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));render()});
+  setFlow=on=>{flowOn=on;const b=$c('cflow');b.setAttribute('aria-pressed',on);b.textContent='Scroll frames flow: '+(on?'On':'Off');b.classList.toggle('on',on);$c('cflowbox').hidden=!on;render()};
+  $c('cflow').onclick=()=>setFlow(!flowOn);
+  ['cflowpath','cflows','cflowfps','cfloww','cflowext'].forEach(id=>{$c(id).addEventListener('input',render);$c(id).addEventListener('change',render)});
+  $c('cclear').onclick=()=>{sel.length=0;$c('ctask').value='';setFlow(false);toast('Cleared')};
+  const doCopy=async()=>{const t=compose();if(!t)return toast('Pick a command first');await copyText(t);toast('Copied to clipboard')};
+  $c('ccopy').onclick=doCopy;$c('ccopy2').onclick=doCopy;
+  new IntersectionObserver(e=>{inView=e[0].isIntersecting;$c('dock').classList.toggle('hid',inView);render()}).observe($c('commands'));
+  const CP=[
+   {img:'car',n:'Hypercar launch page',d:'Full-screen black-and-white hero with parallax and scroll animation.',t:'Launch page for a black hypercar brand',c:['hero','fullscreen','scrollanimation','parallax','monochrome']},
+   {img:'fantasy',n:'Fantasy world site',d:'A story-driven site that unfolds as you scroll.',t:'Website for a fantasy RPG world with an elven ranger',c:['scrollytelling','parallax','worldbuilding','hero','glassmorphism']},
+   {img:'product',n:'Phone product page',d:'Clean Swiss-style page with smooth reveals.',t:'Product page for a premium titanium smartphone',c:['swiss','minimal','hero','reveal','smoothscroll']},
+   {img:'fashion',n:'Fashion lookbook',d:'Editorial magazine layout with an asymmetric grid.',t:'Monochrome lookbook site for a tailored coat collection',c:['editorial','masonry','monochrome','asymmetric','reveal']},
+   {img:'game',n:'Pixel game landing',d:'Bold brutalist bento page with a strong call to action.',t:'Landing page for a 16-bit pixel art platformer',c:['brutalist','bento','landingpage','cta','scrollanimation']}
+  ];
+  CP.forEach((p,i)=>{
+    const ar=(PRESETS.find(x=>x.img===p.img)||{ar:'1:1'}).ar;
+    const b=document.createElement('button');b.className='fig t-'+p.img;b.type='button';b.style.setProperty('--r',ar.replace(':','/'));
+    b.innerHTML=`<img src="${IMG[p.img]}" alt="${p.n}" loading="lazy"><span class="no">0${i+1}</span><span class="go">Use this preset →</span><div class="cap"><span class="ar">${p.c.length} commands</span><h3>${p.n}</h3><p>${p.d}</p></div>`;
+    b.onclick=()=>{sel.length=0;
+      p.c.forEach(n=>{const r=body.querySelector(`.cr[data-c="/${n}:"]`);if(r)sel.push({c:r.dataset.c,d:r.dataset.d})});
+      $c('ctask').value=p.t;render();toast('Preset loaded');$c('cout').scrollIntoView({block:'center'})};
+    $c('cgal').appendChild(b);
+  });
+  $c('cgal').insertAdjacentHTML('beforeend','<div class="note">Click any tile to load its commands</div>');
+  render();
+  q.addEventListener('input',()=>{const v=q.value.trim().toLowerCase();let any=false;
+    body.querySelectorAll('.cg').forEach(g=>{let vis=0;g.querySelectorAll('.cr').forEach(r=>{const m=!v||r.dataset.s.includes(v);r.hidden=!m;if(m)vis++});g.hidden=!vis;if(vis)any=true;
+      side.querySelector(`a[data-id="${g.id}"]`).style.display=vis?'':'none'});
+    document.getElementById('cnone').hidden=any});
+  const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){side.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.dataset.id===e.target.id));
+    const a=side.querySelector('a.on');if(a&&matchMedia('(max-width:760px)').matches)a.scrollIntoView({inline:'center',block:'nearest'})}}),{rootMargin:'-20% 0px -70% 0px'});
+  body.querySelectorAll('.cg').forEach(g=>cio.observe(g));
+})();
 </script>
 </body>
 </html>
