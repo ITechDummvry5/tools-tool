@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Graph Solver — Story Mode</title>
+<style>
+:root{--bg:#fff;--fg:#000;--mute:#6b6b6b;--line:#e4e4e4;--card:#f6f6f6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#fff;--mute:#9a9a9a;--line:#222;--card:#111;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--fg:#fff;--mute:#9a9a9a;--line:#222;--card:#111;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--fg)}
+h1{font-size:18px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+h1 span{color:var(--mute);font-weight:400}
+button{font:inherit;cursor:pointer;border:1px solid var(--fg);background:var(--bg);color:var(--fg);padding:8px 14px;border-radius:0}
+button:hover{background:var(--fg);color:var(--bg)}
+button.solid{background:var(--fg);color:var(--bg)}
+button.solid:hover{background:var(--bg);color:var(--fg)}
+main{display:grid;grid-template-columns:340px minmax(0,1fr);gap:0;min-height:calc(100vh - 62px)}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.panel{padding:20px;border-right:1px solid var(--line)}
+@media (max-width:860px){.panel{border-right:0;border-bottom:1px solid var(--line)}}
+label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:14px 0 6px}
+input{width:100%;font:16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg);color:var(--fg);border:1px solid var(--fg);padding:10px 12px;border-radius:0}
+#err{color:var(--fg);font-size:14px;min-height:20px;margin-top:8px}
+.card{border:1px solid var(--line);background:var(--card);padding:12px 14px;margin-top:10px;cursor:pointer}
+.card.on{border-color:var(--fg)}
+.card small{display:block;color:var(--mute);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.card b{font:600 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pv{min-height:68px;padding:8px 12px;border:1px solid var(--line);border-top:0;font:22px/1.25 "Cambria Math","STIX Two Math",Georgia,"Times New Roman",serif;overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+.pv.bad{color:var(--mute)}.pl{font:12px ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;color:var(--mute);margin-right:12px;text-transform:uppercase}
+.pv .v{font-style:italic}.pv .op{font-style:normal;margin:0 .28em}.pv .fn{font-style:normal}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .2em}
+.fr>.nu{border-bottom:1.6px solid var(--fg);padding:0 .3em .06em}.fr>.de{padding:.06em .3em 0}
+.pv sup{font-size:.62em;position:relative;top:-.6em;line-height:0}
+.rt{display:inline-flex;align-items:stretch}.rt>b{font-weight:400}.rt>.ov{border-top:1.6px solid var(--fg);padding:0 .12em;margin-top:.12em}
+.kp{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}.kp button{padding:9px 0;font-size:15px;min-width:0}.kp button.fnk{background:var(--card)}.kp button.fnk:hover{background:var(--fg)}
+#tgt{text-transform:none;letter-spacing:0;color:var(--fg)}
+.sum{border:1px solid var(--fg);margin-top:16px}.sum>div{display:grid;grid-template-columns:112px 1fr;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line)}.sum>div:last-child{border-bottom:0}.sum span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding-top:3px}.sum b{font:600 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-word}
+.stage{padding:20px;min-width:0}
+.cv{border:1px solid var(--fg);position:relative;height:min(52vh,480px);min-height:300px}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.hint{position:absolute;right:8px;bottom:6px;font-size:11px;color:var(--mute)}
+.story{border:1px solid var(--fg);border-top:0;padding:16px 18px;min-height:150px}
+.story h2{margin:0 0 6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.story p{margin:0;font-size:18px;line-height:1.55;min-height:84px}
+.ctl{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.dots{display:flex;gap:6px;margin-left:auto}
+.dot{width:10px;height:10px;border:1px solid var(--fg);background:var(--bg)}
+.dot.on{background:var(--fg)}
+</style>
+</head>
+<body>
+<header><h1>Graph Solver <span>/ story mode</span></h1><button id="theme" aria-label="Switch black and white">◐ Invert</button></header>
+<main>
+<section class="panel">
+<label for="f">f(x) = </label><input id="f" value="(x - 1)/(x^2 - 4)" autocomplete="off" spellcheck="false"><div class="pv" id="pf"></div>
+<label for="g">g(x) = (optional line or 2nd curve)</label><input id="g" placeholder="e.g. x + 2  (leave empty if none)" autocomplete="off" spellcheck="false"><div class="pv" id="pg"></div>
+<label>Math keypad <span id="tgt"></span></label><div class="kp" id="kp"></div>
+<button class="solid" id="go" style="width:100%">Solve &amp; tell the story ▶</button>
+<div id="err"></div>
+<div id="sum"></div><div id="ans"></div>
+</section>
+<section class="stage">
+<div class="cv"><canvas id="c"></canvas><span class="hint">drag to pan · scroll to zoom · double‑click to reset</span></div>
+<div class="story">
+<h2 id="st">Ready</h2><p id="sp">Type an equation and press solve. I’ll draw it and explain every answer, one chapter at a time.</p>
+<div class="ctl"><button id="prev">◀</button><button id="play">❚❚ Pause</button><button id="next">▶</button><div class="dots" id="dots"></div></div>
+</div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const fmt=n=>Math.abs(n)<1e-9?"0":String(+n.toFixed(3));
+const pt=p=>"("+fmt(p[0])+", "+fmt(p[1])+")";
+// ---------- tiny safe expression parser ----------
+function compile(src){
+  let s=src.toLowerCase().replace(/π/g,"pi").replace(/×/g,"*").replace(/÷/g,"/").replace(/[−–]/g,"-").replace(/²/g,"^2").replace(/³/g,"^3").replace(/√\s*\(/g,"sqrt(").replace(/√\s*([a-z0-9.]+)/g,"sqrt($1)").replace(/^\s*(y|f\(x\)|g\(x\))\s*=/,"");
+  if(!s.trim())throw Error("Type an equation first.");
+  const toks=s.match(/\d*\.?\d+|[a-z]+|[^a-z\d\s]/g);
+  const isN=t=>/^[\d.]/.test(t||""),isV=t=>t&&(isN(t)||t==="x"||t==="pi"||t==="e"||t===")"),startV=t=>isN(t)||/^[a-z]/.test(t)||t==="(";
+  const o=[];for(const t of toks){if(isV(o[o.length-1])&&startV(t))o.push("*");o.push(t)}
+  let i=0;const pk=()=>o[i],nx=()=>o[i++];
+  const F={sin:Math.sin,cos:Math.cos,tan:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,sqrt:Math.sqrt,abs:Math.abs,ln:Math.log,log:Math.log10,exp:Math.exp,floor:Math.floor};
+  const mk=(fn,k,w)=>(fn.k=k,fn.w=w||"",fn),RK={const:0,poly:1,rat:2,non:3},mx=(a,b)=>a.k==="non"?a:b.k==="non"?b:RK[a.k]>=RK[b.k]?a:b,dv=(a,b)=>a.k==="non"?a:b.k==="non"?b:b.k==="const"?a:{k:"rat",w:""};
+  function ex(){let a=tm();while(pk()==="+"||pk()==="-"){const op=nx(),b=tm(),l=a,k=mx(l,b);a=mk(op==="+"?x=>l(x)+b(x):x=>l(x)-b(x),k.k,k.w)}return a}
+  function tm(){let a=un();while(pk()==="*"||pk()==="/"){const op=nx(),b=un(),l=a,k=op==="*"?mx(l,b):dv(l,b);a=mk(op==="*"?x=>l(x)*b(x):x=>l(x)/b(x),k.k,k.w)}return a}
+  function un(){if(pk()==="-"){nx();const a=un();return mk(x=>-a(x),a.k,a.w)}if(pk()==="+")nx();return pw()}
+  function pw(){const b=at();if(pk()==="^"){nx();const e=un(),p=x=>Math.pow(b(x),e(x));
+    if(b.k==="non")return mk(p,"non",b.w);if(e.k==="non")return mk(p,"non",e.w);
+    if(e.k!=="const")return mk(p,"non","x in an exponent (like 2^x)");
+    if(b.k==="const")return mk(p,"const");
+    const n=e(0);if(!Number.isInteger(n))return mk(p,"non","a fractional power of x (a root)");
+    return mk(p,n<0?"rat":b.k)}return b}
+  function at(){const t=nx();if(t===undefined)throw Error("The equation ends too early.");
+    if(isN(t)){const v=parseFloat(t);return mk(()=>v,"const")}
+    if(t==="x")return mk(x=>x,"poly");if(t==="pi")return mk(()=>Math.PI,"const");if(t==="e")return mk(()=>Math.E,"const");
+    if(t==="("){const a=ex();if(nx()!==")")throw Error("Missing a closing bracket.");return a}
+    if(F[t]){if(nx()!=="(")throw Error("Put brackets after "+t+", like "+t+"(x).");const a=ex();if(nx()!==")")throw Error("Missing a closing bracket.");const f=F[t];return mk(x=>f(a(x)),a.k==="const"?"const":"non",a.k==="non"?a.w:t==="sqrt"?"a square root":"the "+t+" function")}
+    throw Error("I don’t know “"+t+"”. Try spaces, like x sin(x).")}
+  const f=ex();if(i<o.length)throw Error("Unexpected “"+o[i]+"”.");f(0);return f;
+}
+// ---------- typeset preview ----------
+function pretty(src){
+  let s=src.toLowerCase().replace(/π/g,"pi").replace(/×/g,"*").replace(/÷/g,"/").replace(/[−–]/g,"-").replace(/²/g,"^2").replace(/³/g,"^3").replace(/√\s*\(/g,"sqrt(").replace(/√\s*([a-z0-9.]+)/g,"sqrt($1)").replace(/^\s*(y|f\(x\)|g\(x\))\s*=/,"");
+  const T=s.match(/\d*\.?\d+|[a-z]+|[^a-z\d\s]/g)||[];let i=0;const pk=()=>T[i],nx=()=>T[i++];
+  const isN=t=>/^[\d.]/.test(t||""),sv=t=>isN(t)||/^[a-z]/.test(t||"")||t==="(";
+  const FN=["sin","cos","tan","asin","acos","atan","sqrt","abs","ln","log","exp","floor"],N=h=>({h,s:h});
+  function ex(){let a=tm();while(pk()==="+"||pk()==="-"){const o=nx(),b=tm();a=N(a.h+'<i class="op">'+(o==="+"?"+":"−")+"</i>"+b.h)}return a}
+  function tm(){let a=un();for(;;){const t=pk();
+    if(t==="/"){nx();const b=un();a=N('<span class="fr"><span class="nu">'+a.s+'</span><span class="de">'+b.s+"</span></span>")}
+    else if(t==="*"){nx();const b=un();a=N(a.h+'<i class="op">·</i>'+b.h)}
+    else if(t&&sv(t)){const b=un();a=N(a.h+b.h)}
+    else break}return a}
+  function un(){if(pk()==="-"){nx();const a=un();return N('<i class="op" style="margin:0 .1em 0 0">−</i>'+a.h)}if(pk()==="+")nx();return pw()}
+  function pw(){const b=at();if(pk()==="^"){nx();const e=un();return N(b.h+"<sup>"+e.s+"</sup>")}return b}
+  function at(){const t=nx();if(t===undefined)throw Error("end");
+    if(isN(t))return N(t);if(t==="x"||t==="e")return N('<i class="v">'+t+"</i>");if(t==="pi")return N("π");
+    if(t==="("){const a=ex();if(nx()!==")")throw Error("paren");return{h:"("+a.h+")",s:a.s}}
+    if(FN.includes(t)){if(nx()!=="(")throw Error("fn");const a=ex();if(nx()!==")")throw Error("paren");
+      return N(t==="sqrt"?'<span class="rt"><b>√</b><span class="ov">'+a.s+"</span></span>":t==="abs"?"|"+a.s+"|":'<span class="fn">'+t+"</span>("+a.s+")")}
+    throw Error("tok")}
+  const r=ex();if(i<T.length)throw Error("extra");return r.h}
+function pv(i){const el=$("#p"+i.id),s=i.value.trim(),lab='<span class="pl">'+i.id+"(x) =</span>";
+  if(!s){el.className="pv bad";el.innerHTML=lab+'<span class="pm">…</span>';return}
+  try{el.innerHTML=lab+'<span class="pm">'+pretty(s)+"</span>";el.className="pv"}
+  catch(e){el.className="pv bad";el.innerHTML=lab;el.append(Object.assign(document.createElement("span"),{className:"pm",textContent:s}))}}
+// ---------- math keypad ----------
+let act=$("#f");
+const setAct=i=>{act=i;$("#tgt").textContent="→ typing into "+i.id+"(x)"};
+const KP=[["x","x"],["x²","^2|"],["xⁿ","^(|)"],["a/b",s=>s?"(§)/(|)":"(|)/()"],["√","sqrt(§|)"],["|x|","abs(§|)"],
+ ["(","(§|)"],[")","#CL"],["π","pi"],["e","e"],["sin","sin(§|)"],["cos","cos(§|)"],
+ ["7","7"],["8","8"],["9","9"],["÷","/"],["tan","tan(§|)"],["ln","ln(§|)"],
+ ["4","4"],["5","5"],["6","6"],["×","*"],["log","log(§|)"],["⌫","#BS"],
+ ["1","1"],["2","2"],["3","3"],["−","-"],["+","+"],["clear","#CLR"],
+ ["0","0"],[".","."],["◀","#L"],["▶","#R"],["⇥","#TAB"],["↵","#GO"]];
+function press(t){const i=act;i.focus();const a=i.selectionStart,b=i.selectionEnd,v=i.value,sel=v.slice(a,b),mv=p=>i.setSelectionRange(p,p);
+  if(t==="#GO"){solve();return}
+  if(t==="#CLR")i.value="";
+  else if(t==="#L")mv(Math.max(0,a-1));
+  else if(t==="#R")mv(a+1);
+  else if(t==="#TAB"){const j=v.indexOf("()",a);mv(j>=0?j+1:v.length)}
+  else if(t==="#BS"){if(a!==b)i.setRangeText("",a,b,"end");else if(a>0)i.setRangeText("",a-1,v[a-1]==="("&&v[a]===")"?a+1:a,"end")}
+  else if(t==="#CL"&&a===b&&v[a]===")")mv(a+1);
+  else{const tp=t==="#CL"?")":typeof t==="function"?t(sel):t;let out=tp.replace("§",()=>sel),c=out.indexOf("|");out=out.replace("|","");if(c<0)c=out.length;i.setRangeText(out,a,b,"end");mv(a+c)}
+  pv(i)}
+KP.forEach(([l,t])=>{const b=document.createElement("button");b.type="button";b.textContent=l;if(l.length>1&&!/^\d/.test(l))b.className="fnk";b.onmousedown=e=>e.preventDefault();b.onclick=()=>press(t);$("#kp").append(b)});
+function bind(i){i.addEventListener("focus",()=>setAct(i));i.addEventListener("input",()=>pv(i));
+  i.addEventListener("keydown",e=>{const a=i.selectionStart,b=i.selectionEnd,v=i.value;
+    if(e.key==="("){e.preventDefault();press("(§|)")}
+    else if(e.key===")"&&a===b&&v[a]===")"){e.preventDefault();i.setSelectionRange(a+1,a+1)}
+    else if(e.key==="Backspace"&&a===b&&v[a-1]==="("&&v[a]===")"){e.preventDefault();press("#BS")}
+    else if(e.key==="Tab"&&!e.shiftKey&&v.indexOf("()",a)>=0){e.preventDefault();press("#TAB")}})}
+// ---------- numeric analysis ----------
+const X0=-15,X1=15,N=3000;
+function bis(h,a,b){for(let k=0;k<50;k++){const m=(a+b)/2;(h(a)*h(m)<=0)?b=m:a=m}return(a+b)/2}
+function dd(a,tol=1e-4){a.sort((p,q)=>p-q);return a.filter((v,k)=>!k||Math.abs(v-a[k-1])>tol)}
+function roots(h){const r=[];let px=X0,py=h(px);
+  for(let k=1;k<=N;k++){const x=X0+(X1-X0)*k/N,y=h(x);
+    if(isFinite(py)&&isFinite(y)){if(y===0)r.push(x);else if(py*y<0){const m=bis(h,px,x);if(Math.abs(h(m))<1e-3)r.push(m)}}
+    px=x;py=y}
+  return r}
+function extrema(f){const d=x=>(f(x+1e-5)-f(x-1e-5))/2e-5,r=[];let px=X0,py=d(px);
+  for(let k=1;k<=N;k++){const x=X0+(X1-X0)*k/N,y=d(x);
+    if(isFinite(py)&&isFinite(y)&&py*y<0){const m=bis(d,px,x),v=f(m);
+      if(isFinite(v)&&Math.abs(v)<1e6){const a=f(m-.01),b=f(m+.01);
+        if(v>a&&v>b)r.push([m,v,"peak"]);else if(v<a&&v<b)r.push([m,v,"valley"])}}
+    px=x;py=y}
+  return r}
+let INFO=null;
+const lst=(a,p)=>a.slice(0,6).map(v=>p+fmt(v)).join(", ")+(a.length>6?", …":"");
+function info(f){
+  const ok=x=>{const y=f(x);return isFinite(y)&&Math.abs(y)<1e8},xs=[],bad=[];
+  for(let k=0;k<=N;k++){xs.push(X0+(X1-X0)*k/N);bad.push(!ok(xs[k]))}
+  const P=roots(x=>1/f(x)),Hh=[],gap=bad.map((b,k)=>b&&((k>0&&bad[k-1])||(k<N&&bad[k+1])));
+  for(let k=0;k<=N;k++)if(bad[k]&&!gap[k]){const x=xs[k];(Math.abs(f(x+1e-6))>1e3||Math.abs(f(x-1e-6))>1e3?P:Hh).push(x)}
+  const bnd=(b,g)=>{for(let j=0;j<45;j++){const m=(b+g)/2;ok(m)?g=m:b=m}return g};
+  const blow=(c,d)=>{const y1=Math.abs(f(c+d*1e-8)),y2=Math.abs(f(c+d*1e-4));return y1>15&&y1>y2+5};
+  const cl=c=>c!==null&&ok(Math.round(c*1e4)/1e4),iv=[],VB=[];
+  let k=0;while(k<=N){if(gap[k]){k++;continue}const a=k;while(k<=N&&!gap[k])k++;const b=k-1;
+    const L=a===0?null:bnd(xs[a-1],xs[a]),R=b===N?null:bnd(xs[b+1],xs[b]);
+    iv.push([L,cl(L),R,cl(R)]);if(L!==null&&blow(L,1))VB.push(L);if(R!==null&&blow(R,-1))VB.push(R)}
+  const VA=dd(P.concat(VB),.05),E=dd(P.concat(Hh),.05);
+  const allR=iv.length===1&&iv[0][0]===null&&iv[0][2]===null;
+  const dom=!iv.length?"No real x works":allR?(E.length?"All real numbers except x = "+lst(E,""):"All real numbers (−∞, ∞)"):iv.map(i=>(i[0]===null?"(−∞":(i[1]?"[":"(")+fmt(i[0]))+", "+(i[2]===null?"∞)":fmt(i[2])+(i[3]?"]":")"))).join(" ∪ ")+(E.length?", x ≠ "+lst(E,""):"");
+  const lm=t=>{const a=f(t),b=f(t*100);return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<1e-3*(1+Math.abs(b))?+b.toFixed(3):null};
+  const rv=lm(1e5),lv=lm(-1e5);
+  const ha=rv===null&&lv===null?"none":rv!==null&&lv!==null&&rv===lv?"y = "+fmt(rv):[rv!==null?"y = "+fmt(rv)+" (right)":"",lv!==null?"y = "+fmt(lv)+" (left)":""].filter(Boolean).join(", ");
+  const HV=[...new Set([rv,lv].filter(v=>v!==null))];
+  let r=roots(f);extrema(f).forEach(e=>{if(Math.abs(e[1])<1e-6)r.push(e[0])});r=dd(r);
+  const xi=r.length?r.slice(0,6).map(v=>"("+fmt(v)+", 0)").join(", ")+(r.length>6?" …":""):"none";
+  const y0=f(0),yi=isFinite(y0)?"(0, "+fmt(y0)+")":"none";
+  return{dom,allR,E,VA,va:VA.length?lst(VA,"x = "):"none",ha,HV,xi,yi}}
+function renderSum(){const I=INFO,rows=[["Domain",I.dom],["Vertical asymptote",I.va],["Horizontal asymptote",I.ha],["x‑intercept",I.xi],["y‑intercept",I.yi]];
+  $("#sum").innerHTML='<div class="sum">'+rows.map(()=>'<div><span></span><b></b></div>').join("")+'</div>';
+  document.querySelectorAll("#sum .sum>div").forEach((d,k)=>{d.children[0].textContent=rows[k][0];d.children[1].textContent=rows[k][1]})}
+function analyse(f,g,fs,gs){
+  const S=[],A=[];
+  S.push({t:"Chapter 1 · Meet the curve",x:"This is y = "+fs+". Every dot on the line is a pair (x, y) that makes the equation true: you pick x, the equation tells you how high to go.",p:[],a:["The curve","y = "+fs]});
+  {const kd=h=>h.k==="non"?"not rational (it uses "+h.w+")":h.k==="rat"?"a rational function":h.k==="poly"?"a polynomial, which counts as rational":"a constant, which counts as rational";
+  const K=f.k,v=[],hz=[],hp=[];let rx;
+  if(K==="rat"){const r=roots(x=>1/f(x));
+    for(let k=0;k<=N;k++){const x=X0+(X1-X0)*k/N,y=f(x);
+      if(!isFinite(y)||Math.abs(y)>1e8){const big=Math.abs(f(x+1e-6))>1e3||Math.abs(f(x-1e-6))>1e3;if(big)r.push(x);else if(!isFinite(y)&&isFinite(f(x+1e-6)))hp.push([x,f(x+1e-6)])}}
+    dd(r,.05).forEach(a=>v.push(a));
+    const a=f(1e7),b=f(-1e7);if(isFinite(a)&&isFinite(b)&&Math.abs(a-b)<1e-3)hz.push(a)}
+  if(K==="non")rx="Not rational. A rational function is one polynomial divided by another, built only from +, −, ×, ÷ and whole‑number powers of x. Yours uses "+f.w+", and that can’t be squeezed into a fraction of polynomials. So the answer is no.";
+  else if(K==="rat")rx="Yes, it’s rational: one polynomial divided by another, with x on the bottom. The catch is that the bottom can reach zero, and you can’t divide by zero, so the graph may break there."+(hp.length?" There’s also a hole at x = "+fmt(hp[0][0])+", a single missing point.":"");
+  else if(K==="poly")rx="Yes, it’s rational. It’s a polynomial: only x to whole‑number powers, added and multiplied. A polynomial is a fraction with 1 on the bottom, so nothing can break and the curve is one smooth, unbroken line.";
+  else rx="Yes, it’s rational. It’s a plain number, which can always be written as a fraction, so the graph is a flat line.";
+  if(g)rx+=" Your second curve g is "+kd(g)+".";
+  S.push({t:"Chapter 2 · Is it rational?",x:rx,p:hp,a:["Rational?",K==="non"?"No — "+f.w:K==="rat"?"Yes — rational function":K==="poly"?"Yes — polynomial":"Yes — constant"]})}
+  {const I=info(f);INFO=I;const lead="The domain is the list of every x you’re allowed to feed into the equation. ";
+  S.push({t:"Chapter 3 · The domain",x:lead+(I.allR&&!I.E.length?"Nothing here ever breaks (no dividing by zero, no square root of a negative), so any x works: all real numbers.":I.allR?"A few spots are forbidden because they would put zero on the bottom of a fraction, and you can’t divide by zero: x = "+lst(I.E,"")+". Every other x works.":"Some x‑values make the equation impossible, like the square root of a negative number or the log of zero or less, so the graph only exists on "+I.dom+"."),p:[],a:["Domain",I.dom]});
+  S.push({t:"Chapter 4 · Asymptotes",x:"An asymptote is an invisible guide line that the curve gets closer and closer to, but never touches. "+(I.VA.length?"Vertical: the curve rockets up or down right beside "+lst(I.VA,"x = ")+" and can never cross it. ":"Vertical: none, the curve never rockets off to infinity at one x. ")+(I.HV.length?"Horizontal: far out, the curve settles toward "+I.ha+".":"Horizontal: none, far out the curve keeps growing, falling or wiggling instead of settling."),p:[],v:I.VA,h:I.HV,a:["Asymptotes","V: "+I.va+" · H: "+I.ha]})}
+  const y0=f(0);
+  S.push(isFinite(y0)?{t:"Chapter 2 · The y‑intercept",x:"The up‑down axis is where x = 0. Put 0 into the equation and you get y = "+fmt(y0)+". So the curve crosses the up‑down axis at "+pt([0,y0])+".",p:[[0,y0]],a:["y‑intercept",pt([0,y0])]}
+   :{t:"Chapter 2 · The y‑intercept",x:"The equation has no answer at x = 0, so the curve never touches the up‑down axis.",p:[],a:["y‑intercept","none"]});
+  const ex=extrema(f);let r=roots(f);
+  ex.forEach(e=>{if(Math.abs(e[1])<1e-6)r.push(e[0])});r=dd(r);
+  S.push(r.length?{t:"Chapter 3 · The solutions",x:"The left‑right axis is height zero. Wherever the curve touches it, y = 0, and those x‑values are the solutions: "+r.map(v=>"x = "+fmt(v)).join(" and ")+".",p:r.map(v=>[v,0]),a:["Solutions (roots)",r.map(v=>"x = "+fmt(v)).join(", ")]}
+   :{t:"Chapter 3 · The solutions",x:"The curve never touches the left‑right axis, so y is never 0. That means there is no real solution to “"+fs+" = 0”.",p:[],a:["Solutions (roots)","no real solution"]});
+  S.push(ex.length?{t:"Chapter 4 · Turning points",x:"A turning point is where the curve stops climbing and starts falling (a peak), or the other way round (a valley). "+ex.slice(0,4).map(e=>"A "+e[2]+" sits at "+pt(e)).join("; ")+".",p:ex.slice(0,4).map(e=>[e[0],e[1]]),a:["Turning points",ex.slice(0,4).map(e=>e[2]+" "+pt(e)).join(" · ")]}
+   :{t:"Chapter 4 · Turning points",x:"This curve never turns around. It keeps heading the same way, steadily.",p:[],a:["Turning points","none"]});
+  if(g){const m=dd(roots(x=>f(x)-g(x))).map(x=>[x,f(x)]);
+    S.push(m.length?{t:"Chapter 5 · Where the curves meet",x:"Now meet the second curve, y = "+gs+". Where the two lines cross they have the same height, so f(x) = g(x). Those crossings are the answers to the pair: "+m.map(pt).join(" and ")+".",p:m,a:["Intersections",m.map(pt).join(" · ")]}
+     :{t:"Chapter 5 · Where the curves meet",x:"The two curves never cross, so they share no point. The system has no solution.",p:[],a:["Intersections","none"]})}
+  return S.map((s,k)=>(s.t=s.t.replace(/^Chapter \d+/,"Chapter "+(k+1)),s))}
+// ---------- state & drawing ----------
+const cv=$("#c"),cx=cv.getContext("2d");
+let F=null,G=null,steps=[],idx=-1,playing=true,t0=0,view={x0:-10,x1:10,y0:-10,y1:10},fit=null,W=0,H=0,shown=-1;
+function resize(){const d=devicePixelRatio||1,r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+addEventListener("resize",resize);
+function autoFit(){const ys=[];for(let k=0;k<=400;k++){const x=-10+20*k/400;[F,G].forEach(h=>{if(h){const y=h(x);if(isFinite(y)&&Math.abs(y)<1e4)ys.push(y)}})}
+  steps.forEach(s=>s.p.forEach(p=>ys.push(p[1])));ys.push(0);ys.sort((a,b)=>a-b);
+  let lo=ys[Math.floor(ys.length*.03)],hi=ys[Math.ceil(ys.length*.97)-1];if(hi-lo<2){lo-=1;hi+=1}
+  const pad=(hi-lo)*.15;fit={x0:-10,x1:10,y0:lo-pad,y1:hi+pad};view={...fit}}
+const nice=r=>{const p=Math.pow(10,Math.floor(Math.log10(r))),m=r/p;return(m<1.5?1:m<3.5?2:m<7.5?5:10)*p};
+const sx=x=>(x-view.x0)/(view.x1-view.x0)*W,sy=y=>H-(y-view.y0)/(view.y1-view.y0)*H;
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function plot(h,prog,dash){cx.beginPath();cx.setLineDash(dash?[7,6]:[]);let pen=false,py=0;const lim=view.x0+(view.x1-view.x0)*prog;
+  for(let px=0;px<=W;px++){const x=view.x0+px/W*(view.x1-view.x0);if(x>lim)break;const y=h(x);
+    if(!isFinite(y)){pen=false;continue}const Y=sy(y);
+    if(pen&&Math.abs(Y-py)<H*2)cx.lineTo(px,Y);else cx.moveTo(px,Y);pen=true;py=Y}
+  cx.stroke();cx.setLineDash([])}
+function frame(now){
+  const bg=css("--bg"),fg=css("--fg"),mute=css("--mute"),line=css("--line");
+  cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+  const sxn=nice((view.x1-view.x0)/8),syn=nice((view.y1-view.y0)/6);
+  cx.font="11px ui-monospace,Menlo,Consolas,monospace";cx.lineWidth=1;
+  for(let x=Math.ceil(view.x0/sxn)*sxn;x<=view.x1;x+=sxn){cx.strokeStyle=line;cx.beginPath();cx.moveTo(sx(x)+.5,0);cx.lineTo(sx(x)+.5,H);cx.stroke();
+    if(Math.abs(x)>1e-9){cx.fillStyle=mute;cx.textAlign="center";cx.fillText(fmt(x),sx(x),Math.min(H-4,Math.max(12,sy(0)+14)))}}
+  for(let y=Math.ceil(view.y0/syn)*syn;y<=view.y1;y+=syn){cx.strokeStyle=line;cx.beginPath();cx.moveTo(0,sy(y)+.5);cx.lineTo(W,sy(y)+.5);cx.stroke();
+    if(Math.abs(y)>1e-9){cx.fillStyle=mute;cx.textAlign="left";cx.fillText(fmt(y),Math.min(W-30,Math.max(4,sx(0)+5)),sy(y)-3)}}
+  cx.strokeStyle=fg;cx.lineWidth=1.5;cx.beginPath();cx.moveTo(0,sy(0));cx.lineTo(W,sy(0));cx.moveTo(sx(0),0);cx.lineTo(sx(0),H);cx.stroke();
+  if(F){const el=now-t0,prog=idx>0?1:Math.min(1,el/1800);
+    cx.strokeStyle=fg;cx.lineWidth=2.5;plot(F,prog,false);
+    if(G){cx.lineWidth=2;plot(G,idx>0?1:Math.min(1,Math.max(0,(el-300)/1800)),true)}
+    cx.save();cx.strokeStyle=mute;cx.lineWidth=1.5;cx.setLineDash([4,5]);for(let s=0;s<=idx;s++){(steps[s].v||[]).forEach(a=>{cx.beginPath();cx.moveTo(sx(a),0);cx.lineTo(sx(a),H);cx.stroke()});(steps[s].h||[]).forEach(a=>{cx.beginPath();cx.moveTo(0,sy(a));cx.lineTo(W,sy(a));cx.stroke()})}cx.restore();
+    for(let s=0;s<=idx;s++)steps[s].p.forEach(p=>{const X=sx(p[0]),Y=sy(p[1]);
+      if(s===idx){const k=((now-t0)/1000%1.2)/1.2;cx.strokeStyle=fg;cx.globalAlpha=1-k;cx.lineWidth=2;cx.beginPath();cx.arc(X,Y,6+k*22,0,7);cx.stroke();cx.globalAlpha=1}
+      cx.fillStyle=bg;cx.strokeStyle=fg;cx.lineWidth=2.5;cx.beginPath();cx.arc(X,Y,6,0,7);cx.fill();cx.stroke();
+      const lb=pt(p),w=cx.measureText(lb).width+12,lx=Math.min(W-w-2,Math.max(2,X-w/2)),ly=Y<30?Y+12:Y-30;
+      cx.fillStyle=fg;cx.fillRect(lx,ly,w,18);cx.fillStyle=bg;cx.textAlign="center";cx.fillText(lb,lx+w/2,ly+13)});
+    // story text
+    if(idx>=0){const s=steps[idx],n=Math.min(s.x.length,Math.floor((now-t0)/16));
+      if(n!==shown){shown=n;$("#sp").textContent=s.x.slice(0,n)}
+      if(playing&&n===s.x.length&&now-t0>s.x.length*16+2600){idx<steps.length-1?go(idx+1):(playing=false,$("#play").textContent="↻ Replay")}}}
+  requestAnimationFrame(frame)}
+function go(i){idx=Math.max(0,Math.min(steps.length-1,i));t0=performance.now();shown=-1;$("#st").textContent=steps[idx].t;
+  document.querySelectorAll(".dot").forEach((d,k)=>d.classList.toggle("on",k<=idx));
+  document.querySelectorAll(".card").forEach((d,k)=>d.classList.toggle("on",k===idx))}
+function solve(){$("#err").textContent="";pv($("#f"));pv($("#g"));
+  try{const fs=$("#f").value.trim(),gs=$("#g").value.trim();F=compile(fs);G=gs?compile(gs):null;
+    steps=analyse(F,G,fs,gs);renderSum();autoFit();
+    $("#dots").innerHTML=steps.map(()=>'<i class="dot"></i>').join("");
+    $("#ans").innerHTML=steps.map((s,k)=>'<div class="card" data-k="'+k+'"><small></small><b></b></div>').join("");
+    document.querySelectorAll(".card").forEach((c,k)=>{c.firstChild.textContent=steps[k].a[0];c.lastChild.textContent=steps[k].a[1];c.onclick=()=>{playing=false;$("#play").textContent="▶ Play";go(k)}});
+    playing=true;$("#play").textContent="❚❚ Pause";go(0)}
+  catch(e){$("#err").textContent="⚠ "+e.message}}
+$("#go").onclick=solve;
+["f","g"].forEach(i=>$("#"+i).addEventListener("keydown",e=>{if(e.key==="Enter")solve()}));
+$("#play").onclick=()=>{if(!steps.length)return;if(idx>=steps.length-1&&!playing){go(0);playing=true}else playing=!playing;$("#play").textContent=playing?"❚❚ Pause":"▶ Play"};
+$("#next").onclick=()=>{if(steps.length){playing=false;$("#play").textContent="▶ Play";go(idx+1)}};
+$("#prev").onclick=()=>{if(steps.length){playing=false;$("#play").textContent="▶ Play";go(idx-1)}};
+$("#theme").onclick=()=>{const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
+// pan & zoom
+let drag=null;
+cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,v:{...view}};cv.setPointerCapture(e.pointerId);cv.style.cursor="grabbing"});
+cv.addEventListener("pointermove",e=>{if(!drag)return;const dx=(e.clientX-drag.x)/W*(drag.v.x1-drag.v.x0),dy=(e.clientY-drag.y)/H*(drag.v.y1-drag.v.y0);
+  view={x0:drag.v.x0-dx,x1:drag.v.x1-dx,y0:drag.v.y0+dy,y1:drag.v.y1+dy}});
+cv.addEventListener("pointerup",()=>{drag=null;cv.style.cursor="grab"});
+cv.addEventListener("wheel",e=>{e.preventDefault();const r=cv.getBoundingClientRect(),mx=view.x0+(e.clientX-r.left)/W*(view.x1-view.x0),my=view.y1-(e.clientY-r.top)/H*(view.y1-view.y0),k=e.deltaY>0?1.12:1/1.12;
+  view={x0:mx-(mx-view.x0)*k,x1:mx+(view.x1-mx)*k,y0:my-(my-view.y0)*k,y1:my+(view.y1-my)*k}},{passive:false});
+cv.addEventListener("dblclick",()=>{if(fit)view={...fit}});
+bind($("#f"));bind($("#g"));setAct($("#f"));resize();requestAnimationFrame(frame);solve();
+</script>
+</body>
+</html>
