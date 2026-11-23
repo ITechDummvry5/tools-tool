@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="description" content="Your Chrono workspace: log progress, time travel, and compare what-if plans. Your data stays in this browser.">
+<meta name="theme-color" content="#f5f5f5">
+<title>Chrono: App</title>
+<link rel="icon" type="image/png" id="fav" href="data:,">
+<link rel="apple-touch-icon" id="fav2" href="data:,">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/app.css">
+<script src="js/components.js"></script>
+</head>
+<body data-page="app">
+<noscript><p style="padding:24px;background:#000;color:#fff;font:16px/1.5 system-ui,sans-serif">Chrono needs JavaScript. Please turn it on in your browser and reload this page.</p></noscript>
+<site-nav></site-nav>
+<div id="app" class="lp lp-app">
+<input type="file" id="imp" accept=".json,application/json" hidden>
+
+<div class="stage">
+<section class="hero" aria-label="Chrono">
+ <canvas id="wave" aria-hidden="true"></canvas>
+ <div class="hero-in">
+  <h1>Your Progress,<br>Across Time.</h1>
+  <div class="tile"><svg class="ic" aria-hidden="true"><use href="#i-travel"/></svg><img src="bg.png" alt=""></div>
+  <div class="hero-side">
+   <p>Track anything you count, look back or ahead in time, and compare what-if plans. Your data stays in your browser.</p>
+   <div class="hero-cta"><button data-act="newsubj">Start a Subject</button><button class="o" data-act="help">How it works</button></div>
+  </div>
+  <span class="wordmark" aria-hidden="true">CHRONO</span>
+ </div>
+</section>
+<section class="work"><div class="workbar"><nav id="switch" class="switch" aria-label="Subjects"></nav><div class="tsw"><button type="button" id="tsbtn" class="outline ibtn sm" aria-haspopup="true" aria-expanded="false" aria-label="Text size" data-tip="Text size"><span class="aa" aria-hidden="true">Aa</span></button><div id="tsmenu" class="tsmenu" role="group" aria-label="Text size" hidden></div></div><button type="button" id="fsbtn" class="outline ibtn sm" data-act="fs" aria-pressed="false" aria-label="Full screen" data-tip="Full screen"><svg class="ic" aria-hidden="true"><use href="#i-expand"/></svg></button></div><main id="board"></main></section>
+</div>
+
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="report" hidden role="dialog" aria-modal="true" aria-label="Report">
+ <div class="rp-bar dark"><div class="wrap">
+  <button class="ghost sm" id="rp-close" data-act="rclose"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg><span>Close</span></button>
+  <label>Subject<select id="rs"></select></label>
+  <label>Period<select id="rpd"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option><option value="all">All time</option><option value="custom">Custom range</option></select></label>
+  <div class="rc" id="rcustom" hidden><label>From<input type="date" id="rf"></label><label>To<input type="date" id="rt"></label></div>
+  <span class="sp"></span>
+  <button class="outline sm" data-act="rcsv" title="Download the entries as a spreadsheet file"><svg class="ic" aria-hidden="true"><use href="#i-table"/></svg><span>CSV</span></button>
+  <button class="outline sm" data-act="rhtml" title="Download the report as a web page"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg><span>HTML</span></button>
+  <button class="sm" data-act="rprint" title="Print or save as PDF"><svg class="ic" aria-hidden="true"><use href="#i-printer"/></svg><span>Print or PDF</span></button>
+ </div></div>
+ <div class="rp-scroll"><article class="rp" id="rp-body"></article></div>
+</div>
+
+
+<site-footer></site-footer>
+
+
+<button type="button" id="toolsbtn" class="tools-badge" aria-haspopup="dialog" aria-expanded="false" aria-controls="toolspanel" title="Tools and keyboard shortcuts (press ?)"><svg class="ic" aria-hidden="true"><use href="#i-keyboard"/></svg><span>Tools</span><kbd aria-hidden="true">?</kbd></button>
+<div id="toolspanel" class="tp" role="dialog" aria-label="Tools and keyboard shortcuts" hidden>
+ <div class="tp-h"><div><b>Tools</b><span>Keyboard shortcuts</span></div><button type="button" class="tp-x" id="tpx" aria-label="Close tools"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+ <div class="tp-b" id="tpbody"></div>
+ <p class="tp-f">Shortcuts work when you are not typing in a field. Press <kbd>?</kbd> any time to open this panel.</p>
+</div>
+
+
+<button type="button" id="footbtn" class="tools-badge foot-badge" aria-expanded="false" aria-controls="foot" aria-label="Show footer" title="Show footer"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg><span>Show footer</span></button>
+<script src="js/app.js"></script>
+</body></html>
